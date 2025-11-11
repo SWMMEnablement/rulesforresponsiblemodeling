@@ -1,5 +1,6 @@
 import { LucideIcon } from "lucide-react";
 import { Card } from "./ui/card";
+import { Link } from "react-router-dom";
 
 interface ChapterCardProps {
   number: number;
@@ -11,7 +12,8 @@ interface ChapterCardProps {
 
 export const ChapterCard = ({ number, title, description, icon: Icon, topics }: ChapterCardProps) => {
   return (
-    <Card className="group p-6 hover:shadow-[var(--shadow-hover)] transition-all duration-300 border-border bg-gradient-to-br from-card to-accent/20 animate-fade-in">
+    <Link to={`/chapter/${number}`}>
+      <Card className="group p-6 hover:shadow-[var(--shadow-hover)] transition-all duration-300 border-border bg-gradient-to-br from-card to-accent/20 animate-fade-in cursor-pointer hover:scale-[1.02]">
       <div className="flex items-start gap-4 mb-4">
         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
           <Icon className="w-6 h-6 text-white" />
@@ -42,5 +44,6 @@ export const ChapterCard = ({ number, title, description, icon: Icon, topics }: 
         ))}
       </div>
     </Card>
+    </Link>
   );
 };

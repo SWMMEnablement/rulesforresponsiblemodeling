@@ -1,0 +1,268 @@
+import { ChapterLayout } from "@/components/ChapterLayout";
+import { Card } from "@/components/ui/card";
+import { MermaidDiagram } from "@/components/MermaidDiagram";
+
+const Chapter14 = () => {
+  return (
+    <ChapterLayout chapterNumber={14} title="Parameter Optimization">
+      <div className="space-y-12">
+        {/* Introduction */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Overview</h2>
+          <p className="text-muted-foreground leading-relaxed mb-4">
+            Parameter optimization is essential for calibrating hydrological models. This chapter focuses on genetic algorithms (GA) 
+            as a powerful optimization technique that mimics natural selection to find optimal parameter sets.
+          </p>
+        </section>
+
+        {/* Genetic Algorithm Process */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Genetic Algorithm Optimization Process</h2>
+          
+          <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
+            <MermaidDiagram chart={`
+graph TD
+    A[Start: Initialize Population] --&gt; B[Generate Random Parameter Sets]
+    B --&gt; C[Evaluate Fitness Function]
+    C --&gt; D[Convergence Criteria Met]
+    D --No--&gt; E[Selection]
+    E --&gt; F[Select Best Performers]
+    F --&gt; G[Crossover]
+    G --&gt; H[Combine Parent Parameters]
+    H --&gt; I[Mutation]
+    I --&gt; J[Random Parameter Variations]
+    J --&gt; K[Create New Generation]
+    K --&gt; C
+    D --Yes--&gt; L[Return Optimal Parameters]
+    
+    style A fill:#3b82f6,stroke:#2563eb,color:#fff
+    style L fill:#10b981,stroke:#059669,color:#fff
+    style D fill:#f59e0b,stroke:#d97706,color:#fff
+    style C fill:#8b5cf6,stroke:#7c3aed,color:#fff
+            `} />
+          </Card>
+
+          <div className="mt-6 grid md:grid-cols-2 gap-6">
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-foreground mb-3">Key Components</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  <span><strong>Population:</strong> Set of candidate solutions (parameter sets)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  <span><strong>Fitness Function:</strong> Objective function measuring model performance</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  <span><strong>Selection:</strong> Choosing best-performing individuals</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  <span><strong>Crossover:</strong> Combining parameters from parents</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  <span><strong>Mutation:</strong> Random variations for diversity</span>
+                </li>
+              </ul>
+            </Card>
+
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-foreground mb-3">Advantages</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-secondary font-bold">✓</span>
+                  <span>Global optimization capability</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-secondary font-bold">✓</span>
+                  <span>Handles non-linear, multi-modal problems</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-secondary font-bold">✓</span>
+                  <span>No gradient information required</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-secondary font-bold">✓</span>
+                  <span>Robust to noisy data</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-secondary font-bold">✓</span>
+                  <span>Parallel evaluation possible</span>
+                </li>
+              </ul>
+            </Card>
+          </div>
+        </section>
+
+        {/* Implementation Example */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Implementation Concept</h2>
+          <Card className="p-6 bg-muted/50">
+            <pre className="text-sm overflow-x-auto">
+              <code className="text-foreground">
+{`// Pseudocode for Genetic Algorithm Calibration
+
+function geneticAlgorithmOptimization(model, observations):
+    // Initialize
+    population = generateRandomParameterSets(populationSize)
+    generation = 0
+    
+    while not converged and generation < maxGenerations:
+        // Evaluate fitness
+        for each parameterSet in population:
+            predictions = model.run(parameterSet)
+            fitness[parameterSet] = evaluateObjectiveFunction(
+                predictions, 
+                observations
+            )
+        
+        // Selection - Tournament or Roulette
+        parents = selectBestPerformers(population, fitness)
+        
+        // Crossover - Create offspring
+        offspring = []
+        for i in range(0, len(parents), 2):
+            child1, child2 = crossover(parents[i], parents[i+1])
+            offspring.append(child1)
+            offspring.append(child2)
+        
+        // Mutation - Introduce variation
+        for child in offspring:
+            if random() < mutationRate:
+                mutate(child)
+        
+        // Replace population
+        population = selectNextGeneration(parents, offspring)
+        generation += 1
+    
+    return bestParameterSet(population, fitness)`}
+              </code>
+            </pre>
+          </Card>
+        </section>
+
+        {/* Parameter Encoding */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Parameter Encoding Strategy</h2>
+          <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
+            <MermaidDiagram chart={`
+graph LR
+    A[Real Parameters] --&gt; B[Binary Encoding]
+    A --&gt; C[Real-Value Encoding]
+    A --&gt; D[Gray Encoding]
+    
+    B --&gt; E[Bit String 01101010]
+    C --&gt; F[Direct Values 0.25, 1.7, 0.8]
+    D --&gt; G[Gray Code Reduced Mutation Impact]
+    
+    E --&gt; H[Crossover & Mutation]
+    F --&gt; H
+    G --&gt; H
+    
+    H --&gt; I[Decoded Parameters]
+    I --&gt; J[Model Simulation]
+    
+    style A fill:#3b82f6,stroke:#2563eb,color:#fff
+    style J fill:#10b981,stroke:#059669,color:#fff
+            `} />
+          </Card>
+        </section>
+
+        {/* Multi-Objective Optimization */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Multi-Objective Optimization</h2>
+          <p className="text-muted-foreground leading-relaxed mb-6">
+            In hydrological modeling, we often need to optimize multiple competing objectives simultaneously, 
+            such as peak flow accuracy, volume conservation, and timing precision.
+          </p>
+
+          <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
+            <MermaidDiagram chart={`
+graph TD
+    A[Multiple Objectives] --&gt; B[Peak Flow Accuracy]
+    A --&gt; C[Volume Conservation]
+    A --&gt; D[Timing Precision]
+    A --&gt; E[Low Flow Simulation]
+    
+    B --&gt; F[Pareto Front Generation]
+    C --&gt; F
+    D --&gt; F
+    E --&gt; F
+    
+    F --&gt; G[Decision Making]
+    G --&gt; H[Weighted Sum]
+    G --&gt; I[Constraint Method]
+    G --&gt; J[Interactive Selection]
+    
+    H --&gt; K[Final Solution]
+    I --&gt; K
+    J --&gt; K
+    
+    style A fill:#3b82f6,stroke:#2563eb,color:#fff
+    style F fill:#8b5cf6,stroke:#7c3aed,color:#fff
+    style K fill:#10b981,stroke:#059669,color:#fff
+            `} />
+          </Card>
+        </section>
+
+        {/* Best Practices */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Calibration Best Practices</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="p-6 border-l-4 border-l-primary">
+              <h3 className="text-xl font-bold text-foreground mb-3">Do's</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li>✓ Use diverse initial population</li>
+                <li>✓ Validate with independent data</li>
+                <li>✓ Monitor convergence carefully</li>
+                <li>✓ Use appropriate fitness functions</li>
+                <li>✓ Consider parameter ranges</li>
+                <li>✓ Run multiple optimizations</li>
+              </ul>
+            </Card>
+
+            <Card className="p-6 border-l-4 border-l-destructive">
+              <h3 className="text-xl font-bold text-foreground mb-3">Don'ts</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li>✗ Over-calibrate to noise</li>
+                <li>✗ Use single objective blindly</li>
+                <li>✗ Ignore physical constraints</li>
+                <li>✗ Stop at local optimum</li>
+                <li>✗ Neglect uncertainty</li>
+                <li>✗ Skip validation step</li>
+              </ul>
+            </Card>
+          </div>
+        </section>
+
+        {/* Key Takeaways */}
+        <section className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg p-8">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Key Takeaways</h2>
+          <ul className="space-y-3 text-muted-foreground">
+            <li className="flex items-start gap-3">
+              <span className="text-primary text-xl">→</span>
+              <span>Genetic algorithms provide robust global optimization for complex parameter spaces</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-primary text-xl">→</span>
+              <span>Multi-objective optimization reveals trade-offs between competing goals</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-primary text-xl">→</span>
+              <span>Proper validation with independent data is essential for reliable models</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-primary text-xl">→</span>
+              <span>Parameter uncertainty should be quantified and communicated</span>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </ChapterLayout>
+  );
+};
+
+export default Chapter14;

@@ -4,12 +4,14 @@ import { ModelingProcess } from "@/components/ModelingProcess";
 import { Chapters } from "@/components/Chapters";
 import { ConceptDiagram } from "@/components/ConceptDiagram";
 import { KeyConcepts } from "@/components/KeyConcepts";
+import { Timeline } from "@/components/Timeline";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
       <Hero />
       <KeyQuotes />
+      <Timeline />
       <ModelingProcess />
       <ConceptDiagram />
       <KeyConcepts />
