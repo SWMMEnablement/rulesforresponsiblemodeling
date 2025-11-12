@@ -7,12 +7,15 @@ import { KeyConcepts } from "@/components/KeyConcepts";
 import { Timeline } from "@/components/Timeline";
 import { SearchBar } from "@/components/SearchBar";
 import { useBookmarks } from "@/hooks/useBookmarks";
+import { useNotes } from "@/hooks/useNotes";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Bookmark } from "lucide-react";
+import { Bookmark, StickyNote } from "lucide-react";
 
 const Index = () => {
   const { bookmarks } = useBookmarks();
+  const { notes } = useNotes();
   return (
     <div className="min-h-screen bg-background">
       <Hero />
@@ -20,9 +23,19 @@ const Index = () => {
       {/* Search Section */}
       <section className="py-12 px-6 bg-gradient-to-br from-primary/5 to-secondary/5">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-6 text-foreground">
-            Find What You're Looking For
-          </h2>
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+            <h2 className="text-2xl font-bold text-foreground">
+              Find What You're Looking For
+            </h2>
+            {notes.length > 0 && (
+              <Link to="/notes">
+                <Button variant="outline" className="gap-2">
+                  <StickyNote className="w-4 h-4" />
+                  View All Notes ({notes.length})
+                </Button>
+              </Link>
+            )}
+          </div>
           <SearchBar />
         </div>
       </section>
