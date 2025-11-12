@@ -18,20 +18,20 @@ const Chapter4 = () => {
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph TD
-    A[Problem Definition] --&gt; B{Assess Factors}
-    B --&gt; C[Data Availability]
-    B --&gt; D[Computational Resources]
-    B --&gt; E[Uncertainty Budget]
-    C --&gt; F[Complexity Selection]
-    D --&gt; F
-    E --&gt; F
-    F --&gt; G{Appropriate Level?}
-    G --&gt;|Too Simple| H[Increase Detail]
-    G --&gt;|Too Complex| I[Simplify Model]
-    G --&gt;|Optimal| J[Implement & Test]
-    H --&gt; F
-    I --&gt; F
-    J --&gt; K[Validate Performance]
+    A[Problem Definition] --> B{Assess Factors}
+    B --> C[Data Availability]
+    B --> D[Computational Resources]
+    B --> E[Uncertainty Budget]
+    C --> F[Complexity Selection]
+    D --> F
+    E --> F
+    F --> G{Appropriate Level?}
+    G -->|Too Simple| H[Increase Detail]
+    G -->|Too Complex| I[Simplify Model]
+    G -->|Optimal| J[Implement & Test]
+    H --> F
+    I --> F
+    J --> K[Validate Performance]
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style J fill:#10b981,stroke:#059669,color:#fff

@@ -18,18 +18,18 @@ const Chapter7 = () => {
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph LR
-    A[Storm Cell] --&gt; B[Movement Vector]
-    B --&gt; C[Velocity]
-    B --&gt; D[Direction]
-    C --&gt; E[Catchment Response]
-    D --&gt; E
-    E --&gt; F{Peak Timing}
-    F --&gt;|Early| G[Different Hydrograph]
-    F --&gt;|Late| H[Different Hydrograph]
-    F --&gt;|Optimal| I[Critical Condition]
-    G --&gt; J[Sensitivity Analysis]
-    H --&gt; J
-    I --&gt; J
+    A[Storm Cell] --> B[Movement Vector]
+    B --> C[Velocity]
+    B --> D[Direction]
+    C --> E[Catchment Response]
+    D --> E
+    E --> F{Peak Timing}
+    F -->|Early| G[Different Hydrograph]
+    F -->|Late| H[Different Hydrograph]
+    F -->|Optimal| I[Critical Condition]
+    G --> J[Sensitivity Analysis]
+    H --> J
+    I --> J
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style J fill:#10b981,stroke:#059669,color:#fff

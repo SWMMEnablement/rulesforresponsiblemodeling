@@ -18,18 +18,18 @@ const Chapter11 = () => {
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph TD
-    A[Parameter Set] --&gt; B[Perturbation]
-    B --&gt; C[Model Runs]
-    C --&gt; D[Output Analysis]
-    D --&gt; E{Sensitivity Metric}
-    E --&gt;|Local| F[Gradient Method]
-    E --&gt;|Global| G[Variance Method]
-    F --&gt; H[Sensitivity Index]
-    G --&gt; H
-    H --&gt; I{Ranking}
-    I --&gt;|High| J[Priority Parameters]
-    I --&gt;|Low| K[Fixed Parameters]
-    J --&gt; L[Focus Calibration]
+    A[Parameter Set] --> B[Perturbation]
+    B --> C[Model Runs]
+    C --> D[Output Analysis]
+    D --> E{Sensitivity Metric}
+    E -->|Local| F[Gradient Method]
+    E -->|Global| G[Variance Method]
+    F --> H[Sensitivity Index]
+    G --> H
+    H --> I{Ranking}
+    I -->|High| J[Priority Parameters]
+    I -->|Low| K[Fixed Parameters]
+    J --> L[Focus Calibration]
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style L fill:#10b981,stroke:#059669,color:#fff

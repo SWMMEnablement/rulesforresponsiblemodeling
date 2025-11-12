@@ -18,18 +18,18 @@ const Chapter8 = () => {
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph TD
-    A[User Interface] --&gt; B[Model Setup]
-    B --&gt; C[Data Input]
-    C --&gt; D[SWMM Engine]
-    D --&gt; E[Simulation]
-    E --&gt; F[Results]
-    F --&gt; G[Visualization]
-    F --&gt; H[Analysis Tools]
-    G --&gt; I[Decision Making]
-    H --&gt; I
-    I --&gt; J{Scenarios}
-    J --&gt;|Iterate| B
-    J --&gt;|Finalize| K[Implementation]
+    A[User Interface] --> B[Model Setup]
+    B --> C[Data Input]
+    C --> D[SWMM Engine]
+    D --> E[Simulation]
+    E --> F[Results]
+    F --> G[Visualization]
+    F --> H[Analysis Tools]
+    G --> I[Decision Making]
+    H --> I
+    I --> J{Scenarios}
+    J -->|Iterate| B
+    J -->|Finalize| K[Implementation]
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style K fill:#10b981,stroke:#059669,color:#fff

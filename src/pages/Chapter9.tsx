@@ -18,18 +18,18 @@ const Chapter9 = () => {
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph TD
-    A[Observed Data] --&gt; B[Model Predictions]
-    A --&gt; C[Objective Function]
-    B --&gt; C
-    C --&gt; D{Function Type}
-    D --&gt;|Single| E[Scalar Metric]
-    D --&gt;|Multi| F[Vector Metrics]
-    E --&gt; G[Optimization]
-    F --&gt; H[Pareto Solutions]
-    G --&gt; I[Best Parameters]
-    H --&gt; J[Trade-off Analysis]
-    I --&gt; K[Model Evaluation]
-    J --&gt; K
+    A[Observed Data] --> B[Model Predictions]
+    A --> C[Objective Function]
+    B --> C
+    C --> D{Function Type}
+    D -->|Single| E[Scalar Metric]
+    D -->|Multi| F[Vector Metrics]
+    E --> G[Optimization]
+    F --> H[Pareto Solutions]
+    G --> I[Best Parameters]
+    H --> J[Trade-off Analysis]
+    I --> K[Model Evaluation]
+    J --> K
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style K fill:#10b981,stroke:#059669,color:#fff

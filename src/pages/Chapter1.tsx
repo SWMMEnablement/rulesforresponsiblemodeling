@@ -18,13 +18,13 @@ const Chapter1 = () => {
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph LR
-    A[Real World System] --&gt; B[Conceptualization]
-    B --&gt; C[Mathematical Model]
-    C --&gt; D[Computer Implementation]
-    D --&gt; E[Predictions & Decisions]
-    E --&gt; F[Validation Check]
-    F --Refine--&gt; B
-    F --Acceptable--&gt; G[Application]
+    A[Real World System] --> B[Conceptualization]
+    B --> C[Mathematical Model]
+    C --> D[Computer Implementation]
+    D --> E[Predictions & Decisions]
+    E --> F[Validation Check]
+    F --Refine--> B
+    F --Acceptable--> G[Application]
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style G fill:#10b981,stroke:#059669,color:#fff

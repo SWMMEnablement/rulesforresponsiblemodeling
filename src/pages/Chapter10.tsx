@@ -17,22 +17,22 @@ const Chapter10 = () => {
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph TD
-    A[Total Model Uncertainty] --&gt; B[Input Uncertainty]
-    A --&gt; C[Parameter Uncertainty]
-    A --&gt; D[Structural Uncertainty]
-    A --&gt; E[Calibration Uncertainty]
+    A[Total Model Uncertainty] --> B[Input Uncertainty]
+    A --> C[Parameter Uncertainty]
+    A --> D[Structural Uncertainty]
+    A --> E[Calibration Uncertainty]
     
-    B --&gt; F[Rainfall Measurement]
-    B --&gt; G[Initial Conditions]
+    B --> F[Rainfall Measurement]
+    B --> G[Initial Conditions]
     
-    C --&gt; H[Physical Parameters]
-    C --&gt; I[Empirical Coefficients]
+    C --> H[Physical Parameters]
+    C --> I[Empirical Coefficients]
     
-    D --&gt; J[Model Structure]
-    D --&gt; K[Process Representation]
+    D --> J[Model Structure]
+    D --> K[Process Representation]
     
-    E --&gt; L[Objective Function]
-    E --&gt; M[Equifinality]
+    E --> L[Objective Function]
+    E --> M[Equifinality]
     
     style A fill:#dc2626,stroke:#b91c1c,color:#fff
     style B fill:#f59e0b,stroke:#d97706,color:#fff
@@ -137,22 +137,22 @@ graph TD
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph TD
-    A[Identify Uncertainty Sources] --&gt; B[Define Probability Distributions]
-    B --&gt; C[Generate Parameter Samples]
-    C --&gt; D[Run Model Ensemble]
-    D --&gt; E[Analyze Output Distribution]
-    E --&gt; F[Confidence Intervals]
-    E --&gt; G[Prediction Bands]
-    E --&gt; H[Sensitivity Ranking]
+    A[Identify Uncertainty Sources] --> B[Define Probability Distributions]
+    B --> C[Generate Parameter Samples]
+    C --> D[Run Model Ensemble]
+    D --> E[Analyze Output Distribution]
+    E --> F[Confidence Intervals]
+    E --> G[Prediction Bands]
+    E --> H[Sensitivity Ranking]
     
-    F --&gt; I[Communicate Results]
-    G --&gt; I
-    H --&gt; I
+    F --> I[Communicate Results]
+    G --> I
+    H --> I
     
-    I --&gt; J[Acceptable Check]
-    J --No--&gt; K[Refine Model/Data]
-    J --Yes--&gt; L[Decision Making]
-    K --&gt; A
+    I --> J[Acceptable Check]
+    J --No--> K[Refine Model/Data]
+    J --Yes--> L[Decision Making]
+    K --> A
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style L fill:#10b981,stroke:#059669,color:#fff

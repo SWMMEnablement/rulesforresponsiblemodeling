@@ -18,14 +18,14 @@ const Chapter15 = () => {
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph LR
-    A[Crisp Input] --&gt; B[Fuzzification]
-    B --&gt; C[Fuzzy Sets]
-    C --&gt; D[Inference Engine]
-    D --&gt; E[Rule Evaluation]
-    E --&gt; F[Fuzzy Output]
-    F --&gt; G[Defuzzification]
-    G --&gt; H[Crisp Output]
-    I[Expert Rules] --&gt; D
+    A[Crisp Input] --> B[Fuzzification]
+    B --> C[Fuzzy Sets]
+    C --> D[Inference Engine]
+    D --> E[Rule Evaluation]
+    E --> F[Fuzzy Output]
+    F --> G[Defuzzification]
+    G --> H[Crisp Output]
+    I[Expert Rules] --> D
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style H fill:#10b981,stroke:#059669,color:#fff
