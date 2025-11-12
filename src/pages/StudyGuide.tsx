@@ -1,8 +1,10 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowLeft, BookOpen, CheckCircle, HelpCircle, Target } from "lucide-react";
+import { ArrowLeft, BookOpen, CheckCircle, HelpCircle, Target, Brain } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FlashcardDeck } from "@/components/FlashcardDeck";
 
 interface ChapterGuide {
   chapter: number;
@@ -450,47 +452,61 @@ const StudyGuide = () => {
 
       <div className="max-w-7xl mx-auto px-6 py-12">
         
-        {/* Introduction */}
-        <Card className="p-8 mb-12 bg-gradient-to-br from-primary/5 to-secondary/5">
-          <h2 className="text-2xl font-bold text-foreground mb-4">How to Use This Study Guide</h2>
-          <div className="space-y-4 text-muted-foreground">
-            <p>
-              This study guide is designed to help you master the principles and practices of responsible 
-              hydrological modeling. For each chapter, you'll find:
-            </p>
-            <div className="grid md:grid-cols-3 gap-4 mt-6">
-              <div className="flex items-start gap-3">
-                <Target className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-bold text-foreground">Learning Objectives</h3>
-                  <p className="text-sm">What you should be able to do after studying the chapter</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-bold text-foreground">Key Concepts</h3>
-                  <p className="text-sm">Essential terminology and principles to understand</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <HelpCircle className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-bold text-foreground">Assessment Questions</h3>
-                  <p className="text-sm">Questions to test your comprehension and application</p>
-                </div>
-              </div>
-            </div>
-            <p className="mt-6 text-sm italic">
-              💡 <strong>Tip:</strong> After reading each chapter, review the learning objectives to ensure 
-              you've achieved them, then attempt the self-assessment questions without referring back to the text. 
-              Use the key concepts as a checklist for your notes.
-            </p>
-          </div>
-        </Card>
+        <Tabs defaultValue="guide" className="space-y-8">
+          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
+            <TabsTrigger value="guide" className="gap-2">
+              <BookOpen className="h-4 w-4" />
+              Study Guide
+            </TabsTrigger>
+            <TabsTrigger value="flashcards" className="gap-2">
+              <Brain className="h-4 w-4" />
+              Flashcards
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Chapter Guides */}
-        <Accordion type="single" collapsible className="space-y-4">
+          {/* Study Guide Tab */}
+          <TabsContent value="guide" className="space-y-12">
+            {/* Introduction */}
+            <Card className="p-8 bg-gradient-to-br from-primary/5 to-secondary/5">
+              <h2 className="text-2xl font-bold text-foreground mb-4">How to Use This Study Guide</h2>
+              <div className="space-y-4 text-muted-foreground">
+                <p>
+                  This study guide is designed to help you master the principles and practices of responsible 
+                  hydrological modeling. For each chapter, you'll find:
+                </p>
+                <div className="grid md:grid-cols-3 gap-4 mt-6">
+                  <div className="flex items-start gap-3">
+                    <Target className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+                    <div>
+                      <h3 className="font-bold text-foreground">Learning Objectives</h3>
+                      <p className="text-sm">What you should be able to do after studying the chapter</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+                    <div>
+                      <h3 className="font-bold text-foreground">Key Concepts</h3>
+                      <p className="text-sm">Essential terminology and principles to understand</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <HelpCircle className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+                    <div>
+                      <h3 className="font-bold text-foreground">Assessment Questions</h3>
+                      <p className="text-sm">Questions to test your comprehension and application</p>
+                    </div>
+                  </div>
+                </div>
+                <p className="mt-6 text-sm italic">
+                  💡 <strong>Tip:</strong> After reading each chapter, review the learning objectives to ensure 
+                  you've achieved them, then attempt the self-assessment questions without referring back to the text. 
+                  Use the key concepts as a checklist for your notes.
+                </p>
+              </div>
+            </Card>
+
+            {/* Chapter Guides */}
+            <Accordion type="single" collapsible className="space-y-4">
           {studyGuideData.map((guide) => (
             <AccordionItem 
               key={guide.chapter} 
@@ -663,6 +679,21 @@ const StudyGuide = () => {
             </Link>
           </Card>
         </div>
+          </TabsContent>
+
+          {/* Flashcards Tab */}
+          <TabsContent value="flashcards" className="space-y-6">
+            <Card className="p-8 bg-gradient-to-br from-secondary/5 to-primary/5">
+              <h2 className="text-2xl font-bold text-foreground mb-4">Master Key Terminology with Flashcards</h2>
+              <p className="text-muted-foreground">
+                Use spaced repetition to efficiently memorize and retain important modeling concepts. 
+                Cards you find difficult will appear more frequently until mastered.
+              </p>
+            </Card>
+            
+            <FlashcardDeck />
+          </TabsContent>
+        </Tabs>
 
         {/* Bottom Navigation */}
         <div className="mt-16 text-center">
