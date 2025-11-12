@@ -80,7 +80,7 @@ const Index = () => {
       <footer className="py-12 px-6 bg-muted/30 border-t border-border">
         <div className="max-w-6xl mx-auto text-center">
           <p className="text-muted-foreground mb-2">
-            Rules for Responsible Modeling by William James, 4th Edition
+            Rules for Responsible Modeling by <Link to="/about-author" className="text-primary hover:underline font-medium">William James</Link>, 4th Edition
           </p>
           <p className="text-sm text-muted-foreground">
             Published by CHI (Computational Hydraulics International) • ISBN 0-9683681-5-8
