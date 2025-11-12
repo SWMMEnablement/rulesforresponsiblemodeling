@@ -26,14 +26,25 @@ export const ChapterLayout = ({ chapterNumber, title, children }: ChapterLayoutP
           {/* Header */}
           <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
             <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-4">
                 <SidebarTrigger />
-                <Link to="/">
-                  <Button variant="ghost" size="sm">
-                    <ArrowLeft className="w-4 h-4 mr-2" />
-                    Back to Overview
-                  </Button>
-                </Link>
+                <nav className="flex items-center gap-2">
+                  <Link to="/">
+                    <Button variant="ghost" size="sm">
+                      Home
+                    </Button>
+                  </Link>
+                  <Link to="/about-author">
+                    <Button variant="ghost" size="sm">
+                      About Author
+                    </Button>
+                  </Link>
+                  <Link to="/notes">
+                    <Button variant="ghost" size="sm">
+                      All Notes
+                    </Button>
+                  </Link>
+                </nav>
               </div>
               <div className="flex items-center gap-4">
                 <BookmarkButton chapterNumber={chapterNumber} title={title} />
