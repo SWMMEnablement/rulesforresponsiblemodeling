@@ -74,33 +74,122 @@ graph LR
         </section>
 
         <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Practical Example: Urban Catchment Data Assessment</h2>
+          <Card className="p-6 bg-card border-l-4 border-l-primary">
+            <h3 className="text-xl font-bold text-primary mb-3">Case Study: Downtown Drainage System</h3>
+            <p className="text-muted-foreground mb-4">
+              A 250-hectare urban catchment requires model development for flood management. Data assessment reveals:
+            </p>
+            <ul className="space-y-2 text-muted-foreground">
+              <li><strong>Physical Data:</strong> High-quality GIS layers with 2m resolution DTM (excellent)</li>
+              <li><strong>Rainfall Data:</strong> 15-minute rain gauge data with 5% missing values (good with interpolation)</li>
+              <li><strong>Flow Data:</strong> Single downstream gauge with occasional sensor drift (requires quality control)</li>
+              <li><strong>Land Use:</strong> Outdated by 3 years, significant new development (needs field verification)</li>
+            </ul>
+            <p className="text-muted-foreground mt-4">
+              The modeler documents each limitation, implements data correction procedures, and quantifies uncertainty 
+              impacts through sensitivity analysis. Missing rainfall values are filled using nearby stations with documented 
+              correlation coefficients.
+            </p>
+          </Card>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Statistical Analysis Methods</h2>
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-3">Quality Control Tests</h3>
+              <ul className="space-y-2 text-muted-foreground text-sm">
+                <li>• Range checking (min/max values)</li>
+                <li>• Consistency checks (mass balance)</li>
+                <li>• Outlier detection (z-scores, box plots)</li>
+                <li>• Temporal coherence (rate of change)</li>
+                <li>• Cross-validation with nearby stations</li>
+              </ul>
+            </Card>
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-3">Uncertainty Quantification</h3>
+              <ul className="space-y-2 text-muted-foreground text-sm">
+                <li>• Measurement error estimation</li>
+                <li>• Propagation through model chain</li>
+                <li>• Monte Carlo simulation</li>
+                <li>• Confidence interval calculation</li>
+                <li>• Sensitivity to data quality</li>
+              </ul>
+            </Card>
+          </div>
+          <p className="text-muted-foreground">
+            Systematic statistical analysis helps identify problematic data points, assess overall data quality, 
+            and provide quantitative measures of reliability. This information directly informs model calibration 
+            strategies and uncertainty bounds on predictions.
+          </p>
+        </section>
+
+        <section>
           <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
           <Quiz
             questions={[
               {
-                question: "What is model uncertainty?",
+                question: "What is the most critical factor affecting input data reliability?",
                 options: [
-                  "Errors in data entry",
-                  "The range of possible outcomes due to incomplete knowledge",
-                  "Computer processing errors",
-                  "User interface issues"
+                  "File format",
+                  "Systematic documentation of sources, methods, and quality checks",
+                  "Computer storage capacity",
+                  "Graphical presentation"
                 ],
                 correctAnswer: 1,
-                explanation: "Model uncertainty represents the range of possible outcomes that arise from incomplete knowledge about system parameters, structure, and future conditions."
+                explanation: "Systematic documentation of data sources, collection methods, and quality control procedures is essential for assessing and maintaining input data reliability throughout the modeling process."
               },
               {
-                question: "Which type of uncertainty relates to natural variability?",
+                question: "How should missing rainfall data best be handled?",
                 options: [
-                  "Epistemic uncertainty",
-                  "Aleatory uncertainty",
-                  "Parametric uncertainty",
-                  "Structural uncertainty"
+                  "Ignore the gaps and proceed",
+                  "Fill with zeros",
+                  "Use correlation with nearby stations and document the method",
+                  "Delete the entire dataset"
+                ],
+                correctAnswer: 2,
+                explanation: "Missing data should be filled using validated methods like correlation with nearby stations, and the approach must be documented with uncertainty quantification to maintain transparency."
+              },
+              {
+                question: "Why is GIS integration important for hydrological modeling?",
+                options: [
+                  "It makes prettier maps",
+                  "It enables systematic extraction of spatial parameters and maintains data consistency",
+                  "It is not important",
+                  "Only for large watersheds"
                 ],
                 correctAnswer: 1,
-                explanation: "Aleatory uncertainty represents inherent randomness and natural variability in systems that cannot be reduced through better data or knowledge."
+                explanation: "GIS integration allows systematic extraction of catchment characteristics, maintains spatial consistency, enables parameter updates, and provides essential documentation of physical model inputs."
               }
             ]}
           />
+        </section>
+
+        <section className="bg-gradient-to-br from-accent/20 to-background rounded-lg p-8">
+          <h2 className="text-2xl font-bold text-foreground mb-4">References & Further Reading</h2>
+          <div className="space-y-3 text-muted-foreground">
+            <p>
+              <strong className="text-foreground">James, W.</strong> (2005). <em>Rules for Responsible Modeling</em> (4th ed.). 
+              Computational Hydraulics International (CHI). Guelph, Ontario, Canada.
+            </p>
+            <p className="text-sm">
+              Available at:{" "}
+              <a 
+                href="https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html
+              </a>
+            </p>
+            <p className="mt-4 text-sm italic">
+              This chapter presents original educational content inspired by concepts from the James textbook, 
+              focusing on data reliability, quality assessment, and the critical role of GIS in managing 
+              hydrological model inputs.
+            </p>
+          </div>
         </section>
       </div>
     </ChapterLayout>

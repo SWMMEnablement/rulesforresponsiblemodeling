@@ -80,33 +80,131 @@ graph TD
         </section>
 
         <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Practical Example: Synthetic Storm Generation</h2>
+          <Card className="p-6 bg-card border-l-4 border-l-primary">
+            <h3 className="text-xl font-bold text-primary mb-3">Case Study: Design Storm Development</h3>
+            <p className="text-muted-foreground mb-4">
+              A site has only daily rainfall data but requires 5-minute resolution for urban drainage design:
+            </p>
+            <div className="space-y-3 text-muted-foreground text-sm">
+              <div className="p-3 bg-background rounded">
+                <strong>Challenge:</strong> 40 years of daily data, but storm structure unknown at sub-hourly scale. 
+                Historical design storms may not represent future climate conditions.
+              </div>
+              <div className="p-3 bg-background rounded">
+                <strong>Solution:</strong> Implement cascade-based temporal disaggregation:
+                <ul className="ml-4 mt-2 space-y-1">
+                  <li>• Preserve daily volumes and wet/dry statistics</li>
+                  <li>• Generate realistic sub-hourly variability</li>
+                  <li>• Create 100-year ensemble for risk analysis</li>
+                  <li>• Validate against limited sub-hourly records</li>
+                </ul>
+              </div>
+              <div className="p-3 bg-background rounded">
+                <strong>Results:</strong> Generated storms maintain statistical properties (mean, variance, extremes) 
+                while providing temporal detail needed for SWMM. Ensemble approach quantifies uncertainty bounds 
+                (50th-95th percentile) on infrastructure sizing.
+              </div>
+            </div>
+          </Card>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Stochastic Rainfall Models</h2>
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-3">Poisson Cluster Models</h3>
+              <ul className="space-y-2 text-muted-foreground text-sm">
+                <li>• Storm arrivals: Poisson process</li>
+                <li>• Rain cells: clustered around storms</li>
+                <li>• Parameters: cell intensity, duration, spacing</li>
+                <li>• Captures intermittency naturally</li>
+                <li>• Widely used (e.g., Bartlett-Lewis, NSRP)</li>
+              </ul>
+            </Card>
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-3">Disaggregation Methods</h3>
+              <ul className="space-y-2 text-muted-foreground text-sm">
+                <li>• Cascade models (multiplicative)</li>
+                <li>• Method of fragments</li>
+                <li>• Scaling relationships</li>
+                <li>• Preserves coarse-scale statistics</li>
+                <li>• Less physically based than point process</li>
+              </ul>
+            </Card>
+          </div>
+          <p className="text-muted-foreground">
+            Choice between generation and disaggregation depends on available data and objectives. Stochastic 
+            generation creates entirely synthetic series useful for risk analysis. Disaggregation refines 
+            existing coarse data, maintaining consistency with observed large-scale patterns while adding 
+            realistic fine-scale variability.
+          </p>
+        </section>
+
+        <section>
           <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
           <Quiz
             questions={[
               {
-                question: "What is the purpose of peer review in modeling?",
+                question: "What is the main purpose of rainfall disaggregation?",
                 options: [
-                  "To delay project completion",
-                  "To provide independent evaluation and improve model quality",
-                  "To make models more complex",
-                  "To avoid stakeholder input"
+                  "To remove data",
+                  "To convert coarse temporal resolution data into finer resolution needed for modeling",
+                  "To aggregate fine data",
+                  "To eliminate uncertainty"
                 ],
                 correctAnswer: 1,
-                explanation: "Peer review provides independent evaluation of model quality, assumptions, and methods, helping identify issues and improve overall model credibility."
+                explanation: "Disaggregation converts coarse temporal resolution (e.g., daily) rainfall data into finer resolution (e.g., 5-minute) needed for event-based urban drainage modeling while preserving statistical properties."
               },
               {
-                question: "When should peer review occur?",
+                question: "What is a key requirement when generating synthetic rainfall?",
                 options: [
-                  "Only at the end of the project",
-                  "Throughout the modeling process",
-                  "Never",
-                  "Only if problems arise"
+                  "Make it look different from observed data",
+                  "Preserve statistical properties of the historical record",
+                  "Always use the same pattern",
+                  "Ignore extreme events"
                 ],
                 correctAnswer: 1,
-                explanation: "Peer review should occur throughout the modeling process to catch issues early and ensure continuous quality improvement."
+                explanation: "Synthetic rainfall must preserve key statistics (mean, variance, extremes, temporal structure) of the historical record to ensure generated storms are representative and produce realistic model responses."
+              },
+              {
+                question: "Why use stochastic ensembles rather than single design storms?",
+                options: [
+                  "They are easier to generate",
+                  "To quantify uncertainty and explore range of possible outcomes",
+                  "Design storms are always wrong",
+                  "Computational efficiency"
+                ],
+                correctAnswer: 1,
+                explanation: "Stochastic ensembles provide a range of equally-probable scenarios that quantify uncertainty, assess risk across multiple storm characteristics, and avoid bias from single design storm selection."
               }
             ]}
           />
+        </section>
+
+        <section className="bg-gradient-to-br from-accent/20 to-background rounded-lg p-8">
+          <h2 className="text-2xl font-bold text-foreground mb-4">References & Further Reading</h2>
+          <div className="space-y-3 text-muted-foreground">
+            <p>
+              <strong className="text-foreground">James, W.</strong> (2005). <em>Rules for Responsible Modeling</em> (4th ed.). 
+              Computational Hydraulics International (CHI). Guelph, Ontario, Canada.
+            </p>
+            <p className="text-sm">
+              Available at:{" "}
+              <a 
+                href="https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html
+              </a>
+            </p>
+            <p className="mt-4 text-sm italic">
+              This chapter presents original educational content inspired by concepts from the James textbook, 
+              focusing on stochastic rainfall generation and disaggregation techniques for hydrological modeling.
+            </p>
+          </div>
         </section>
       </div>
     </ChapterLayout>

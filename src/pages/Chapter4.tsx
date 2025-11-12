@@ -83,33 +83,130 @@ graph TD
         </section>
 
         <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Practical Example: Selecting Model Detail</h2>
+          <Card className="p-6 bg-card border-l-4 border-l-primary">
+            <h3 className="text-xl font-bold text-primary mb-3">Case Study: Watershed Management Decision</h3>
+            <p className="text-muted-foreground mb-4">
+              A municipality must choose between three modeling approaches for long-term planning:
+            </p>
+            <div className="space-y-3 text-muted-foreground text-sm">
+              <div className="p-3 bg-background rounded">
+                <strong>Option A - Simple Rational Method:</strong> 3 parameters per subcatchment. Fast but misses 
+                temporal dynamics. Suitable only for peak flow estimation.
+              </div>
+              <div className="p-3 bg-background rounded">
+                <strong>Option B - Continuous SWMM:</strong> 15 parameters per subcatchment. Captures storage, 
+                infiltration, and temporal patterns. Requires calibration data but provides water balance.
+              </div>
+              <div className="p-3 bg-background rounded">
+                <strong>Option C - Distributed 2D Model:</strong> 100+ parameters. High resolution but parameter 
+                uncertainty overwhelms additional detail. Data requirements exceed availability.
+              </div>
+            </div>
+            <p className="text-muted-foreground mt-4">
+              <strong>Decision:</strong> Option B selected. Continuous simulation needed for long-term assessment, 
+              calibration data available, computational resources adequate. Option C rejected due to equifinality 
+              issues—many parameter sets produce similar results, making calibration unreliable.
+            </p>
+          </Card>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Sensitivity Analysis Methods</h2>
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-3">Local Sensitivity</h3>
+              <ul className="space-y-2 text-muted-foreground text-sm">
+                <li>• One-at-a-time parameter variation</li>
+                <li>• Derivative-based approaches</li>
+                <li>• Fast computation</li>
+                <li>• Limited to vicinity of base values</li>
+                <li>• Misses parameter interactions</li>
+              </ul>
+            </Card>
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-3">Global Sensitivity</h3>
+              <ul className="space-y-2 text-muted-foreground text-sm">
+                <li>• Variance-based methods (Sobol indices)</li>
+                <li>• Morris screening technique</li>
+                <li>• Explores full parameter space</li>
+                <li>• Captures interactions</li>
+                <li>• Computationally intensive</li>
+              </ul>
+            </Card>
+          </div>
+          <p className="text-muted-foreground">
+            Sensitivity analysis reveals which parameters merit careful calibration and which can be set to 
+            literature values. High sensitivity parameters become calibration targets; low sensitivity parameters 
+            can often be fixed, reducing model complexity without sacrificing performance.
+          </p>
+        </section>
+
+        <section>
           <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
           <Quiz
             questions={[
               {
-                question: "What is the purpose of sensitivity analysis?",
+                question: "What is equifinality in hydrological modeling?",
                 options: [
-                  "To make models more complex",
-                  "To identify which parameters most influence model outputs",
-                  "To eliminate all uncertainty",
-                  "To avoid validation"
+                  "Having only one correct parameter set",
+                  "Multiple different parameter sets producing similar model performance",
+                  "Parameters that never change",
+                  "Perfect model calibration"
                 ],
                 correctAnswer: 1,
-                explanation: "Sensitivity analysis identifies which parameters have the greatest influence on model outputs, helping prioritize data collection and understand model behavior."
+                explanation: "Equifinality means multiple parameter combinations can produce equally good fits to observed data, making it impossible to identify a single 'correct' parameter set and increasing prediction uncertainty."
               },
               {
-                question: "What does a high sensitivity indicate?",
+                question: "How does adding parameters affect model uncertainty?",
                 options: [
-                  "The parameter has little effect on outputs",
-                  "The model is incorrect",
-                  "Small changes in the parameter cause large changes in outputs",
-                  "The parameter should be ignored"
+                  "Always reduces uncertainty",
+                  "Has no effect",
+                  "Can increase uncertainty if parameters cannot be well-identified from available data",
+                  "Only affects computational speed"
                 ],
                 correctAnswer: 2,
-                explanation: "High sensitivity means small changes in a parameter lead to large changes in model outputs, indicating the parameter is critical and requires careful estimation."
+                explanation: "Adding parameters without sufficient data to constrain them increases model uncertainty through equifinality. More parameters require more data for reliable calibration."
+              },
+              {
+                question: "What is the parsimony principle in modeling?",
+                options: [
+                  "Always use maximum detail",
+                  "Use the simplest model that adequately captures system behavior",
+                  "Avoid all simplifications",
+                  "Minimize computer cost only"
+                ],
+                correctAnswer: 1,
+                explanation: "Parsimony (Occam's Razor) advocates using the simplest model that adequately represents the system, balancing detail against data availability and reducing unnecessary complexity."
               }
             ]}
           />
+        </section>
+
+        <section className="bg-gradient-to-br from-accent/20 to-background rounded-lg p-8">
+          <h2 className="text-2xl font-bold text-foreground mb-4">References & Further Reading</h2>
+          <div className="space-y-3 text-muted-foreground">
+            <p>
+              <strong className="text-foreground">James, W.</strong> (2005). <em>Rules for Responsible Modeling</em> (4th ed.). 
+              Computational Hydraulics International (CHI). Guelph, Ontario, Canada.
+            </p>
+            <p className="text-sm">
+              Available at:{" "}
+              <a 
+                href="https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html
+              </a>
+            </p>
+            <p className="mt-4 text-sm italic">
+              This chapter presents original educational content inspired by concepts from the James textbook, 
+              focusing on optimal complexity, the parsimony principle, and balancing model detail against 
+              data availability and uncertainty.
+            </p>
+          </div>
         </section>
       </div>
     </ChapterLayout>

@@ -80,33 +80,132 @@ graph TD
         </section>
 
         <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Practical Example: Ensemble Flood Forecasting</h2>
+          <Card className="p-6 bg-card border-l-4 border-l-primary">
+            <h3 className="text-xl font-bold text-primary mb-3">Case Study: Real-Time Warning System Implementation</h3>
+            <p className="text-muted-foreground mb-4">
+              A city operates a 6-hour ahead flood warning system with real-time uncertainty quantification:
+            </p>
+            <div className="space-y-3 text-muted-foreground text-sm">
+              <div className="p-3 bg-background rounded">
+                <strong>System Components:</strong>
+                <ul className="ml-4 mt-2 space-y-1">
+                  <li>• Ensemble rainfall forecasts (20 members from weather service)</li>
+                  <li>• Parameter uncertainty (100 sets from calibration)</li>
+                  <li>• Continuous model updating with real-time observations</li>
+                  <li>• Bayesian updating of confidence intervals</li>
+                </ul>
+              </div>
+              <div className="p-3 bg-background rounded">
+                <strong>Display Strategy:</strong> Operators see central forecast plus 50%, 80%, and 95% confidence 
+                bounds. Decision thresholds based on risk tolerance: 80% confidence for routine alerts, 50% for 
+                high-consequence areas requiring early action.
+              </div>
+              <div className="p-3 bg-background rounded">
+                <strong>Performance:</strong> 6-month evaluation shows 85% of actual peaks fall within 80% bounds. 
+                False alarm rate reduced 40% versus deterministic forecasts because uncertainty communication enables 
+                risk-informed decisions. Operators trust system more due to honest uncertainty representation.
+              </div>
+            </div>
+          </Card>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Uncertainty Quantification Methods</h2>
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-3">Probabilistic Approaches</h3>
+              <ul className="space-y-2 text-muted-foreground text-sm">
+                <li>• Monte Carlo ensemble generation</li>
+                <li>• Bayesian updating with observations</li>
+                <li>• Particle filtering for state estimation</li>
+                <li>• Ensemble Kalman filtering</li>
+                <li>• Confidence interval construction</li>
+              </ul>
+            </Card>
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-3">Communication Strategies</h3>
+              <ul className="space-y-2 text-muted-foreground text-sm">
+                <li>• Spaghetti plots (ensemble trajectories)</li>
+                <li>• Shaded confidence regions</li>
+                <li>• Probability of exceedance curves</li>
+                <li>• Risk matrices (likelihood × consequence)</li>
+                <li>• Plain language uncertainty statements</li>
+              </ul>
+            </Card>
+          </div>
+          <p className="text-muted-foreground">
+            Effective real-time uncertainty display requires balancing information richness with clarity. 
+            Too much detail overwhelms operators; too little leads to overconfidence. Best practices include 
+            showing central forecast prominently, providing multiple confidence levels, and training users to 
+            interpret probabilistic information for decision-making.
+          </p>
+        </section>
+
+        <section>
           <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
           <Quiz
             questions={[
               {
-                question: "What is risk analysis?",
+                question: "Why display uncertainty in real-time systems rather than single forecasts?",
                 options: [
-                  "Ignoring potential problems",
-                  "Systematic evaluation of potential adverse outcomes",
-                  "Assuming worst-case always",
-                  "Avoiding uncertainty"
+                  "To confuse operators",
+                  "Enables risk-informed decisions and builds trust through honest communication",
+                  "Single forecasts are always better",
+                  "To avoid responsibility"
                 ],
                 correctAnswer: 1,
-                explanation: "Risk analysis systematically evaluates potential adverse outcomes, their likelihood, and their consequences to support informed decision-making."
+                explanation: "Displaying uncertainty enables operators to make risk-informed decisions appropriate to consequences, reduces false confidence in precise predictions, and builds long-term trust through transparent communication of model limitations."
               },
               {
-                question: "What does risk characterization involve?",
+                question: "What is ensemble forecasting?",
                 options: [
-                  "Only identifying risks",
-                  "Estimating both probability and consequence of risks",
-                  "Eliminating all risks",
-                  "Accepting all risks"
+                  "Running model only once",
+                  "Running model multiple times with varied inputs/parameters to show range of outcomes",
+                  "Averaging all forecasts",
+                  "Using oldest forecast"
                 ],
                 correctAnswer: 1,
-                explanation: "Risk characterization involves estimating both the probability of adverse events and the magnitude of their potential consequences to fully understand risks."
+                explanation: "Ensemble forecasting runs the model multiple times with systematically varied inputs and parameters to generate a range of equally-plausible outcomes, representing prediction uncertainty through the spread of ensemble members."
+              },
+              {
+                question: "How should confidence bounds be used in decision-making?",
+                options: [
+                  "Always ignore them",
+                  "Set action thresholds based on risk tolerance and consequences",
+                  "Only use central forecast",
+                  "Take no action if any uncertainty exists"
+                ],
+                correctAnswer: 1,
+                explanation: "Decision thresholds should reflect risk tolerance: use wider bounds (lower confidence) for high-consequence decisions requiring early action, narrower bounds (higher confidence) for routine operations, balancing false alarms against missed events."
               }
             ]}
           />
+        </section>
+
+        <section className="bg-gradient-to-br from-accent/20 to-background rounded-lg p-8">
+          <h2 className="text-2xl font-bold text-foreground mb-4">References & Further Reading</h2>
+          <div className="space-y-3 text-muted-foreground">
+            <p>
+              <strong className="text-foreground">James, W.</strong> (2005). <em>Rules for Responsible Modeling</em> (4th ed.). 
+              Computational Hydraulics International (CHI). Guelph, Ontario, Canada.
+            </p>
+            <p className="text-sm">
+              Available at:{" "}
+              <a 
+                href="https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html
+              </a>
+            </p>
+            <p className="mt-4 text-sm italic">
+              This chapter presents original educational content inspired by concepts from the James textbook, 
+              focusing on real-time uncertainty assessment and communication in operational hydrological systems.
+            </p>
+          </div>
         </section>
       </div>
     </ChapterLayout>
