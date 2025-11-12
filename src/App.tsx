@@ -26,6 +26,7 @@ import AllNotes from "./pages/AllNotes";
 import AboutAuthor from "./pages/AboutAuthor";
 import Resources from "./pages/Resources";
 import Glossary from "./pages/Glossary";
+import StudyGuide from "./pages/StudyGuide";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ const App = () => (
           <Route path="/about-author" element={<AboutAuthor />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/glossary" element={<Glossary />} />
+          <Route path="/study-guide" element={<StudyGuide />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
