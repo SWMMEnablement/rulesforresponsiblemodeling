@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { BookmarkButton } from "./BookmarkButton";
+import { ChapterNotes } from "./ChapterNotes";
 
 interface ChapterLayoutProps {
   chapterNumber: number;
@@ -48,7 +49,14 @@ export const ChapterLayout = ({ chapterNumber, title, children }: ChapterLayoutP
 
       {/* Content */}
       <div className="max-w-6xl mx-auto px-6 py-12">
-        {children}
+        <div className="space-y-12">
+          {children}
+          
+          {/* Personal Notes Section */}
+          <section>
+            <ChapterNotes chapterNumber={chapterNumber} />
+          </section>
+        </div>
       </div>
 
       {/* Navigation */}
