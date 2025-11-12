@@ -250,14 +250,29 @@ graph TD
           </Card>
         </section>
 
-        <section>
-          <h2 className="text-3xl font-bold text-foreground mb-4">References</h2>
-          <Card className="p-6 bg-muted/30">
-            <p className="text-muted-foreground leading-relaxed">
-              <strong>James, W.</strong> (2005). <em>Rules for Responsible Modeling</em> (4th ed.). Computational 
-              Hydraulics International (CHI), Guelph, Ontario, Canada.
+        <section className="bg-gradient-to-br from-accent/20 to-background rounded-lg p-8">
+          <h2 className="text-2xl font-bold text-foreground mb-4">References & Further Reading</h2>
+          <div className="space-y-3 text-muted-foreground">
+            <p>
+              <strong className="text-foreground">James, W.</strong> (2005). <em>Rules for Responsible Modeling</em> (4th ed.). 
+              Computational Hydraulics International (CHI). Guelph, Ontario, Canada.
             </p>
-          </Card>
+            <p className="text-sm">
+              Available at:{" "}
+              <a 
+                href="https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html
+              </a>
+            </p>
+            <p className="mt-4 text-sm italic">
+              This chapter presents original educational content inspired by concepts from the James textbook, 
+              with focus on understanding and quantifying model uncertainty in hydrological applications.
+            </p>
+          </div>
         </section>
 
         <section>
