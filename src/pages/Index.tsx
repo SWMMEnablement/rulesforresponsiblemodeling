@@ -85,6 +85,11 @@ const Index = () => {
           <p className="text-sm text-muted-foreground">
             Published by CHI (Computational Hydraulics International) • ISBN 0-9683681-5-8
           </p>
+          <p className="text-sm text-muted-foreground mt-2">
+            <Link to="/resources" className="text-primary hover:underline">
+              View Water Modeling Resources & Links
+            </Link>
+          </p>
           <p className="text-sm text-muted-foreground mt-4">
             © 2005 CHI. All rights reserved.
           </p>
