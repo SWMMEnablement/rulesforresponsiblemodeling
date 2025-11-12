@@ -16,7 +16,7 @@ export const Hero = () => {
         </h1>
         
         <p className="text-xl md:text-2xl text-white/90 mb-4 animate-slide-up" style={{ animationDelay: "0.1s" }}>
-          by William James
+          by William James reinterpretation by Robert Dickinson in a Vibe APP
         </p>
         
         <p className="text-lg md:text-xl text-white/80 mb-12 max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: "0.2s" }}>
