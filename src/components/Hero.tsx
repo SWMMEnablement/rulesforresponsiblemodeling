@@ -1,6 +1,11 @@
-import { BookOpen, Activity, TrendingUp } from "lucide-react";
+import { BookOpen, Activity, TrendingUp, Code2 } from "lucide-react";
+import { Button } from "./ui/button";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 
 export const Hero = () => {
+  const [showCodeDialog, setShowCodeDialog] = useState(false);
+  
   return (
     <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary via-primary-light to-secondary px-6 py-20">
       <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:40px_40px]" />
@@ -24,7 +29,7 @@ export const Hero = () => {
           covering reliability, uncertainty, and sustainable ecosystem impacts
         </p>
         
-        <div className="flex flex-wrap justify-center gap-6 animate-slide-up" style={{ animationDelay: "0.3s" }}>
+        <div className="flex flex-wrap justify-center gap-6 mb-8 animate-slide-up" style={{ animationDelay: "0.3s" }}>
           <div className="flex items-center gap-3 px-6 py-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20">
             <BookOpen className="w-6 h-6 text-white" />
             <div className="text-left">
@@ -41,7 +46,36 @@ export const Hero = () => {
             </div>
           </div>
         </div>
+        
+        <Button 
+          onClick={() => setShowCodeDialog(true)}
+          variant="outline"
+          size="lg"
+          className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 animate-slide-up"
+          style={{ animationDelay: "0.4s" }}
+        >
+          <Code2 className="w-5 h-5 mr-2" />
+          View Source Code
+        </Button>
       </div>
+      
+      <Dialog open={showCodeDialog} onOpenChange={setShowCodeDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>View Source Code</DialogTitle>
+            <DialogDescription className="space-y-3 pt-2">
+              <p>This Vibe APP is built with React, TypeScript, and Tailwind CSS.</p>
+              <div className="space-y-2">
+                <p className="font-semibold">To view the code:</p>
+                <ul className="list-disc list-inside space-y-1 text-sm">
+                  <li><strong>Desktop:</strong> Click the Dev Mode toggle (code icon) in the top area of the preview</li>
+                  <li><strong>Export to GitHub:</strong> Click the GitHub button in the top right to connect and sync this project to your repository</li>
+                </ul>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
       
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
     </section>
