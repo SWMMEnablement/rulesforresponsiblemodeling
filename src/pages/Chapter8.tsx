@@ -1,0 +1,80 @@
+import { ChapterLayout } from "@/components/ChapterLayout";
+import { Card } from "@/components/ui/card";
+import { MermaidDiagram } from "@/components/MermaidDiagram";
+
+const Chapter8 = () => {
+  return (
+    <ChapterLayout chapterNumber={8} title="Decision Support">
+      <div className="space-y-12">
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">PCSWMM and Software Tools</h2>
+          <p className="text-muted-foreground leading-relaxed mb-6">
+            Decision support systems integrate modeling capabilities with user-friendly interfaces, 
+            visualization tools, and scenario analysis features. PCSWMM exemplifies modern approaches 
+            to practical urban drainage modeling and management.
+          </p>
+
+          <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
+            <MermaidDiagram chart={`
+graph TD
+    A[User Interface] --&gt; B[Model Setup]
+    B --&gt; C[Data Input]
+    C --&gt; D[SWMM Engine]
+    D --&gt; E[Simulation]
+    E --&gt; F[Results]
+    F --&gt; G[Visualization]
+    F --&gt; H[Analysis Tools]
+    G --&gt; I[Decision Making]
+    H --&gt; I
+    I --&gt; J{Scenarios}
+    J --&gt;|Iterate| B
+    J --&gt;|Finalize| K[Implementation]
+    
+    style A fill:#3b82f6,stroke:#2563eb,color:#fff
+    style K fill:#10b981,stroke:#059669,color:#fff
+    style I fill:#f59e0b,stroke:#d97706,color:#fff
+            `} />
+          </Card>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Tool Features</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-2">Integration</h3>
+              <p className="text-muted-foreground text-sm">GIS connectivity, database management, CAD import/export</p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-2">Visualization</h3>
+              <p className="text-muted-foreground text-sm">Time series plots, spatial maps, animation capabilities</p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-2">Analysis</h3>
+              <p className="text-muted-foreground text-sm">Sensitivity, calibration, optimization, reporting</p>
+            </Card>
+          </div>
+        </section>
+
+        <section className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg p-8">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Implementation Benefits</h2>
+          <ul className="space-y-3 text-muted-foreground">
+            <li className="flex items-start gap-3">
+              <span className="text-primary text-xl">→</span>
+              <span>Streamlined workflow from data to decisions</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-primary text-xl">→</span>
+              <span>Scenario comparison and trade-off analysis</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-primary text-xl">→</span>
+              <span>Stakeholder communication through visualization</span>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </ChapterLayout>
+  );
+};
+
+export default Chapter8;

@@ -1,0 +1,79 @@
+import { ChapterLayout } from "@/components/ChapterLayout";
+import { Card } from "@/components/ui/card";
+import { MermaidDiagram } from "@/components/MermaidDiagram";
+
+const Chapter5 = () => {
+  return (
+    <ChapterLayout chapterNumber={5} title="Continuous Models">
+      <div className="space-y-12">
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Long-Term Sustainability Modeling</h2>
+          <p className="text-muted-foreground leading-relaxed mb-6">
+            Continuous simulation models run over extended periods to capture seasonal variations, 
+            ecosystem processes, and long-term trends. These models are essential for sustainability 
+            assessment, climate impact studies, and ethical water resource management.
+          </p>
+
+          <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
+            <MermaidDiagram chart={`
+graph LR
+    A[Continuous Input] --&gt; B[Hydrological Processes]
+    B --&gt; C[Runoff Generation]
+    B --&gt; D[Infiltration]
+    B --&gt; E[Evapotranspiration]
+    C --&gt; F[Water Balance]
+    D --&gt; F
+    E --&gt; F
+    F --&gt; G[Ecosystem Impact]
+    F --&gt; H[Sustainability Metrics]
+    G --&gt; I[Long-term Analysis]
+    H --&gt; I
+    
+    style A fill:#3b82f6,stroke:#2563eb,color:#fff
+    style I fill:#10b981,stroke:#059669,color:#fff
+    style F fill:#f59e0b,stroke:#d97706,color:#fff
+            `} />
+          </Card>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Key Applications</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-2">Water Balance</h3>
+              <p className="text-muted-foreground text-sm">Long-term accounting of inputs, outputs, and storage changes</p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-2">Ecosystem Health</h3>
+              <p className="text-muted-foreground text-sm">Stream flow patterns and habitat sustainability</p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-2">Climate Change</h3>
+              <p className="text-muted-foreground text-sm">Impact assessment over multi-decadal periods</p>
+            </Card>
+          </div>
+        </section>
+
+        <section className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg p-8">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Ethical Considerations</h2>
+          <ul className="space-y-3 text-muted-foreground">
+            <li className="flex items-start gap-3">
+              <span className="text-primary text-xl">→</span>
+              <span>Intergenerational equity in water resource planning</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-primary text-xl">→</span>
+              <span>Environmental flow requirements for ecosystem protection</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-primary text-xl">→</span>
+              <span>Transparent communication of model limitations and uncertainties</span>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </ChapterLayout>
+  );
+};
+
+export default Chapter5;

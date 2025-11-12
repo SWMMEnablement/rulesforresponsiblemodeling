@@ -5,11 +5,23 @@ import { Chapters } from "@/components/Chapters";
 import { ConceptDiagram } from "@/components/ConceptDiagram";
 import { KeyConcepts } from "@/components/KeyConcepts";
 import { Timeline } from "@/components/Timeline";
+import { SearchBar } from "@/components/SearchBar";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <Hero />
+      
+      {/* Search Section */}
+      <section className="py-12 px-6 bg-gradient-to-br from-primary/5 to-secondary/5">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-2xl font-bold text-center mb-6 text-foreground">
+            Find What You're Looking For
+          </h2>
+          <SearchBar />
+        </div>
+      </section>
+      
       <KeyQuotes />
       <Timeline />
       <ModelingProcess />
