@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter4 = () => {
   return (
@@ -79,6 +80,36 @@ graph TD
               <span>Consider diminishing returns of increasing complexity</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is the purpose of sensitivity analysis?",
+                options: [
+                  "To make models more complex",
+                  "To identify which parameters most influence model outputs",
+                  "To eliminate all uncertainty",
+                  "To avoid validation"
+                ],
+                correctAnswer: 1,
+                explanation: "Sensitivity analysis identifies which parameters have the greatest influence on model outputs, helping prioritize data collection and understand model behavior."
+              },
+              {
+                question: "What does a high sensitivity indicate?",
+                options: [
+                  "The parameter has little effect on outputs",
+                  "The model is incorrect",
+                  "Small changes in the parameter cause large changes in outputs",
+                  "The parameter should be ignored"
+                ],
+                correctAnswer: 2,
+                explanation: "High sensitivity means small changes in a parameter lead to large changes in model outputs, indicating the parameter is critical and requires careful estimation."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

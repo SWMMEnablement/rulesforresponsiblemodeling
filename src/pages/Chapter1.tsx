@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter1 = () => {
   return (
@@ -89,6 +90,47 @@ graph LR
               <span>The goal is insight and informed decisions, not perfect predictions</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is the primary purpose of responsible modeling?",
+                options: [
+                  "To create the most complex model possible",
+                  "To develop defensible, credible models for decision-making",
+                  "To avoid stakeholder engagement",
+                  "To maximize computational efficiency"
+                ],
+                correctAnswer: 1,
+                explanation: "Responsible modeling aims to create defensible, credible models that support effective decision-making while maintaining transparency and stakeholder trust."
+              },
+              {
+                question: "Which is NOT one of the key principles of responsible modeling?",
+                options: [
+                  "Transparency",
+                  "Stakeholder engagement",
+                  "Model complexity maximization",
+                  "Uncertainty characterization"
+                ],
+                correctAnswer: 2,
+                explanation: "Model complexity should be appropriate to the problem, not maximized. The key principles include transparency, stakeholder engagement, and proper uncertainty characterization."
+              },
+              {
+                question: "Why is stakeholder engagement important in modeling?",
+                options: [
+                  "It slows down the modeling process",
+                  "It ensures models address real needs and build trust",
+                  "It is not important",
+                  "It only matters for academic models"
+                ],
+                correctAnswer: 1,
+                explanation: "Stakeholder engagement ensures that models address real-world needs, incorporate diverse perspectives, and build trust in the modeling process and results."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

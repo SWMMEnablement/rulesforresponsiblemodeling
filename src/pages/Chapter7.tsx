@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter7 = () => {
   return (
@@ -77,6 +78,36 @@ graph LR
               <span>Critical duration and path identification</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "Why is documentation important?",
+                options: [
+                  "It's not important",
+                  "It ensures reproducibility and transparency",
+                  "It slows down projects",
+                  "Only for academic purposes"
+                ],
+                correctAnswer: 1,
+                explanation: "Documentation ensures model reproducibility, transparency, and allows others to understand, evaluate, and build upon the modeling work."
+              },
+              {
+                question: "What should documentation include?",
+                options: [
+                  "Only final results",
+                  "Objectives, methods, assumptions, data, results, and limitations",
+                  "Just the code",
+                  "Only success stories"
+                ],
+                correctAnswer: 1,
+                explanation: "Comprehensive documentation includes objectives, methods, assumptions, data sources, results, limitations, and uncertainties for complete transparency."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

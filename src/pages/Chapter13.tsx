@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter13 = () => {
   return (
@@ -71,6 +72,36 @@ graph TD
               <span>Align metrics with modeling objectives and decision context</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is optimization in modeling?",
+                options: [
+                  "Making models faster",
+                  "Finding the best solution given objectives and constraints",
+                  "Removing all parameters",
+                  "Simplifying equations"
+                ],
+                correctAnswer: 1,
+                explanation: "Optimization is the process of finding the best solution to a problem given defined objectives and constraints, such as minimizing cost or maximizing performance."
+              },
+              {
+                question: "What is a constraint in optimization?",
+                options: [
+                  "A limitation or requirement that must be satisfied",
+                  "An error in the model",
+                  "An objective function",
+                  "A data source"
+                ],
+                correctAnswer: 0,
+                explanation: "A constraint is a limitation or requirement that feasible solutions must satisfy, such as capacity limits, budget restrictions, or regulatory requirements."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

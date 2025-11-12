@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter3 = () => {
   return (
@@ -70,6 +71,36 @@ graph LR
               <span>File management and metadata documentation standards</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is model uncertainty?",
+                options: [
+                  "Errors in data entry",
+                  "The range of possible outcomes due to incomplete knowledge",
+                  "Computer processing errors",
+                  "User interface issues"
+                ],
+                correctAnswer: 1,
+                explanation: "Model uncertainty represents the range of possible outcomes that arise from incomplete knowledge about system parameters, structure, and future conditions."
+              },
+              {
+                question: "Which type of uncertainty relates to natural variability?",
+                options: [
+                  "Epistemic uncertainty",
+                  "Aleatory uncertainty",
+                  "Parametric uncertainty",
+                  "Structural uncertainty"
+                ],
+                correctAnswer: 1,
+                explanation: "Aleatory uncertainty represents inherent randomness and natural variability in systems that cannot be reduced through better data or knowledge."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

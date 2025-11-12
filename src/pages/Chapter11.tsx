@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter11 = () => {
   return (
@@ -77,6 +78,36 @@ graph TD
               <span>Understand model behavior and limitations</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is scenario analysis?",
+                options: [
+                  "Predicting exact futures",
+                  "Exploring plausible future conditions and their impacts",
+                  "Eliminating uncertainty",
+                  "Avoiding planning"
+                ],
+                correctAnswer: 1,
+                explanation: "Scenario analysis explores a range of plausible future conditions to understand potential impacts and develop robust strategies across different futures."
+              },
+              {
+                question: "Why use multiple scenarios?",
+                options: [
+                  "To make analysis more complex",
+                  "To test robustness across different possible futures",
+                  "It's not necessary",
+                  "To avoid decisions"
+                ],
+                correctAnswer: 1,
+                explanation: "Multiple scenarios help test the robustness of decisions and strategies across different possible futures, leading to more resilient planning."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

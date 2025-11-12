@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter16 = () => {
   return (
@@ -76,6 +77,36 @@ graph TD
               <span>Risk-based decision thresholds incorporating uncertainty</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is risk analysis?",
+                options: [
+                  "Ignoring potential problems",
+                  "Systematic evaluation of potential adverse outcomes",
+                  "Assuming worst-case always",
+                  "Avoiding uncertainty"
+                ],
+                correctAnswer: 1,
+                explanation: "Risk analysis systematically evaluates potential adverse outcomes, their likelihood, and their consequences to support informed decision-making."
+              },
+              {
+                question: "What does risk characterization involve?",
+                options: [
+                  "Only identifying risks",
+                  "Estimating both probability and consequence of risks",
+                  "Eliminating all risks",
+                  "Accepting all risks"
+                ],
+                correctAnswer: 1,
+                explanation: "Risk characterization involves estimating both the probability of adverse events and the magnitude of their potential consequences to fully understand risks."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

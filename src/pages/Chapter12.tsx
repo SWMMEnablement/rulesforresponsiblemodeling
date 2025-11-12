@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter12 = () => {
   return (
@@ -76,6 +77,36 @@ graph LR
               <span>Optimization problem formulation</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is state variable space?",
+                options: [
+                  "Physical storage location",
+                  "Mathematical framework for representing system dynamics",
+                  "Computer memory",
+                  "Data storage system"
+                ],
+                correctAnswer: 1,
+                explanation: "State variable space is a mathematical framework that represents system dynamics using state variables and their relationships in a multidimensional space."
+              },
+              {
+                question: "What are state variables?",
+                options: [
+                  "Geographic locations",
+                  "Variables that describe the current condition of a system",
+                  "Government regulations",
+                  "Software settings"
+                ],
+                correctAnswer: 1,
+                explanation: "State variables are quantities that describe the current condition or status of a system, such as storage volumes, flow rates, or concentrations."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter15 = () => {
   return (
@@ -67,6 +68,36 @@ graph LR
               <span>Integration of expert knowledge into model frameworks</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is adaptive management?",
+                options: [
+                  "Fixed long-term plans",
+                  "Learning by doing and adjusting based on monitoring",
+                  "Avoiding changes",
+                  "Only theoretical planning"
+                ],
+                correctAnswer: 1,
+                explanation: "Adaptive management is a structured, iterative approach that involves learning from implementation, monitoring outcomes, and adjusting strategies based on results."
+              },
+              {
+                question: "Why is monitoring important in adaptive management?",
+                options: [
+                  "It's not important",
+                  "It provides feedback to evaluate and adjust strategies",
+                  "Only for compliance",
+                  "To increase costs"
+                ],
+                correctAnswer: 1,
+                explanation: "Monitoring provides essential feedback on how well strategies are working, enabling evidence-based adjustments and continuous improvement."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

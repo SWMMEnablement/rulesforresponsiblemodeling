@@ -6,8 +6,13 @@ import { ConceptDiagram } from "@/components/ConceptDiagram";
 import { KeyConcepts } from "@/components/KeyConcepts";
 import { Timeline } from "@/components/Timeline";
 import { SearchBar } from "@/components/SearchBar";
+import { useBookmarks } from "@/hooks/useBookmarks";
+import { Card } from "@/components/ui/card";
+import { Link } from "react-router-dom";
+import { Bookmark } from "lucide-react";
 
 const Index = () => {
+  const { bookmarks } = useBookmarks();
   return (
     <div className="min-h-screen bg-background">
       <Hero />
@@ -21,6 +26,35 @@ const Index = () => {
           <SearchBar />
         </div>
       </section>
+      
+      {/* Bookmarked Chapters */}
+      {bookmarks.length > 0 && (
+        <section className="py-12 px-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center gap-2 mb-6">
+              <Bookmark className="w-6 h-6 text-primary fill-primary" />
+              <h2 className="text-3xl font-bold text-foreground">Your Bookmarks</h2>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {bookmarks
+                .sort((a, b) => b.timestamp - a.timestamp)
+                .map((bookmark) => (
+                  <Link key={bookmark.chapterNumber} to={`/chapter/${bookmark.chapterNumber}`}>
+                    <Card className="p-6 hover:shadow-[var(--shadow-hover)] transition-all border-l-4 border-l-primary">
+                      <div className="flex items-start justify-between mb-2">
+                        <span className="text-sm font-medium text-primary">
+                          Chapter {bookmark.chapterNumber}
+                        </span>
+                        <Bookmark className="w-4 h-4 text-primary fill-primary" />
+                      </div>
+                      <h3 className="text-lg font-bold text-foreground">{bookmark.title}</h3>
+                    </Card>
+                  </Link>
+                ))}
+            </div>
+          </div>
+        </section>
+      )}
       
       <KeyQuotes />
       <Timeline />

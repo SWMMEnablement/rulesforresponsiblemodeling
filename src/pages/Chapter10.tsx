@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter10 = () => {
   return (
@@ -203,6 +204,36 @@ graph TD
               <span>Communication of uncertainty is as important as its quantification</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is Monte Carlo simulation used for?",
+                options: [
+                  "Eliminating uncertainty",
+                  "Quantifying uncertainty through repeated random sampling",
+                  "Making models more complex",
+                  "Avoiding probability distributions"
+                ],
+                correctAnswer: 1,
+                explanation: "Monte Carlo simulation uses repeated random sampling from probability distributions to quantify uncertainty and generate probability distributions of model outputs."
+              },
+              {
+                question: "What does a probability distribution describe?",
+                options: [
+                  "Exact future values",
+                  "The range and likelihood of possible values",
+                  "Only worst-case scenarios",
+                  "Model errors"
+                ],
+                correctAnswer: 1,
+                explanation: "A probability distribution describes the range of possible values a variable can take and the relative likelihood of each value occurring."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter2 = () => {
   return (
@@ -75,6 +76,36 @@ graph TD
               <span>Perform sensitivity analysis on discretization choices</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is the main purpose of model objectives?",
+                options: [
+                  "To make the model more complex",
+                  "To clearly define what the model should achieve",
+                  "To exclude stakeholders",
+                  "To avoid documentation"
+                ],
+                correctAnswer: 1,
+                explanation: "Model objectives clearly define what the model should achieve, guiding the entire modeling process and ensuring alignment with decision-making needs."
+              },
+              {
+                question: "Why should objectives be SMART?",
+                options: [
+                  "To impress stakeholders",
+                  "To ensure they are Specific, Measurable, Achievable, Relevant, and Time-bound",
+                  "To make them complex",
+                  "SMART is not relevant to modeling"
+                ],
+                correctAnswer: 1,
+                explanation: "SMART objectives ensure clarity, measurability, and achievability, making it easier to evaluate whether the model meets its intended purpose."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

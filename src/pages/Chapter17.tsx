@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter17 = () => {
   return (
@@ -76,6 +77,36 @@ graph TD
               <span>Ethical practice requires honesty about what models can and cannot do</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is model integration?",
+                options: [
+                  "Using only one model",
+                  "Combining multiple models to address complex problems",
+                  "Avoiding complexity",
+                  "Simplifying all models"
+                ],
+                correctAnswer: 1,
+                explanation: "Model integration involves combining multiple models (e.g., hydrologic, economic, ecological) to address complex, interdisciplinary problems more comprehensively."
+              },
+              {
+                question: "What is a challenge in model integration?",
+                options: [
+                  "Models become too simple",
+                  "Ensuring consistency across different spatial and temporal scales",
+                  "Reduced capabilities",
+                  "Less realistic results"
+                ],
+                correctAnswer: 1,
+                explanation: "A major challenge is ensuring consistency when integrating models that may operate at different spatial scales, temporal resolutions, or with different assumptions."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

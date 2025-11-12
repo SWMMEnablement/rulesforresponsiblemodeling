@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter6 = () => {
   return (
@@ -76,6 +77,36 @@ graph TD
               <span>Risk analysis with synthetic ensembles</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is the purpose of peer review in modeling?",
+                options: [
+                  "To delay project completion",
+                  "To provide independent evaluation and improve model quality",
+                  "To make models more complex",
+                  "To avoid stakeholder input"
+                ],
+                correctAnswer: 1,
+                explanation: "Peer review provides independent evaluation of model quality, assumptions, and methods, helping identify issues and improve overall model credibility."
+              },
+              {
+                question: "When should peer review occur?",
+                options: [
+                  "Only at the end of the project",
+                  "Throughout the modeling process",
+                  "Never",
+                  "Only if problems arise"
+                ],
+                correctAnswer: 1,
+                explanation: "Peer review should occur throughout the modeling process to catch issues early and ensure continuous quality improvement."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

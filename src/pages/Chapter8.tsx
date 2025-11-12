@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter8 = () => {
   return (
@@ -71,6 +72,36 @@ graph TD
               <span>Stakeholder communication through visualization</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is data quality assurance?",
+                options: [
+                  "Ignoring data errors",
+                  "Systematic processes to ensure data accuracy and reliability",
+                  "Using any available data",
+                  "Avoiding data documentation"
+                ],
+                correctAnswer: 1,
+                explanation: "Data quality assurance involves systematic processes to verify, validate, and ensure the accuracy, completeness, and reliability of data used in models."
+              },
+              {
+                question: "Why is data provenance important?",
+                options: [
+                  "It's not important",
+                  "It tracks data sources and transformations for transparency",
+                  "It makes data more complex",
+                  "Only for legal purposes"
+                ],
+                correctAnswer: 1,
+                explanation: "Data provenance tracks the origin, collection methods, and transformations of data, ensuring transparency and enabling quality assessment."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

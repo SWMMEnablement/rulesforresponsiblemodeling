@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
+import { BookmarkButton } from "./BookmarkButton";
 
 interface ChapterLayoutProps {
   chapterNumber: number;
@@ -24,8 +25,11 @@ export const ChapterLayout = ({ chapterNumber, title, children }: ChapterLayoutP
               Back to Overview
             </Button>
           </Link>
-          <div className="text-sm text-muted-foreground">
-            Chapter {chapterNumber} of 17
+          <div className="flex items-center gap-4">
+            <BookmarkButton chapterNumber={chapterNumber} title={title} />
+            <div className="text-sm text-muted-foreground">
+              Chapter {chapterNumber} of 17
+            </div>
           </div>
         </div>
       </header>

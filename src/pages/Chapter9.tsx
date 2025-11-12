@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter9 = () => {
   return (
@@ -77,6 +78,36 @@ graph TD
               <span>Weight selection should reflect stakeholder priorities</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is model complexity?",
+                options: [
+                  "Always better when higher",
+                  "The balance between detail and simplicity appropriate to objectives",
+                  "Unimportant consideration",
+                  "Should always be minimized"
+                ],
+                correctAnswer: 1,
+                explanation: "Model complexity should be appropriate to the objectives - complex enough to answer key questions but simple enough to be understood and calibrated."
+              },
+              {
+                question: "What is Occam's Razor in modeling?",
+                options: [
+                  "Always use the most complex model",
+                  "Prefer simpler models when they perform equally well",
+                  "Avoid all simplifications",
+                  "Only use simple models"
+                ],
+                correctAnswer: 1,
+                explanation: "Occam's Razor suggests that when multiple models perform equally well, the simpler model should be preferred for easier interpretation and fewer calibration issues."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

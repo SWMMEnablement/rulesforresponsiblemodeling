@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter14 = () => {
   return (
@@ -259,6 +260,47 @@ graph TD
               <span>Parameter uncertainty should be quantified and communicated</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "How do genetic algorithms work?",
+                options: [
+                  "By random guessing",
+                  "By mimicking natural selection and evolution",
+                  "By exhaustive search",
+                  "By linear programming"
+                ],
+                correctAnswer: 1,
+                explanation: "Genetic algorithms mimic natural selection, using operations like selection, crossover, and mutation to evolve better solutions over generations."
+              },
+              {
+                question: "What is a fitness function in genetic algorithms?",
+                options: [
+                  "Exercise routine",
+                  "Measure of how well a solution performs",
+                  "Computer processing speed",
+                  "Data quality metric"
+                ],
+                correctAnswer: 1,
+                explanation: "The fitness function evaluates how well each solution performs relative to the objectives, guiding the selection process toward better solutions."
+              },
+              {
+                question: "What is crossover in genetic algorithms?",
+                options: [
+                  "Deleting solutions",
+                  "Combining parts of parent solutions to create offspring",
+                  "Random mutation",
+                  "Final optimization step"
+                ],
+                correctAnswer: 1,
+                explanation: "Crossover combines genetic information from two parent solutions to create offspring solutions, allowing good traits to be shared and combined."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>

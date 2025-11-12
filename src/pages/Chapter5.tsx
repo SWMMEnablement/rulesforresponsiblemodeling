@@ -1,6 +1,7 @@
 import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { Quiz } from "@/components/Quiz";
 
 const Chapter5 = () => {
   return (
@@ -70,6 +71,36 @@ graph LR
               <span>Transparent communication of model limitations and uncertainties</span>
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
+          <Quiz
+            questions={[
+              {
+                question: "What is model calibration?",
+                options: [
+                  "Making the model more complex",
+                  "Adjusting parameters to match observed data",
+                  "Removing uncertainty",
+                  "Ignoring validation"
+                ],
+                correctAnswer: 1,
+                explanation: "Model calibration is the process of adjusting model parameters so that model outputs match observed historical data as closely as possible."
+              },
+              {
+                question: "Why is validation important?",
+                options: [
+                  "It's not important",
+                  "It tests model performance on independent data",
+                  "It eliminates all errors",
+                  "It makes models simpler"
+                ],
+                correctAnswer: 1,
+                explanation: "Validation tests model performance using independent data not used in calibration, providing confidence that the model can make reliable predictions."
+              }
+            ]}
+          />
         </section>
       </div>
     </ChapterLayout>
