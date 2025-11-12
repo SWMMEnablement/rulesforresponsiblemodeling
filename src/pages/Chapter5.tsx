@@ -18,17 +18,17 @@ const Chapter5 = () => {
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph LR
-    A[Continuous Input] --&gt; B[Hydrological Processes]
-    B --&gt; C[Runoff Generation]
-    B --&gt; D[Infiltration]
-    B --&gt; E[Evapotranspiration]
-    C --&gt; F[Water Balance]
-    D --&gt; F
-    E --&gt; F
-    F --&gt; G[Ecosystem Impact]
-    F --&gt; H[Sustainability Metrics]
-    G --&gt; I[Long-term Analysis]
-    H --&gt; I
+    A[Continuous Input] --> B[Hydrological Processes]
+    B --> C[Runoff Generation]
+    B --> D[Infiltration]
+    B --> E[Evapotranspiration]
+    C --> F[Water Balance]
+    D --> F
+    E --> F
+    F --> G[Ecosystem Impact]
+    F --> H[Sustainability Metrics]
+    G --> I[Long-term Analysis]
+    H --> I
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style I fill:#10b981,stroke:#059669,color:#fff

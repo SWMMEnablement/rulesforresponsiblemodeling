@@ -23,18 +23,18 @@ const Chapter14 = () => {
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph TD
-    A[Start: Initialize Population] --&gt; B[Generate Random Parameter Sets]
-    B --&gt; C[Evaluate Fitness Function]
-    C --&gt; D[Convergence Criteria Met]
-    D --No--&gt; E[Selection]
-    E --&gt; F[Select Best Performers]
-    F --&gt; G[Crossover]
-    G --&gt; H[Combine Parent Parameters]
-    H --&gt; I[Mutation]
-    I --&gt; J[Random Parameter Variations]
-    J --&gt; K[Create New Generation]
-    K --&gt; C
-    D --Yes--&gt; L[Return Optimal Parameters]
+    A[Start: Initialize Population] --> B[Generate Random Parameter Sets]
+    B --> C[Evaluate Fitness Function]
+    C --> D[Convergence Criteria Met]
+    D --No--> E[Selection]
+    E --> F[Select Best Performers]
+    F --> G[Crossover]
+    G --> H[Combine Parent Parameters]
+    H --> I[Mutation]
+    I --> J[Random Parameter Variations]
+    J --> K[Create New Generation]
+    K --> C
+    D --Yes--> L[Return Optimal Parameters]
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style L fill:#10b981,stroke:#059669,color:#fff
@@ -151,20 +151,20 @@ function geneticAlgorithmOptimization(model, observations):
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph LR
-    A[Real Parameters] --&gt; B[Binary Encoding]
-    A --&gt; C[Real-Value Encoding]
-    A --&gt; D[Gray Encoding]
+    A[Real Parameters] --> B[Binary Encoding]
+    A --> C[Real-Value Encoding]
+    A --> D[Gray Encoding]
     
-    B --&gt; E[Bit String 01101010]
-    C --&gt; F[Direct Values 0.25, 1.7, 0.8]
-    D --&gt; G[Gray Code Reduced Mutation Impact]
+    B --> E[Bit String 01101010]
+    C --> F[Direct Values 0.25, 1.7, 0.8]
+    D --> G[Gray Code Reduced Mutation Impact]
     
-    E --&gt; H[Crossover & Mutation]
-    F --&gt; H
-    G --&gt; H
+    E --> H[Crossover & Mutation]
+    F --> H
+    G --> H
     
-    H --&gt; I[Decoded Parameters]
-    I --&gt; J[Model Simulation]
+    H --> I[Decoded Parameters]
+    I --> J[Model Simulation]
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style J fill:#10b981,stroke:#059669,color:#fff
@@ -183,24 +183,24 @@ graph LR
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph TD
-    A[Multiple Objectives] --&gt; B[Peak Flow Accuracy]
-    A --&gt; C[Volume Conservation]
-    A --&gt; D[Timing Precision]
-    A --&gt; E[Low Flow Simulation]
+    A[Multiple Objectives] --> B[Peak Flow Accuracy]
+    A --> C[Volume Conservation]
+    A --> D[Timing Precision]
+    A --> E[Low Flow Simulation]
     
-    B --&gt; F[Pareto Front Generation]
-    C --&gt; F
-    D --&gt; F
-    E --&gt; F
+    B --> F[Pareto Front Generation]
+    C --> F
+    D --> F
+    E --> F
     
-    F --&gt; G[Decision Making]
-    G --&gt; H[Weighted Sum]
-    G --&gt; I[Constraint Method]
-    G --&gt; J[Interactive Selection]
+    F --> G[Decision Making]
+    G --> H[Weighted Sum]
+    G --> I[Constraint Method]
+    G --> J[Interactive Selection]
     
-    H --&gt; K[Final Solution]
-    I --&gt; K
-    J --&gt; K
+    H --> K[Final Solution]
+    I --> K
+    J --> K
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style F fill:#8b5cf6,stroke:#7c3aed,color:#fff

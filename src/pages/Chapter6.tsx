@@ -18,17 +18,17 @@ const Chapter6 = () => {
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph TD
-    A[Historical Data] --&gt; B[Statistical Analysis]
-    B --&gt; C[Parameter Extraction]
-    C --&gt; D{Model Type}
-    D --&gt;|Stochastic| E[Random Generation]
-    D --&gt;|Disaggregation| F[Temporal Refinement]
-    E --&gt; G[Synthetic Rainfall]
-    F --&gt; G
-    G --&gt; H[Validation]
-    H --&gt; I{Statistics Match?}
-    I --&gt;|No| C
-    I --&gt;|Yes| J[Model Application]
+    A[Historical Data] --> B[Statistical Analysis]
+    B --> C[Parameter Extraction]
+    C --> D{Model Type}
+    D -->|Stochastic| E[Random Generation]
+    D -->|Disaggregation| F[Temporal Refinement]
+    E --> G[Synthetic Rainfall]
+    F --> G
+    G --> H[Validation]
+    H --> I{Statistics Match?}
+    I -->|No| C
+    I -->|Yes| J[Model Application]
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style J fill:#10b981,stroke:#059669,color:#fff

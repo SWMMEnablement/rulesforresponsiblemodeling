@@ -18,17 +18,17 @@ const Chapter12 = () => {
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph LR
-    A[State Variables] --&gt; B[State Space]
-    B --&gt; C[System Dynamics]
-    C --&gt; D[Differential Equations]
-    D --&gt; E[Numerical Solution]
-    E --&gt; F{Analysis Type}
-    F --&gt;|Stability| G[Equilibrium Points]
-    F --&gt;|Control| H[Optimal Trajectory]
-    F --&gt;|Sensitivity| I[Perturbation]
-    G --&gt; J[System Understanding]
-    H --&gt; J
-    I --&gt; J
+    A[State Variables] --> B[State Space]
+    B --> C[System Dynamics]
+    C --> D[Differential Equations]
+    D --> E[Numerical Solution]
+    E --> F{Analysis Type}
+    F -->|Stability| G[Equilibrium Points]
+    F -->|Control| H[Optimal Trajectory]
+    F -->|Sensitivity| I[Perturbation]
+    G --> J[System Understanding]
+    H --> J
+    I --> J
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style J fill:#10b981,stroke:#059669,color:#fff

@@ -18,16 +18,16 @@ const Chapter2 = () => {
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph TD
-    A[Continuous System] --&gt; B[Spatial Discretization]
-    A --&gt; C[Temporal Discretization]
-    B --&gt; D[Grid Cells/Elements]
-    C --&gt; E[Time Steps]
-    D --&gt; F[Resolution Trade-offs]
-    E --&gt; F
-    F --&gt; G{Balance Point}
-    G --&gt;|Too Coarse| H[Loss of Detail]
-    G --&gt;|Too Fine| I[Computational Cost]
-    G --&gt;|Optimal| J[Effective Model]
+    A[Continuous System] --> B[Spatial Discretization]
+    A --> C[Temporal Discretization]
+    B --> D[Grid Cells/Elements]
+    C --> E[Time Steps]
+    D --> F[Resolution Trade-offs]
+    E --> F
+    F --> G{Balance Point}
+    G -->|Too Coarse| H[Loss of Detail]
+    G -->|Too Fine| I[Computational Cost]
+    G -->|Optimal| J[Effective Model]
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style J fill:#10b981,stroke:#059669,color:#fff
