@@ -9,7 +9,7 @@ export const Navigation = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
             <BookOpen className="w-6 h-6 text-primary" />
-            <span className="font-bold text-lg">Vibe APP</span>
+            <span className="font-bold text-lg">Rules for Responsible Modeling</span>
           </div>
           
           <div className="flex items-center gap-2">
