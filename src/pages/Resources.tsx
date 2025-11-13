@@ -358,6 +358,206 @@ const Resources = () => {
           </div>
         </section>
 
+        {/* Abbreviations and Acronyms */}
+        <section>
+          <div className="flex items-center gap-3 mb-6">
+            <BookOpen className="w-8 h-8 text-primary" />
+            <h2 className="text-3xl font-bold text-foreground">Abbreviations and Acronyms</h2>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* General Abbreviations */}
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-4">General Terms</h3>
+              <div className="space-y-2 text-sm">
+                <div className="grid grid-cols-[auto,1fr] gap-3">
+                  <span className="font-semibold text-foreground">3G</span>
+                  <span className="text-muted-foreground">three generation(s) (approx. 75 years)</span>
+                  <span className="font-semibold text-foreground">3GM</span>
+                  <span className="text-muted-foreground">three generation modelling</span>
+                  <span className="font-semibold text-foreground">AES</span>
+                  <span className="text-muted-foreground">Atmospheric Environment Services</span>
+                  <span className="font-semibold text-foreground">ANSI</span>
+                  <span className="text-muted-foreground">American National Standards Institute</span>
+                  <span className="font-semibold text-foreground">AOC</span>
+                  <span className="text-muted-foreground">area of concern</span>
+                  <span className="font-semibold text-foreground">ASCE</span>
+                  <span className="text-muted-foreground">American Society of Civil Engineers</span>
+                  <span className="font-semibold text-foreground">BBS</span>
+                  <span className="text-muted-foreground">bulletin board system</span>
+                  <span className="font-semibold text-foreground">BMP</span>
+                  <span className="text-muted-foreground">best management practice</span>
+                  <span className="font-semibold text-foreground">BOD</span>
+                  <span className="text-muted-foreground">biological oxygen demand</span>
+                  <span className="font-semibold text-foreground">CAD</span>
+                  <span className="text-muted-foreground">computer aided design/drafting</span>
+                  <span className="font-semibold text-foreground">CAE</span>
+                  <span className="text-muted-foreground">computer aided engineering</span>
+                  <span className="font-semibold text-foreground">CBSQMP</span>
+                  <span className="text-muted-foreground">combinations of better stormwater quality management proposals</span>
+                  <span className="font-semibold text-foreground">CDM</span>
+                  <span className="text-muted-foreground">Camp Dresser McKee (a consulting engineering company)</span>
+                  <span className="font-semibold text-foreground">CF</span>
+                  <span className="text-muted-foreground">continuous flow</span>
+                  <span className="font-semibold text-foreground">CFS</span>
+                  <span className="text-muted-foreground">cubic feet per second</span>
+                  <span className="font-semibold text-foreground">CPU</span>
+                  <span className="text-muted-foreground">central processing unit</span>
+                  <span className="font-semibold text-foreground">CSCE</span>
+                  <span className="text-muted-foreground">Canadian Society of Civil Engineers</span>
+                  <span className="font-semibold text-foreground">CSO</span>
+                  <span className="text-muted-foreground">combined sewer overflow</span>
+                  <span className="font-semibold text-foreground">CSWQMM</span>
+                  <span className="text-muted-foreground">continuous storm water quality management modelling</span>
+                  <span className="font-semibold text-foreground">DEIS</span>
+                  <span className="text-muted-foreground">draft environmental impact statement</span>
+                  <span className="font-semibold text-foreground">dpi</span>
+                  <span className="text-muted-foreground">dots per inch</span>
+                  <span className="font-semibold text-foreground">DSS</span>
+                  <span className="text-muted-foreground">decision support system</span>
+                  <span className="font-semibold text-foreground">DWF</span>
+                  <span className="text-muted-foreground">dry weather flow</span>
+                  <span className="font-semibold text-foreground">EPA</span>
+                  <span className="text-muted-foreground">Environmental Protection Agency</span>
+                  <span className="font-semibold text-foreground">GRU</span>
+                  <span className="text-muted-foreground">grouped response units</span>
+                  <span className="font-semibold text-foreground">GUI</span>
+                  <span className="text-muted-foreground">graphical user interface</span>
+                  <span className="font-semibold text-foreground">HRU</span>
+                  <span className="text-muted-foreground">homogeneous response units</span>
+                  <span className="font-semibold text-foreground">HSI</span>
+                  <span className="text-muted-foreground">habitat suitability indices</span>
+                  <span className="font-semibold text-foreground">IAHR</span>
+                  <span className="text-muted-foreground">International Association for Hydraulic Ressearch</span>
+                  <span className="font-semibold text-foreground">IAWPRC</span>
+                  <span className="text-muted-foreground">International Association for Water Pollution Research and Control</span>
+                  <span className="font-semibold text-foreground">IBM</span>
+                  <span className="text-muted-foreground">International Business Machines</span>
+                  <span className="font-semibold text-foreground">IDF</span>
+                  <span className="text-muted-foreground">Intensity-Duration-Frequency curves</span>
+                  <span className="font-semibold text-foreground">IET</span>
+                  <span className="text-muted-foreground">inter-event time</span>
+                  <span className="font-semibold text-foreground">Mb</span>
+                  <span className="text-muted-foreground">Mega bytes (millions of bytes)</span>
+                  <span className="font-semibold text-foreground">MDP</span>
+                  <span className="text-muted-foreground">master drainage plan</span>
+                  <span className="font-semibold text-foreground">MIPS</span>
+                  <span className="text-muted-foreground">million instruction sets per second</span>
+                  <span className="font-semibold text-foreground">MOEE</span>
+                  <span className="text-muted-foreground">(Ontario) Ministry of Environment and Energy</span>
+                  <span className="font-semibold text-foreground">NPDES</span>
+                  <span className="text-muted-foreground">National Pollution Discharge Elimination System</span>
+                  <span className="font-semibold text-foreground">NPS</span>
+                  <span className="text-muted-foreground">nonpoint source</span>
+                  <span className="font-semibold text-foreground">NURP</span>
+                  <span className="text-muted-foreground">Nationwide Urban Runoff Program</span>
+                  <span className="font-semibold text-foreground">OMNR</span>
+                  <span className="text-muted-foreground">Ontario Ministry of Natural Resources</span>
+                  <span className="font-semibold text-foreground">PC</span>
+                  <span className="text-muted-foreground">personal computer</span>
+                  <span className="font-semibold text-foreground">PCP</span>
+                  <span className="text-muted-foreground">pollution control plan</span>
+                  <span className="font-semibold text-foreground">pdf's</span>
+                  <span className="text-muted-foreground">probability density functions</span>
+                  <span className="font-semibold text-foreground">PF</span>
+                  <span className="text-muted-foreground">plug flow</span>
+                  <span className="font-semibold text-foreground">pH</span>
+                  <span className="text-muted-foreground">negative log of hydrogen ion concentration</span>
+                  <span className="font-semibold text-foreground">PWQO</span>
+                  <span className="text-muted-foreground">Provincial Water Quality Objectives</span>
+                  <span className="font-semibold text-foreground">RTC</span>
+                  <span className="text-muted-foreground">real time control</span>
+                  <span className="font-semibold text-foreground">SCS</span>
+                  <span className="text-muted-foreground">Soil Conservation Service</span>
+                  <span className="font-semibold text-foreground">SS</span>
+                  <span className="text-muted-foreground">suspended solids</span>
+                  <span className="font-semibold text-foreground">TBRG</span>
+                  <span className="text-muted-foreground">tipping bucket rain gages</span>
+                  <span className="font-semibold text-foreground">TS</span>
+                  <span className="text-muted-foreground">time series</span>
+                  <span className="font-semibold text-foreground">TSM</span>
+                  <span className="text-muted-foreground">time series management</span>
+                  <span className="font-semibold text-foreground">TSS</span>
+                  <span className="text-muted-foreground">total suspended solids</span>
+                  <span className="font-semibold text-foreground">USEPA</span>
+                  <span className="text-muted-foreground">United States Environmental Protection Agency</span>
+                  <span className="font-semibold text-foreground">USGS</span>
+                  <span className="text-muted-foreground">United States Geological Survey</span>
+                  <span className="font-semibold text-foreground">UWRRC</span>
+                  <span className="text-muted-foreground">Urban Water Resources Research Council</span>
+                  <span className="font-semibold text-foreground">UZS</span>
+                  <span className="text-muted-foreground">upper zone storage</span>
+                  <span className="font-semibold text-foreground">VGA</span>
+                  <span className="text-muted-foreground">video graphics array</span>
+                  <span className="font-semibold text-foreground">WIMP</span>
+                  <span className="text-muted-foreground">windows-icons-menus-pointing devices</span>
+                  <span className="font-semibold text-foreground">ZUM</span>
+                  <span className="text-muted-foreground">zones of uniform meteorology</span>
+                </div>
+              </div>
+            </Card>
+
+            {/* Models and Programs */}
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-primary mb-4">Models and Programs</h3>
+              <div className="space-y-2 text-sm">
+                <div className="grid grid-cols-[auto,1fr] gap-3">
+                  <span className="font-semibold text-foreground">ARCINFO</span>
+                  <span className="text-muted-foreground">a GIS program</span>
+                  <span className="font-semibold text-foreground">AutoCAD®</span>
+                  <span className="text-muted-foreground">an automated computer aided drafting package</span>
+                  <span className="font-semibold text-foreground">BASIC</span>
+                  <span className="text-muted-foreground">a programming language</span>
+                  <span className="font-semibold text-foreground">BMP-Planner</span>
+                  <span className="text-muted-foreground">an OOP for hydrology and planning</span>
+                  <span className="font-semibold text-foreground">C, C++</span>
+                  <span className="text-muted-foreground">a programming language</span>
+                  <span className="font-semibold text-foreground">DBMS</span>
+                  <span className="text-muted-foreground">database management system</span>
+                  <span className="font-semibold text-foreground">EXTRAN</span>
+                  <span className="text-muted-foreground">Extended transport program</span>
+                  <span className="font-semibold text-foreground">FORTRAN</span>
+                  <span className="text-muted-foreground">a programming language</span>
+                  <span className="font-semibold text-foreground">GIS</span>
+                  <span className="text-muted-foreground">Geographic Information System</span>
+                  <span className="font-semibold text-foreground">HEC</span>
+                  <span className="text-muted-foreground">Hydrologic Engineering Center (US Army Corps of Engineers)</span>
+                  <span className="font-semibold text-foreground">HSPF</span>
+                  <span className="text-muted-foreground">Hydrologic Simulation Program-Fortran</span>
+                  <span className="font-semibold text-foreground">HYMO</span>
+                  <span className="text-muted-foreground">a hydrologic model</span>
+                  <span className="font-semibold text-foreground">LEAP</span>
+                  <span className="text-muted-foreground">a program to compute eutrophication effects in small lakes</span>
+                  <span className="font-semibold text-foreground">PCSWMM</span>
+                  <span className="text-muted-foreground">Personal Computer version of SWMM</span>
+                  <span className="font-semibold text-foreground">PRMS</span>
+                  <span className="text-muted-foreground">Precipitation-Runoff Modelling System</span>
+                  <span className="font-semibold text-foreground">QuattroPRO</span>
+                  <span className="text-muted-foreground">a spreadsheet program</span>
+                  <span className="font-semibold text-foreground">QuickBASIC</span>
+                  <span className="text-muted-foreground">a programming language</span>
+                  <span className="font-semibold text-foreground">RUNOFF</span>
+                  <span className="text-muted-foreground">hydrology module in SWMM</span>
+                  <span className="font-semibold text-foreground">STATISTICS</span>
+                  <span className="text-muted-foreground">a post-processor in SWMM</span>
+                  <span className="font-semibold text-foreground">STORM</span>
+                  <span className="text-muted-foreground">Storage Treatment Overflow Runoff Model</span>
+                  <span className="font-semibold text-foreground">SWMM</span>
+                  <span className="text-muted-foreground">Storm Water Management Model</span>
+                  <span className="font-semibold text-foreground">TRANSPORT</span>
+                  <span className="text-muted-foreground">a drainage system of pipes, conduits and structures module in SWMM</span>
+                  <span className="font-semibold text-foreground">TurboVision</span>
+                  <span className="text-muted-foreground">an application framework for Borland's C++ compiler</span>
+                  <span className="font-semibold text-foreground">WATFLOOD</span>
+                  <span className="text-muted-foreground">a hydrologic program</span>
+                  <span className="font-semibold text-foreground">XP-SWMM</span>
+                  <span className="text-muted-foreground">SWMM Graphic based platform</span>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </section>
+
         {/* Additional Tools */}
         <section className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-lg p-8">
           <h2 className="text-2xl font-bold text-foreground mb-6">Additional Modeling Tools</h2>
