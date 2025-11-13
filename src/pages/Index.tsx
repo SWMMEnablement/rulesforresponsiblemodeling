@@ -7,6 +7,7 @@ import { KeyConcepts } from "@/components/KeyConcepts";
 import { Timeline } from "@/components/Timeline";
 import { SearchBar } from "@/components/SearchBar";
 import { Footer } from "@/components/Footer";
+import { Navigation } from "@/components/Navigation";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useNotes } from "@/hooks/useNotes";
 import { Card } from "@/components/ui/card";
@@ -19,6 +20,7 @@ const Index = () => {
   const { notes } = useNotes();
   return (
     <div className="min-h-screen bg-background">
+      <Navigation />
       <Hero />
       
       {/* Search Section */}
