@@ -2,10 +2,13 @@ import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
+import { Navigation } from "@/components/Navigation";
 
 const Chapter3 = () => {
   return (
-    <ChapterLayout chapterNumber={3} title="Reliability of Input">
+    <>
+      <Navigation />
+      <ChapterLayout chapterNumber={3} title="Reliability of Input">
       <div className="space-y-12">
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Data Quality Management</h2>
@@ -193,6 +196,7 @@ graph LR
         </section>
       </div>
     </ChapterLayout>
+    </>
   );
 };
 

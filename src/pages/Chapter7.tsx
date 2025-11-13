@@ -2,10 +2,13 @@ import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
+import { Navigation } from "@/components/Navigation";
 
 const Chapter7 = () => {
   return (
-    <ChapterLayout chapterNumber={7} title="Dynamic Rain Systems">
+    <>
+      <Navigation />
+      <ChapterLayout chapterNumber={7} title="Dynamic Rain Systems">
       <div className="space-y-12">
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Storm Cell Kinematics</h2>
@@ -207,6 +210,7 @@ graph LR
         </section>
       </div>
     </ChapterLayout>
+    </>
   );
 };
 

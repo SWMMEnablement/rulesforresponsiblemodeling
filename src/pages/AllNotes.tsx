@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useNotes } from "@/hooks/useNotes";
+import { Navigation } from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,9 @@ export default function AllNotes() {
   }, [notes, searchQuery, sortBy]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+    <>
+      <Navigation />
+      <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
       <div className="container mx-auto px-4 py-12 max-w-6xl">
         <div className="mb-8">
           <Link
@@ -136,6 +139,7 @@ export default function AllNotes() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 }

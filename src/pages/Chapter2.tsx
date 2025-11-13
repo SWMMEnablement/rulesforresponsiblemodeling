@@ -2,10 +2,13 @@ import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
+import { Navigation } from "@/components/Navigation";
 
 const Chapter2 = () => {
   return (
-    <ChapterLayout chapterNumber={2} title="Discretization & Complexity">
+    <>
+      <Navigation />
+      <ChapterLayout chapterNumber={2} title="Discretization & Complexity">
       <div className="space-y-12">
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Understanding Discretization</h2>
@@ -306,6 +309,7 @@ graph TD
         </section>
       </div>
     </ChapterLayout>
+    </>
   );
 };
 

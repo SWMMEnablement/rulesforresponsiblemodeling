@@ -1,11 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { Navigation } from "@/components/Navigation";
 import { ArrowLeft, BookOpen, Award, GraduationCap } from "lucide-react";
 
 const AboutAuthor = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <Navigation />
+      <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4">
@@ -132,7 +135,8 @@ const AboutAuthor = () => {
           </Link>
         </div>
       </footer>
-    </div>
+      </div>
+    </>
   );
 };
 

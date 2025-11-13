@@ -2,10 +2,13 @@ import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
+import { Navigation } from "@/components/Navigation";
 
 const Chapter6 = () => {
   return (
-    <ChapterLayout chapterNumber={6} title="Rain Input Generation">
+    <>
+      <Navigation />
+      <ChapterLayout chapterNumber={6} title="Rain Input Generation">
       <div className="space-y-12">
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Stochastic Rainfall Models</h2>
@@ -208,6 +211,7 @@ graph TD
         </section>
       </div>
     </ChapterLayout>
+    </>
   );
 };
 

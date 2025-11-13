@@ -2,10 +2,13 @@ import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
+import { Navigation } from "@/components/Navigation";
 
 const Chapter4 = () => {
   return (
-    <ChapterLayout chapterNumber={4} title="Optimal Complexity">
+    <>
+      <Navigation />
+      <ChapterLayout chapterNumber={4} title="Optimal Complexity">
       <div className="space-y-12">
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Finding the Right Balance</h2>
@@ -210,6 +213,7 @@ graph TD
         </section>
       </div>
     </ChapterLayout>
+    </>
   );
 };
 

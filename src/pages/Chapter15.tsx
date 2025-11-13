@@ -2,10 +2,13 @@ import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
+import { Navigation } from "@/components/Navigation";
 
 const Chapter15 = () => {
   return (
-    <ChapterLayout chapterNumber={15} title="Fuzzy Logic">
+    <>
+      <Navigation />
+      <ChapterLayout chapterNumber={15} title="Fuzzy Logic">
       <div className="space-y-12">
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Handling Imprecision</h2>
@@ -203,6 +206,7 @@ graph LR
         </section>
       </div>
     </ChapterLayout>
+    </>
   );
 };
 

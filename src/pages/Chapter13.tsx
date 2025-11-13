@@ -2,10 +2,13 @@ import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
+import { Navigation } from "@/components/Navigation";
 
 const Chapter13 = () => {
   return (
-    <ChapterLayout chapterNumber={13} title="Performance Evaluation">
+    <>
+      <Navigation />
+      <ChapterLayout chapterNumber={13} title="Performance Evaluation">
       <div className="space-y-12">
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Comprehensive Evaluation Survey</h2>
@@ -105,6 +108,7 @@ graph TD
         </section>
       </div>
     </ChapterLayout>
+    </>
   );
 };
 

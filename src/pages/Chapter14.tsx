@@ -2,10 +2,13 @@ import { ChapterLayout } from "@/components/ChapterLayout";
 import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
+import { Navigation } from "@/components/Navigation";
 
 const Chapter14 = () => {
   return (
-    <ChapterLayout chapterNumber={14} title="Parameter Optimization">
+    <>
+      <Navigation />
+      <ChapterLayout chapterNumber={14} title="Parameter Optimization">
       <div className="space-y-12">
         {/* Introduction */}
         <section>
@@ -304,6 +307,7 @@ graph TD
         </section>
       </div>
     </ChapterLayout>
+    </>
   );
 };
 
