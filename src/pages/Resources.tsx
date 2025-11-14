@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 import { ArrowLeft, ExternalLink, BookOpen, FileText, Video, Code, Users, GraduationCap } from "lucide-react";
 
 const Resources = () => {
@@ -662,6 +663,7 @@ const Resources = () => {
         </div>
       </footer>
       </div>
+      <Footer />
     </>
   );
 };
