@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 import { ArrowLeft, BookOpen, Award, GraduationCap } from "lucide-react";
 
 const AboutAuthor = () => {
@@ -124,18 +125,8 @@ const AboutAuthor = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 bg-muted/30 border-t border-border mt-12">
-        <div className="max-w-6xl mx-auto text-center">
-          <Link to="/">
-            <Button variant="outline" className="gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              Return to Book Content
-            </Button>
-          </Link>
-        </div>
-      </footer>
       </div>
+      <Footer />
     </>
   );
 };
