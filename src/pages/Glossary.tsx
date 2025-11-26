@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 import { ArrowLeft, Search } from "lucide-react";
 import { useState, useMemo } from "react";
 
@@ -410,6 +411,7 @@ const Glossary = () => {
         </div>
       </footer>
       </div>
+      <Footer />
     </>
   );
 };

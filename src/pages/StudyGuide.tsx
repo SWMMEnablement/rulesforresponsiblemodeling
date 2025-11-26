@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 import { ArrowLeft, BookOpen, CheckCircle, HelpCircle, Target, Brain } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -719,6 +720,7 @@ const StudyGuide = () => {
         </div>
       </footer>
       </div>
+      <Footer />
     </>
   );
 };

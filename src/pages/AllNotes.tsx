@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useNotes } from "@/hooks/useNotes";
 import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -140,6 +141,7 @@ export default function AllNotes() {
         )}
       </div>
       </div>
+      <Footer />
     </>
   );
 }

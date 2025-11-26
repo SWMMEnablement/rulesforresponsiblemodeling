@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 
 const Chapter17 = () => {
   return (
@@ -269,6 +270,7 @@ graph TD
         </section>
       </div>
     </ChapterLayout>
+    <Footer />
     </>
   );
 };
