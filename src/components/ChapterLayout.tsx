@@ -1,11 +1,19 @@
 import { ReactNode } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { BookmarkButton } from "./BookmarkButton";
 import { ChapterNotes } from "./ChapterNotes";
 import { SidebarProvider, SidebarTrigger } from "./ui/sidebar";
 import { TableOfContents } from "./TableOfContents";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./ui/breadcrumb";
 
 interface ChapterLayoutProps {
   chapterNumber: number;
@@ -54,6 +62,30 @@ export const ChapterLayout = ({ chapterNumber, title, children }: ChapterLayoutP
               </div>
             </div>
           </header>
+
+          {/* Breadcrumb Navigation */}
+          <div className="bg-muted/30 border-b border-border">
+            <div className="max-w-6xl mx-auto px-6 py-3">
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink asChild>
+                      <Link to="/" className="flex items-center gap-1 hover:text-primary transition-colors">
+                        <Home className="w-3.5 h-3.5" />
+                        <span>Home</span>
+                      </Link>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage className="font-medium">
+                      Chapter {chapterNumber}: {title}
+                    </BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+            </div>
+          </div>
 
           {/* Chapter Hero */}
           <div className="bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 border-b border-border">
