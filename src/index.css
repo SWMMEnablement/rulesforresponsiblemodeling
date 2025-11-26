@@ -126,7 +126,11 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
+  }
+  
+  html {
+    @apply transition-colors duration-300;
   }
 }
 
