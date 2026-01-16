@@ -117,16 +117,16 @@ graph TD
         </section>
 
         <section>
-          <h2 className="text-3xl font-bold text-foreground mb-4">Uncertainty Quantification Methods</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-4"><GlossaryTooltip term="Uncertainty Analysis">Uncertainty Quantification</GlossaryTooltip> Methods</h2>
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <Card className="p-6">
               <h3 className="text-xl font-bold text-primary mb-3">Probabilistic Approaches</h3>
               <ul className="space-y-2 text-muted-foreground text-sm">
-                <li>• Monte Carlo ensemble generation</li>
+                <li>• <GlossaryTooltip term="Monte Carlo Simulation">Monte Carlo ensemble generation</GlossaryTooltip></li>
                 <li>• Bayesian updating with observations</li>
                 <li>• Particle filtering for state estimation</li>
                 <li>• Ensemble Kalman filtering</li>
-                <li>• Confidence interval construction</li>
+                <li>• <GlossaryTooltip term="Confidence Interval" /> construction</li>
               </ul>
             </Card>
             <Card className="p-6">

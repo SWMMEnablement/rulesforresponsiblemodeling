@@ -51,10 +51,10 @@ graph TD
         </section>
 
         <section>
-          <h2 className="text-3xl font-bold text-foreground mb-4">Uncertainty Quantification Methods</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-4"><GlossaryTooltip term="Uncertainty Analysis">Uncertainty Quantification</GlossaryTooltip> Methods</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="p-6">
-              <h3 className="text-xl font-bold text-primary mb-3">Monte Carlo Simulation</h3>
+              <h3 className="text-xl font-bold text-primary mb-3"><GlossaryTooltip term="Monte Carlo Simulation" /></h3>
               <p className="text-muted-foreground text-sm mb-4">
                 Repeatedly sample from parameter distributions and propagate through model
               </p>
@@ -86,7 +86,7 @@ graph TD
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-primary">+</span>
-                  <span>Accounts for equifinality</span>
+                  <span>Accounts for <GlossaryTooltip term="Equifinality" /></span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-destructive">-</span>

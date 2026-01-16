@@ -69,7 +69,7 @@ graph TD
         </section>
 
         <section className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg p-8">
-          <h2 className="text-2xl font-bold text-foreground mb-4">Multi-Objective Considerations</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-4"><GlossaryTooltip term="Multi-Objective Optimization" /> Considerations</h2>
           <ul className="space-y-3 text-muted-foreground">
             <li className="flex items-start gap-3">
               <span className="text-primary text-xl">→</span>
@@ -77,7 +77,7 @@ graph TD
             </li>
             <li className="flex items-start gap-3">
               <span className="text-primary text-xl">→</span>
-              <span>Pareto-optimal solutions represent trade-offs</span>
+              <span><GlossaryTooltip term="Pareto-Optimal Solution">Pareto-optimal solutions</GlossaryTooltip> represent trade-offs</span>
             </li>
             <li className="flex items-start gap-3">
               <span className="text-primary text-xl">→</span>

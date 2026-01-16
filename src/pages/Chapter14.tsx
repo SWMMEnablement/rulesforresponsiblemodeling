@@ -60,7 +60,7 @@ graph TD
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-primary font-bold">•</span>
-                  <span><strong>Fitness Function:</strong> Objective function measuring model performance</span>
+                  <span><strong>Fitness Function:</strong> <GlossaryTooltip term="Objective Function" /> measuring model performance</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-primary font-bold">•</span>
@@ -224,9 +224,9 @@ graph TD
               <h3 className="text-xl font-bold text-foreground mb-3">Do's</h3>
               <ul className="space-y-2 text-muted-foreground">
                 <li>✓ Use diverse initial population</li>
-                <li>✓ Validate with independent data</li>
+                <li>✓ <GlossaryTooltip term="Validation">Validate</GlossaryTooltip> with independent data</li>
                 <li>✓ Monitor convergence carefully</li>
-                <li>✓ Use appropriate fitness functions</li>
+                <li>✓ Use appropriate <GlossaryTooltip term="Objective Function">fitness functions</GlossaryTooltip></li>
                 <li>✓ Consider parameter ranges</li>
                 <li>✓ Run multiple optimizations</li>
               </ul>
@@ -239,8 +239,8 @@ graph TD
                 <li>✗ Use single objective blindly</li>
                 <li>✗ Ignore physical constraints</li>
                 <li>✗ Stop at local optimum</li>
-                <li>✗ Neglect uncertainty</li>
-                <li>✗ Skip validation step</li>
+                <li>✗ Neglect <GlossaryTooltip term="Uncertainty Analysis">uncertainty</GlossaryTooltip></li>
+                <li>✗ Skip <GlossaryTooltip term="Validation">validation</GlossaryTooltip> step</li>
               </ul>
             </Card>
           </div>

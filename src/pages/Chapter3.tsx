@@ -114,12 +114,12 @@ graph LR
               </ul>
             </Card>
             <Card className="p-6">
-              <h3 className="text-xl font-bold text-primary mb-3">Uncertainty Quantification</h3>
+              <h3 className="text-xl font-bold text-primary mb-3"><GlossaryTooltip term="Uncertainty Analysis">Uncertainty Quantification</GlossaryTooltip></h3>
               <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>• Measurement error estimation</li>
                 <li>• Propagation through model chain</li>
-                <li>• Monte Carlo simulation</li>
-                <li>• Confidence interval calculation</li>
+                <li>• <GlossaryTooltip term="Monte Carlo Simulation" /></li>
+                <li>• <GlossaryTooltip term="Confidence Interval" /> calculation</li>
                 <li>• Sensitivity to data quality</li>
               </ul>
             </Card>

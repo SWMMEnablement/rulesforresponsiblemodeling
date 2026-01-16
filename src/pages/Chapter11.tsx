@@ -59,9 +59,9 @@ graph TD
               <h3 className="text-xl font-bold text-primary mb-3">Global Sensitivity</h3>
               <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>• Variance decomposition</li>
-                <li>• Monte Carlo sampling</li>
+                <li>• <GlossaryTooltip term="Monte Carlo Simulation">Monte Carlo sampling</GlossaryTooltip></li>
                 <li>• Parameter interactions</li>
-                <li>• Full uncertainty space</li>
+                <li>• Full <GlossaryTooltip term="Epistemic Uncertainty">uncertainty space</GlossaryTooltip></li>
               </ul>
             </Card>
           </div>

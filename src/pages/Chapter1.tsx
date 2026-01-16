@@ -100,10 +100,10 @@ graph LR
               </Card>
 
               <Card className="p-6">
-                <h4 className="text-lg font-bold text-primary mb-3">3. Mathematical Formulation</h4>
+              <h4 className="text-lg font-bold text-primary mb-3">3. Mathematical Formulation</h4>
                 <p className="text-muted-foreground text-sm mb-3">
                   Translate the conceptual model into equations. This might include empirical relationships 
-                  (e.g., Manning's equation) or physically-based equations (e.g., Saint-Venant equations).
+                  (e.g., <GlossaryTooltip term="Manning's Roughness">Manning's equation</GlossaryTooltip>) or physically-based equations (e.g., Saint-Venant equations).
                 </p>
                 <p className="text-muted-foreground text-sm italic">
                   Example: "Use kinematic wave routing for overland flow and dynamic wave for pipe network."
@@ -173,7 +173,7 @@ graph LR
                   <h3 className="text-xl font-bold text-foreground mb-2">Choose Appropriate Model Complexity</h3>
                   <p className="text-muted-foreground mb-3">
                     More complex models are not inherently better. Each additional parameter increases 
-                    uncertainty and data requirements. The principle of parsimony suggests using the 
+                    uncertainty and data requirements. The principle of <GlossaryTooltip term="Parsimony" /> suggests using the 
                     simplest model that adequately addresses your objectives.
                   </p>
                   <div className="grid md:grid-cols-2 gap-4">
@@ -248,8 +248,8 @@ graph LR
                     <p className="text-sm text-muted-foreground">
                       Instead of reporting: "The 100-year peak flow is 142.7 cfs"
                       <br /><br />
-                      Report: "The 100-year peak flow is estimated at 140 cfs, with a 90% confidence 
-                      interval of 115 to 170 cfs, based on Monte Carlo analysis of parameter and rainfall 
+                      Report: "The 100-year peak flow is estimated at 140 cfs, with a 90% <GlossaryTooltip term="Confidence Interval">confidence 
+                      interval</GlossaryTooltip> of 115 to 170 cfs, based on <GlossaryTooltip term="Monte Carlo Simulation" /> analysis of parameter and rainfall 
                       uncertainties."
                     </p>
                   </Card>
@@ -270,7 +270,7 @@ graph LR
                     tests memorization, not predictive capability.
                   </p>
                   <div className="space-y-2 text-sm text-muted-foreground">
-                    <p><strong>Split-sample validation:</strong> Use 70% of events for calibration, reserve 30% for validation</p>
+                    <p><strong><GlossaryTooltip term="Split-Sample Validation" />:</strong> Use 70% of events for calibration, reserve 30% for validation</p>
                     <p><strong>Spatial validation:</strong> Calibrate to one gauge, validate against another</p>
                     <p><strong>Temporal validation:</strong> Calibrate to one time period, validate on a different period</p>
                   </div>
@@ -461,7 +461,7 @@ graph LR
               <div>
                 <h4 className="font-semibold text-foreground mb-2">Modeling Approach</h4>
                 <p className="text-sm mb-2">
-                  A comprehensive SWMM model was developed representing:
+                  A comprehensive <GlossaryTooltip term="SWMM" /> model was developed representing:
                 </p>
                 <ul className="text-sm space-y-1 ml-4">
                   <li>• 45 square miles of tributary area with detailed land use mapping</li>
@@ -472,10 +472,10 @@ graph LR
               </div>
 
               <div>
-                <h4 className="font-semibold text-foreground mb-2">Calibration and Validation</h4>
+                <h4 className="font-semibold text-foreground mb-2"><GlossaryTooltip term="Calibration" /> and <GlossaryTooltip term="Validation" /></h4>
                 <p className="text-sm">
                   The model was calibrated to 8 monitored storm events over 2 years, comparing predicted 
-                  and observed flows at 6 gauged locations and overflow volumes at 12 CSO points. 
+                  and observed flows at 6 gauged locations and overflow volumes at 12 CSO points.
                   Validation used an independent set of 5 events, achieving Nash-Sutcliffe efficiency 
                   coefficients above 0.75 at all calibration points.
                 </p>

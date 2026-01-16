@@ -57,9 +57,9 @@ graph LR
               </ul>
             </Card>
             <Card className="p-6">
-              <h3 className="text-xl font-bold text-primary mb-3">Catchment Response</h3>
+              <h3 className="text-xl font-bold text-primary mb-3"><GlossaryTooltip term="Catchment" /> Response</h3>
               <ul className="space-y-2 text-muted-foreground text-sm">
-                <li>• Time of concentration effects</li>
+                <li>• <GlossaryTooltip term="Time of Concentration" /> effects</li>
                 <li>• Spatial rainfall patterns</li>
                 <li>• Critical storm paths</li>
                 <li>• Peak flow sensitivity</li>
@@ -107,8 +107,8 @@ graph LR
                 </ul>
               </div>
               <div className="p-3 bg-background rounded">
-                <strong>Findings:</strong> When storm velocity matches catchment time of concentration (35 km/h downstream), 
-                runoff from all subcatchments synchronizes at outlet, producing 49% higher peak than stationary storm. 
+                <strong>Findings:</strong> When storm velocity matches <GlossaryTooltip term="Catchment" /> <GlossaryTooltip term="Time of Concentration">time of concentration</GlossaryTooltip> (35 km/h downstream), 
+                <GlossaryTooltip term="Runoff" /> from all <GlossaryTooltip term="Subcatchment">subcatchments</GlossaryTooltip> synchronizes at outlet, producing 49% higher peak than stationary storm. 
                 Design must consider this critical condition, not just stationary assumption.
               </div>
             </div>
