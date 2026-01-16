@@ -48,15 +48,15 @@ graph TD
           <div className="grid md:grid-cols-3 gap-6">
             <Card className="p-6">
               <h3 className="text-xl font-bold text-primary mb-2">Absolute Metrics</h3>
-              <p className="text-muted-foreground text-sm">RMSE, MAE, mean error - dimensional measures</p>
+              <p className="text-muted-foreground text-sm"><GlossaryTooltip term="RMSE" />, MAE, mean error - dimensional measures</p>
             </Card>
             <Card className="p-6">
               <h3 className="text-xl font-bold text-primary mb-2">Relative Metrics</h3>
-              <p className="text-muted-foreground text-sm">NSE, R², normalized statistics - dimensionless</p>
+              <p className="text-muted-foreground text-sm"><GlossaryTooltip term="NSE" />, R², normalized statistics - dimensionless</p>
             </Card>
             <Card className="p-6">
               <h3 className="text-xl font-bold text-primary mb-2">Visual Assessment</h3>
-              <p className="text-muted-foreground text-sm">Hydrograph comparison, residual plots</p>
+              <p className="text-muted-foreground text-sm"><GlossaryTooltip term="Hydrograph" /> comparison, residual plots</p>
             </Card>
           </div>
         </section>

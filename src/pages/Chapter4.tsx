@@ -118,7 +118,7 @@ graph TD
         </section>
 
         <section>
-          <h2 className="text-3xl font-bold text-foreground mb-4">Sensitivity Analysis Methods</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-4"><GlossaryTooltip term="Sensitivity Analysis" /> Methods</h2>
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <Card className="p-6">
               <h3 className="text-xl font-bold text-primary mb-3">Local Sensitivity</h3>

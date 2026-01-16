@@ -97,24 +97,24 @@ graph TD
                 <strong>Foundational Principles:</strong>
                 <ul className="ml-4 mt-2 space-y-1">
                   <li>• Data quality and reliability (Ch. 1-3)</li>
-                  <li>• Optimal complexity and parsimony (Ch. 4)</li>
-                  <li>• Continuous simulation capabilities (Ch. 5)</li>
+                  <li>• Optimal complexity and <GlossaryTooltip term="Parsimony" /> (Ch. 4)</li>
+                  <li>• <GlossaryTooltip term="Continuous Simulation" /> capabilities (Ch. 5)</li>
                 </ul>
               </div>
               <div className="p-3 bg-background rounded">
                 <strong>Technical Methods:</strong>
                 <ul className="ml-4 mt-2 space-y-1">
                   <li>• Rainfall generation and uncertainty (Ch. 6-7)</li>
-                  <li>• Calibration and objective functions (Ch. 8-9)</li>
-                  <li>• Sensitivity and error analysis (Ch. 10-11)</li>
+                  <li>• <GlossaryTooltip term="Calibration" /> and <GlossaryTooltip term="Objective Function">objective functions</GlossaryTooltip> (Ch. 8-9)</li>
+                  <li>• <GlossaryTooltip term="Sensitivity Analysis" /> and error analysis (Ch. 10-11)</li>
                 </ul>
               </div>
               <div className="p-3 bg-background rounded">
                 <strong>Advanced Topics:</strong>
                 <ul className="ml-4 mt-2 space-y-1">
-                  <li>• Parameter optimization (Ch. 12-13)</li>
+                  <li>• <GlossaryTooltip term="Multi-Objective Optimization">Parameter optimization</GlossaryTooltip> (Ch. 12-13)</li>
                   <li>• Ecosystem sustainability (Ch. 14)</li>
-                  <li>• Fuzzy logic and uncertainty (Ch. 15-16)</li>
+                  <li>• <GlossaryTooltip term="Fuzzy Logic" /> and <GlossaryTooltip term="Uncertainty Analysis">uncertainty</GlossaryTooltip> (Ch. 15-16)</li>
                 </ul>
               </div>
               <div className="p-3 bg-background rounded">
@@ -142,19 +142,19 @@ graph TD
             </Card>
             
             <Card className="p-6 bg-gradient-to-br from-primary/5 to-secondary/5">
-              <h3 className="text-lg font-bold text-primary mb-3">2. Calibration and Validation</h3>
+              <h3 className="text-lg font-bold text-primary mb-3">2. <GlossaryTooltip term="Calibration" /> and <GlossaryTooltip term="Validation" /></h3>
               <p className="text-muted-foreground text-sm">
                 Never rely on calibration alone. Split available data for independent validation. Use multiple 
-                objective functions reflecting project goals. Conduct sensitivity analysis to identify critical 
+                <GlossaryTooltip term="Objective Function">objective functions</GlossaryTooltip> reflecting project goals. Conduct <GlossaryTooltip term="Sensitivity Analysis" /> to identify critical 
                 parameters. Accept that perfect fits often indicate overfitting, not superior models.
               </p>
             </Card>
             
             <Card className="p-6 bg-gradient-to-br from-primary/5 to-secondary/5">
-              <h3 className="text-lg font-bold text-primary mb-3">3. Uncertainty Analysis</h3>
+              <h3 className="text-lg font-bold text-primary mb-3">3. <GlossaryTooltip term="Uncertainty Analysis" /></h3>
               <p className="text-muted-foreground text-sm">
-                Quantify and communicate uncertainty at every stage. Use ensemble approaches, Monte Carlo methods, 
-                or scenario analysis as appropriate. Display confidence bounds alongside predictions. Educate 
+                Quantify and communicate uncertainty at every stage. Use <GlossaryTooltip term="Ensemble Forecasting">ensemble approaches</GlossaryTooltip>, <GlossaryTooltip term="Monte Carlo Simulation" /> methods, 
+                or scenario analysis as appropriate. Display <GlossaryTooltip term="Confidence Interval">confidence bounds</GlossaryTooltip> alongside predictions. Educate 
                 stakeholders that uncertainty acknowledgment strengthens rather than weakens credibility.
               </p>
             </Card>

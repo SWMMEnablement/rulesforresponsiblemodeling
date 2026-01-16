@@ -49,7 +49,7 @@ graph LR
               <h3 className="text-xl font-bold text-primary mb-3">State Variables</h3>
               <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>• Storage volumes</li>
-                <li>• Flow rates</li>
+                <li>• Flow rates (<GlossaryTooltip term="Hydrograph" />)</li>
                 <li>• Water quality parameters</li>
                 <li>• System conditions</li>
               </ul>
@@ -59,8 +59,8 @@ graph LR
               <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>• Feasible region</li>
                 <li>• Constraint boundaries</li>
-                <li>• Objective contours</li>
-                <li>• Optimal solutions</li>
+                <li>• <GlossaryTooltip term="Objective Function">Objective</GlossaryTooltip> contours</li>
+                <li>• <GlossaryTooltip term="Pareto-Optimal Solution">Optimal solutions</GlossaryTooltip></li>
               </ul>
             </Card>
           </div>

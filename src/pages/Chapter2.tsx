@@ -166,7 +166,7 @@ graph TD
           <h3 className="text-xl font-bold text-foreground mb-3">The Complexity-Uncertainty Trade-off</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">
             James (2005) emphasizes that increasing model complexity does not automatically improve predictions. 
-            Beyond an optimal point, additional parameters and detail may increase uncertainty due to:
+            Beyond an optimal point, additional parameters and detail may increase <GlossaryTooltip term="Epistemic Uncertainty">uncertainty</GlossaryTooltip> due to:
           </p>
           <ul className="space-y-2 text-muted-foreground mb-6">
             <li className="flex items-start gap-3">
@@ -176,7 +176,7 @@ graph TD
             </li>
             <li className="flex items-start gap-3">
               <span className="text-primary">•</span>
-              <span><strong>Equifinality:</strong> Multiple parameter sets may produce equally good fits to 
+              <span><strong><GlossaryTooltip term="Equifinality" />:</strong> Multiple parameter sets may produce equally good fits to 
               observed data, reducing predictive confidence</span>
             </li>
             <li className="flex items-start gap-3">

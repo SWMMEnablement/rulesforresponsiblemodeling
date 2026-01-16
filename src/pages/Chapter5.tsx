@@ -84,13 +84,13 @@ graph LR
           <Card className="p-6 bg-card border-l-4 border-l-primary">
             <h3 className="text-xl font-bold text-primary mb-3">Case Study: Stream Restoration Assessment</h3>
             <p className="text-muted-foreground mb-4">
-              A 5-year continuous simulation evaluates urbanization impacts on stream baseflow:
+              A 5-year <GlossaryTooltip term="Continuous Simulation">continuous simulation</GlossaryTooltip> evaluates urbanization impacts on stream <GlossaryTooltip term="Baseflow" />:
             </p>
             <ul className="space-y-2 text-muted-foreground">
               <li><strong>Rainfall Input:</strong> 5-minute resolution for 1825 days (2001-2005)</li>
               <li><strong>Results:</strong> Pre-development: 125 mm/year baseflow; Post-development: 45 mm/year</li>
               <li><strong>Ecological Impact:</strong> 64% reduction threatens aquatic habitat during summer low flows</li>
-              <li><strong>Validation:</strong> Stream gauge data confirms model predictions within 15% error</li>
+              <li><strong><GlossaryTooltip term="Validation" />:</strong> Stream gauge data confirms model predictions within 15% error</li>
             </ul>
             <p className="text-muted-foreground mt-4">
               Continuous modeling reveals that increased impervious area reduces infiltration, lowering groundwater 
@@ -101,7 +101,7 @@ graph LR
         </section>
 
         <section>
-          <h2 className="text-3xl font-bold text-foreground mb-4">Calibration and Validation Strategies</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-4"><GlossaryTooltip term="Calibration" /> and <GlossaryTooltip term="Validation" /> Strategies</h2>
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <Card className="p-6">
               <h3 className="text-xl font-bold text-primary mb-3">Calibration Approach</h3>

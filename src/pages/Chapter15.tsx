@@ -111,7 +111,7 @@ graph LR
         </section>
 
         <section>
-          <h2 className="text-3xl font-bold text-foreground mb-4">Fuzzy Set Theory Fundamentals</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-4"><GlossaryTooltip term="Fuzzy Logic">Fuzzy Set Theory</GlossaryTooltip> Fundamentals</h2>
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <Card className="p-6">
               <h3 className="text-xl font-bold text-primary mb-3">Membership Functions</h3>
@@ -130,7 +130,7 @@ graph LR
                 <li>• OR: maximum of memberships</li>
                 <li>• NOT: 1 minus membership</li>
                 <li>• Aggregation: combine rule outputs</li>
-                <li>• Defuzzification: centroid, max methods</li>
+                <li>• <GlossaryTooltip term="Defuzzification" />: centroid, max methods</li>
               </ul>
             </Card>
           </div>

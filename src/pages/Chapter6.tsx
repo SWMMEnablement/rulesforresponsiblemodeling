@@ -108,7 +108,7 @@ graph TD
               </div>
               <div className="p-3 bg-background rounded">
                 <strong>Results:</strong> Generated storms maintain statistical properties (mean, variance, extremes) 
-                while providing temporal detail needed for SWMM. Ensemble approach quantifies uncertainty bounds 
+                while providing temporal detail needed for <GlossaryTooltip term="SWMM" />. Ensemble approach quantifies <GlossaryTooltip term="Confidence Interval">uncertainty bounds</GlossaryTooltip> 
                 (50th-95th percentile) on infrastructure sizing.
               </div>
             </div>
