@@ -2,10 +2,12 @@ import { ReactNode } from "react";
 import { ArrowLeft, ArrowRight, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
+import { Progress } from "./ui/progress";
 import { BookmarkButton } from "./BookmarkButton";
 import { ChapterNotes } from "./ChapterNotes";
 import { SidebarProvider, SidebarTrigger } from "./ui/sidebar";
 import { TableOfContents } from "./TableOfContents";
+import { useReadingProgress } from "@/hooks/useReadingProgress";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -24,6 +26,7 @@ interface ChapterLayoutProps {
 export const ChapterLayout = ({ chapterNumber, title, children }: ChapterLayoutProps) => {
   const prevChapter = chapterNumber > 1 ? chapterNumber - 1 : null;
   const nextChapter = chapterNumber < 17 ? chapterNumber + 1 : null;
+  const readingProgress = useReadingProgress();
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -33,6 +36,11 @@ export const ChapterLayout = ({ chapterNumber, title, children }: ChapterLayoutP
         <div className="flex-1 flex flex-col min-w-0">
           {/* Header */}
           <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
+            {/* Reading Progress Bar */}
+            <Progress 
+              value={readingProgress} 
+              className="h-1 rounded-none bg-muted/50" 
+            />
             <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <SidebarTrigger />
