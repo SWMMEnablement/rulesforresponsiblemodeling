@@ -8,12 +8,13 @@ import { Timeline } from "@/components/Timeline";
 import { SearchBar } from "@/components/SearchBar";
 import { Footer } from "@/components/Footer";
 import { Navigation } from "@/components/Navigation";
+import { ReadingPathways } from "@/components/ReadingPathways";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useNotes } from "@/hooks/useNotes";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Bookmark, StickyNote } from "lucide-react";
+import { Bookmark, StickyNote, Compass } from "lucide-react";
 
 const Index = () => {
   const { bookmarks } = useBookmarks();
@@ -72,6 +73,27 @@ const Index = () => {
         </section>
       )}
       
+      {/* Reading Pathways Section */}
+      <section className="py-16 px-6 bg-gradient-to-br from-muted/30 to-background">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-3 mb-8">
+            <Compass className="w-8 h-8 text-primary" />
+            <h2 className="text-3xl font-bold text-foreground">Learning Pathways</h2>
+          </div>
+          <p className="text-muted-foreground mb-8 max-w-2xl">
+            Choose a guided reading path based on your experience level and learning goals.
+          </p>
+          <ReadingPathways compact />
+          <div className="mt-6 text-center">
+            <Link to="/study-guide">
+              <Button variant="outline" size="lg">
+                View All Pathways & Study Guide
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <KeyQuotes />
       <Timeline />
       <ModelingProcess />
