@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter1 = () => {
   return (
@@ -35,7 +36,9 @@ const Chapter1 = () => {
               In the context of urban drainage and hydrological systems, models range from simple empirical 
               equations to sophisticated computer simulations. The key is not to create the most complex model 
               possible, but rather to develop an appropriate representation that serves your specific purpose 
-              while being defensible and transparent.
+              while being defensible and transparent. Understanding concepts like <GlossaryTooltip term="Calibration" />, 
+              <GlossaryTooltip term="Validation" />, and <GlossaryTooltip term="Uncertainty Analysis" /> is essential 
+              for responsible modeling practice.
             </p>
 
             <Card className="p-6 bg-primary/5 border-l-4 border-l-primary mb-6">

@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { ArrowLeft, BookOpen, CheckCircle, HelpCircle, Target, Brain } from "lucide-react";
+import { ArrowLeft, BookOpen, CheckCircle, HelpCircle, Target, Brain, Compass } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FlashcardDeck } from "@/components/FlashcardDeck";
+import { ReadingPathways } from "@/components/ReadingPathways";
 
 interface ChapterGuide {
   chapter: number;
@@ -456,8 +457,12 @@ const StudyGuide = () => {
 
       <div className="max-w-7xl mx-auto px-6 py-12">
         
-        <Tabs defaultValue="guide" className="space-y-8">
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
+        <Tabs defaultValue="pathways" className="space-y-8">
+          <TabsList className="grid w-full max-w-lg mx-auto grid-cols-3">
+            <TabsTrigger value="pathways" className="gap-2">
+              <Compass className="h-4 w-4" />
+              Pathways
+            </TabsTrigger>
             <TabsTrigger value="guide" className="gap-2">
               <BookOpen className="h-4 w-4" />
               Study Guide
@@ -467,6 +472,11 @@ const StudyGuide = () => {
               Flashcards
             </TabsTrigger>
           </TabsList>
+
+          {/* Reading Pathways Tab */}
+          <TabsContent value="pathways" className="space-y-8">
+            <ReadingPathways />
+          </TabsContent>
 
           {/* Study Guide Tab */}
           <TabsContent value="guide" className="space-y-12">
