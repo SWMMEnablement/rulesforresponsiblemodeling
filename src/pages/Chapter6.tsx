@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter6 = () => {
   return (
@@ -14,9 +15,10 @@ const Chapter6 = () => {
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Stochastic Rainfall Models</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
-            When historical rainfall data is limited or synthetic scenarios are needed, stochastic 
-            models generate statistically similar rainfall patterns. Disaggregation techniques convert 
-            coarse temporal data into finer resolution needed for event modeling.
+            When historical rainfall data is limited or synthetic scenarios are needed, <GlossaryTooltip term="Stochastic Model">stochastic 
+            models</GlossaryTooltip> generate statistically similar rainfall patterns. <GlossaryTooltip term="Disaggregation" /> techniques convert 
+            coarse temporal data into finer resolution needed for event modeling. Understanding <GlossaryTooltip term="Return Period" /> 
+            and <GlossaryTooltip term="Design Storm" /> concepts is essential.
           </p>
 
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">

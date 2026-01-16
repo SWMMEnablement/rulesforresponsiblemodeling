@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter16 = () => {
   return (
@@ -15,8 +16,9 @@ const Chapter16 = () => {
           <h2 className="text-3xl font-bold text-foreground mb-4">Continuous Reliability Assessment</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
             Real-time systems must present model uncertainty alongside predictions. This chapter addresses 
-            methods for continuously updating uncertainty bounds, displaying confidence intervals, and 
-            communicating reliability to decision-makers during live operations.
+            methods for continuously updating uncertainty bounds, displaying <GlossaryTooltip term="Confidence Interval">confidence intervals</GlossaryTooltip>, and 
+            communicating reliability to decision-makers during live operations. <GlossaryTooltip term="Ensemble Forecasting" /> 
+            is a key technique for quantifying prediction uncertainty.
           </p>
 
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">

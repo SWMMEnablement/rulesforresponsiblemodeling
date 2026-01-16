@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter4 = () => {
   return (
@@ -16,7 +17,8 @@ const Chapter4 = () => {
           <p className="text-muted-foreground leading-relaxed mb-6">
             Model complexity should match the problem at hand, available data, and computational resources. 
             Too simple, and critical processes are missed. Too complex, and the model becomes unreliable 
-            due to parameter uncertainty and overfitting.
+            due to parameter uncertainty and overfitting. The <GlossaryTooltip term="Parsimony" /> principle 
+            and understanding <GlossaryTooltip term="Equifinality" /> are essential for finding the right balance.
           </p>
 
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">

@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter10 = () => {
   return (
@@ -15,7 +16,9 @@ const Chapter10 = () => {
           <h2 className="text-3xl font-bold text-foreground mb-4">Sources of Uncertainty</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
             Every model prediction contains uncertainty from multiple sources. Understanding and quantifying 
-            these uncertainties is essential for responsible modeling and informed decision-making.
+            these uncertainties through <GlossaryTooltip term="Uncertainty Analysis" /> is essential for responsible modeling. 
+            Methods like <GlossaryTooltip term="Monte Carlo Simulation" /> help propagate and quantify uncertainty, 
+            while recognizing <GlossaryTooltip term="Equifinality" /> in parameter identification.
           </p>
 
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">

@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter17 = () => {
   return (
@@ -15,8 +16,9 @@ const Chapter17 = () => {
           <h2 className="text-3xl font-bold text-foreground mb-4">Framework for Responsible Modeling</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
             This concluding chapter synthesizes key principles into a comprehensive framework for 
-            continuous hydrological modeling. It provides practical recommendations and emphasizes 
-            the ethical responsibilities of modelers.
+            continuous hydrological modeling. It provides practical recommendations emphasizing 
+            <GlossaryTooltip term="Calibration" />, <GlossaryTooltip term="Validation" />, <GlossaryTooltip term="Uncertainty Analysis" />, 
+            and the ethical responsibilities of modelers.
           </p>
 
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">

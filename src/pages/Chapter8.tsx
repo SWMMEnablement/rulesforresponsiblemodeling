@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter8 = () => {
   return (
@@ -15,8 +16,9 @@ const Chapter8 = () => {
           <h2 className="text-3xl font-bold text-foreground mb-4">PCSWMM and Software Tools</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
             Decision support systems integrate modeling capabilities with user-friendly interfaces, 
-            visualization tools, and scenario analysis features. PCSWMM exemplifies modern approaches 
-            to practical urban drainage modeling and management.
+            visualization tools, and scenario analysis features. <GlossaryTooltip term="PCSWMM" /> exemplifies modern approaches 
+            to practical urban drainage modeling and management, built on the <GlossaryTooltip term="SWMM" /> computational engine 
+            with enhanced <GlossaryTooltip term="GIS" /> integration.
           </p>
 
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">

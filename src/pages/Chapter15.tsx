@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter15 = () => {
   return (
@@ -14,9 +15,10 @@ const Chapter15 = () => {
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Handling Imprecision</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
-            Fuzzy logic provides a framework for reasoning with imprecise or uncertain information. 
+            <GlossaryTooltip term="Fuzzy Logic" /> provides a framework for reasoning with imprecise or uncertain information. 
             In hydrological modeling, it's particularly useful for incorporating expert knowledge, 
-            managing linguistic variables, and decision-making under uncertainty.
+            managing linguistic variables, and decision-making under uncertainty. Key processes include 
+            fuzzification and <GlossaryTooltip term="Defuzzification" />.
           </p>
 
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
