@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter7 = () => {
   return (
@@ -14,9 +15,10 @@ const Chapter7 = () => {
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Storm Cell Kinematics</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
-            Moving storm systems introduce spatial and temporal variability that significantly impacts 
+            Moving <GlossaryTooltip term="Storm Cell" /> systems introduce spatial and temporal variability that significantly impacts 
             urban drainage response. Understanding storm velocity, direction, and timing uncertainties 
-            is crucial for accurate flood prediction.
+            is crucial for accurate flood prediction. The <GlossaryTooltip term="Time of Concentration" /> concept is 
+            particularly important for dynamic rainfall analysis.
           </p>
 
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">

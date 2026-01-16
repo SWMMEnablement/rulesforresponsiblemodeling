@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter14 = () => {
   return (
@@ -16,7 +17,9 @@ const Chapter14 = () => {
           <h2 className="text-3xl font-bold text-foreground mb-4">Overview</h2>
           <p className="text-muted-foreground leading-relaxed mb-4">
             Parameter optimization is essential for calibrating hydrological models. This chapter focuses on genetic algorithms (GA) 
-            as a powerful optimization technique that mimics natural selection to find optimal parameter sets.
+            as a powerful optimization technique that mimics natural selection to find optimal parameter sets. 
+            <GlossaryTooltip term="Multi-Objective Optimization" /> enables exploration of <GlossaryTooltip term="Pareto-Optimal Solution">Pareto-optimal solutions</GlossaryTooltip> 
+            that balance competing <GlossaryTooltip term="Objective Function">objective functions</GlossaryTooltip>.
           </p>
         </section>
 

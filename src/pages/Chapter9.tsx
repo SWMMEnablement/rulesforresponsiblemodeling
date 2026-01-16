@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter9 = () => {
   return (
@@ -14,9 +15,10 @@ const Chapter9 = () => {
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Performance Measurement</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
-            Objective functions quantify how well model predictions match observations. The choice of 
-            performance metric significantly influences calibration results and should align with 
-            modeling objectives and decision-making needs.
+            <GlossaryTooltip term="Objective Function">Objective functions</GlossaryTooltip> quantify how well model predictions match observations. The choice of 
+            performance metric significantly influences <GlossaryTooltip term="Calibration" /> results and should align with 
+            modeling objectives. Key metrics include <GlossaryTooltip term="Nash-Sutcliffe Efficiency" />, <GlossaryTooltip term="RMSE" />, 
+            <GlossaryTooltip term="PBIAS" />, and <GlossaryTooltip term="KGE" />.
           </p>
 
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">

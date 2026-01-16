@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter3 = () => {
   return (
@@ -15,8 +16,9 @@ const Chapter3 = () => {
           <h2 className="text-3xl font-bold text-foreground mb-4">Data Quality Management</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
             The reliability of model inputs directly affects output credibility. This chapter addresses 
-            data categorization, quality assessment, uncertainty handling, and the critical role of GIS 
-            in managing spatial data for hydrological models.
+            data categorization, quality assessment, uncertainty handling, and the critical role of <GlossaryTooltip term="GIS" /> 
+            in managing spatial data for hydrological models. Understanding <GlossaryTooltip term="Epistemic Uncertainty" /> versus 
+            <GlossaryTooltip term="Aleatory Uncertainty" /> is fundamental to data quality management.
           </p>
 
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">

@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter11 = () => {
   return (
@@ -14,8 +15,8 @@ const Chapter11 = () => {
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Parameter Influence Assessment</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
-            Sensitivity analysis identifies which parameters most strongly influence model outputs. 
-            This guides data collection priorities, calibration efforts, and uncertainty analysis, 
+            <GlossaryTooltip term="Sensitivity Analysis" /> identifies which parameters most strongly influence model outputs. 
+            This guides data collection priorities, <GlossaryTooltip term="Calibration" /> efforts, and <GlossaryTooltip term="Uncertainty Analysis" />, 
             while revealing model behavior and potential issues.
           </p>
 

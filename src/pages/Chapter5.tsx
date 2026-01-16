@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter5 = () => {
   return (
@@ -14,9 +15,10 @@ const Chapter5 = () => {
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Long-Term Sustainability Modeling</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
-            Continuous simulation models run over extended periods to capture seasonal variations, 
+            <GlossaryTooltip term="Continuous Simulation" /> models run over extended periods to capture seasonal variations, 
             ecosystem processes, and long-term trends. These models are essential for sustainability 
-            assessment, climate impact studies, and ethical water resource management.
+            assessment, climate impact studies, and ethical water resource management. Key concepts include 
+            <GlossaryTooltip term="Water Balance" />, <GlossaryTooltip term="Baseflow" />, and <GlossaryTooltip term="Split-Sample Validation" />.
           </p>
 
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">

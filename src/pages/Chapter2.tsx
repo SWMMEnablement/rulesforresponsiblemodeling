@@ -4,6 +4,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 
 const Chapter2 = () => {
   return (
@@ -14,7 +15,7 @@ const Chapter2 = () => {
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Understanding Discretization</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
-            Discretization is the fundamental process of transforming continuous spatial domains and temporal 
+            <GlossaryTooltip term="Discretization" /> is the fundamental process of transforming continuous spatial domains and temporal 
             processes into discrete units suitable for computational analysis. This transformation forms the 
             bridge between real-world hydrological phenomena and numerical simulation (James, 2005).
           </p>
@@ -22,7 +23,8 @@ const Chapter2 = () => {
             The discretization process involves two critical dimensions: spatial subdivision of watersheds into 
             manageable computational elements, and temporal division of continuous time into discrete steps. 
             Both choices profoundly influence model accuracy, computational requirements, data needs, and the 
-            ability to represent key physical processes.
+            ability to represent key physical processes. Understanding the <GlossaryTooltip term="CFL Condition" /> is 
+            essential for ensuring numerical stability.
           </p>
 
           <Card className="p-6 bg-muted/50 border-l-4 border-l-primary">
@@ -65,9 +67,9 @@ graph TD
 
           <h3 className="text-2xl font-bold text-foreground mb-4">Subcatchment-Based Approach</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">
-            The subcatchment method divides the watershed into hydrologically homogeneous areas that drain to 
+            The <GlossaryTooltip term="Subcatchment" /> method divides the <GlossaryTooltip term="Watershed" /> into hydrologically homogeneous areas that drain to 
             specific nodes in the drainage network. This approach, commonly used in urban drainage models like 
-            SWMM, balances computational efficiency with physical representation.
+            <GlossaryTooltip term="SWMM" />, balances computational efficiency with physical representation.
           </p>
           
           <Card className="p-6 bg-card mb-6">
