@@ -444,6 +444,45 @@ const Resources = () => {
                 Learn More <ExternalLink className="w-3 h-3" />
               </a>
             </Card>
+
+            <Card className="p-4">
+              <h3 className="font-bold text-primary mb-2">XPSWMM</h3>
+              <p className="text-sm text-muted-foreground mb-3">Advanced 1D/2D stormwater and wastewater modeling with full SWMM engine</p>
+              <a 
+                href="https://www.innovyze.com/en-us/products/xpswmm" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs text-primary hover:underline flex items-center gap-1"
+              >
+                Learn More <ExternalLink className="w-3 h-3" />
+              </a>
+            </Card>
+
+            <Card className="p-4">
+              <h3 className="font-bold text-primary mb-2">Autodesk InfoDrainage</h3>
+              <p className="text-sm text-muted-foreground mb-3">Stormwater drainage design and analysis with sustainable drainage systems</p>
+              <a 
+                href="https://www.autodesk.com/products/infodrainage/overview" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs text-primary hover:underline flex items-center gap-1"
+              >
+                Learn More <ExternalLink className="w-3 h-3" />
+              </a>
+            </Card>
+
+            <Card className="p-4">
+              <h3 className="font-bold text-primary mb-2">Aquanuity</h3>
+              <p className="text-sm text-muted-foreground mb-3">Cloud-based stormwater compliance and water quality management platform</p>
+              <a 
+                href="https://www.aquanuity.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs text-primary hover:underline flex items-center gap-1"
+              >
+                Learn More <ExternalLink className="w-3 h-3" />
+              </a>
+            </Card>
           </div>
         </section>
 
