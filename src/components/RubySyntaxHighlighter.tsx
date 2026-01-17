@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Hash } from "lucide-react";
+import { Hash, ToggleLeft, ToggleRight } from "lucide-react";
 
 interface RubySyntaxHighlighterProps {
   code: string;
@@ -271,18 +269,18 @@ export const RubySyntaxHighlighter: React.FC<RubySyntaxHighlighterProps> = ({
   return (
     <div className="text-xs font-mono leading-relaxed">
       {/* Line Numbers Toggle */}
-      <div className="flex items-center justify-end gap-2 mb-2 pb-2 border-b border-slate-700/50">
+      <button
+        onClick={() => setShowLineNumbers(!showLineNumbers)}
+        className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-700/50 w-full justify-end hover:opacity-80 transition-opacity"
+      >
         <Hash className="w-3.5 h-3.5 text-slate-500" />
-        <Label htmlFor="line-numbers" className="text-xs text-slate-400 cursor-pointer">
-          Line numbers
-        </Label>
-        <Switch
-          id="line-numbers"
-          checked={showLineNumbers}
-          onCheckedChange={setShowLineNumbers}
-          className="scale-75"
-        />
-      </div>
+        <span className="text-xs text-slate-400">Line numbers</span>
+        {showLineNumbers ? (
+          <ToggleRight className="w-5 h-5 text-emerald-500" />
+        ) : (
+          <ToggleLeft className="w-5 h-5 text-slate-500" />
+        )}
+      </button>
       
       {showLineNumbers ? (
         <table className="w-full border-collapse">
