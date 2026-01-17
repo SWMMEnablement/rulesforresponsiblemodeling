@@ -12,6 +12,7 @@ interface SoftwareExample {
   description: string;
   steps: string[];
   tips: string[];
+  rubyCode?: string;
 }
 
 interface ComparisonItem {
@@ -26,6 +27,500 @@ interface ChapterExamples {
   icmSwmm: SoftwareExample;
   icm: SoftwareExample;
   comparison: ComparisonItem[];
+}
+
+// Ruby code examples for ICM InfoWorks
+const icmRubyCode: Record<number, string> = {
+  1: `# Chapter 1: Creating Your First ICM Model with Ruby
+# This script creates a simple subcatchment and runs a simulation
+
+net = WSApplication.current_network
+net.transaction_begin
+
+# Create a new subcatchment
+subcatch = net.new_row_object('hw_subcatchment')
+subcatch['subcatchment_id'] = 'SC1'
+subcatch['total_area'] = 10.0  # hectares
+subcatch['runoff_routing_type'] = 'DIRECT'
+subcatch.write
+
+# Create an outfall node
+outfall = net.new_row_object('hw_node')
+outfall['node_id'] = 'OUT1'
+outfall['node_type'] = 'Outfall'
+outfall['x'] = 100.0
+outfall['y'] = 100.0
+outfall.write
+
+net.transaction_commit
+puts "Model created successfully - remember: it's a decision tool!"`,
+
+  2: `# Chapter 2: Subcatchment Discretization Analysis
+# Compare results with different discretization levels
+
+net = WSApplication.current_network
+results = []
+
+# Get all subcatchments and analyze areas
+net.row_objects('hw_subcatchment').each do |sc|
+  area = sc['total_area']
+  width = sc['width'] || Math.sqrt(area * 10000)  # Estimate if not set
+  
+  results << {
+    id: sc['subcatchment_id'],
+    area: area,
+    width: width,
+    tc_estimate: (width / 100.0) * 60  # Simple time of concentration
+  }
+end
+
+puts "Discretization Analysis:"
+results.each { |r| puts "#{r[:id]}: #{r[:area]} ha, Width: #{r[:width]} m" }
+puts "\\nRemember: More subcatchments ≠ better results without spatial data"`,
+
+  3: `# Chapter 3: Data Quality Assessment Script
+# Validate network data and identify potential issues
+
+net = WSApplication.current_network
+issues = []
+
+# Check for missing or suspicious values
+net.row_objects('hw_conduit').each do |link|
+  if link['us_invert'].nil? || link['ds_invert'].nil?
+    issues << "#{link['link_id']}: Missing invert levels"
+  end
+  
+  if link['conduit_width'] && link['conduit_width'] < 0.1
+    issues << "#{link['link_id']}: Suspicious diameter < 100mm"
+  end
+  
+  # Check for adverse gradients
+  if link['us_invert'] && link['ds_invert']
+    if link['ds_invert'] > link['us_invert']
+      issues << "#{link['link_id']}: Adverse gradient detected"
+    end
+  end
+end
+
+puts "Data Quality Report:"
+puts "Found #{issues.length} potential issues:"
+issues.each { |i| puts "  - #{i}" }
+puts "\\nAlways document data sources and confidence levels!"`,
+
+  4: `# Chapter 4: Model Complexity Comparison
+# Analyze model complexity metrics
+
+net = WSApplication.current_network
+
+# Count model elements
+stats = {
+  subcatchments: net.row_objects('hw_subcatchment').length,
+  nodes: net.row_objects('hw_node').length,
+  links: net.row_objects('hw_conduit').length,
+  pumps: net.row_objects('hw_pump').length,
+  weirs: net.row_objects('hw_weir').length
+}
+
+total_elements = stats.values.sum
+complexity_score = total_elements + (stats[:pumps] * 5) + (stats[:weirs] * 3)
+
+puts "Model Complexity Analysis:"
+stats.each { |k, v| puts "  #{k}: #{v}" }
+puts "\\nTotal elements: #{total_elements}"
+puts "Complexity score: #{complexity_score}"
+puts "\\nParsimony principle: Choose simplest model that answers your question"`,
+
+  5: `# Chapter 5: Continuous Simulation Setup
+# Configure and analyze long-term simulation results
+
+net = WSApplication.current_network
+
+# Analyze time series data availability
+rainfall_events = []
+net.row_objects('hw_rainfall_event').each do |event|
+  duration = event['duration'] || 0
+  rainfall_events << {
+    name: event['event_name'],
+    duration: duration,
+    type: duration > 24 ? 'Continuous' : 'Event'
+  }
+end
+
+puts "Time Series Analysis:"
+continuous = rainfall_events.select { |e| e[:type] == 'Continuous' }
+puts "Continuous series available: #{continuous.length}"
+puts "Event-based available: #{rainfall_events.length - continuous.length}"
+
+puts "\\nFor continuous simulation:"
+puts "  - Ensure adequate warm-up period"
+puts "  - Check antecedent moisture conditions"
+puts "  - Use FAST engine for efficiency"`,
+
+  6: `# Chapter 6: Calibration Helper Script
+# Compare simulated vs observed flows at calibration points
+
+net = WSApplication.current_network
+
+# Define calibration targets (example)
+calibration_points = [
+  { node: 'MH101', observed_peak: 0.85, observed_volume: 1200 },
+  { node: 'MH205', observed_peak: 1.20, observed_volume: 2100 }
+]
+
+puts "Calibration Checklist:"
+puts "1. Volume balance - adjust impervious %"
+puts "2. Peak flow - adjust width, slope"
+puts "3. Timing - adjust routing parameters"
+puts "4. Base flow - check groundwater/infiltration"
+
+calibration_points.each do |cp|
+  puts "\\nTarget: #{cp[:node]}"
+  puts "  Observed Peak: #{cp[:observed_peak]} m³/s"
+  puts "  Observed Volume: #{cp[:observed_volume]} m³"
+end
+
+puts "\\nRemember: Keep parameters physically reasonable!"`,
+
+  7: `# Chapter 7: Event Selection and Analysis
+# Analyze rainfall events and select appropriate design storms
+
+net = WSApplication.current_network
+
+# Analyze available events
+events = []
+net.row_objects('hw_rainfall_event').each do |event|
+  total_depth = event['total_depth'] || 0
+  duration = event['duration'] || 1
+  
+  events << {
+    name: event['event_name'],
+    depth: total_depth,
+    duration: duration,
+    intensity: total_depth / duration
+  }
+end
+
+# Sort by intensity
+events.sort_by! { |e| -e[:intensity] }
+
+puts "Event Analysis (sorted by intensity):"
+events.first(5).each do |e|
+  puts "  #{e[:name]}: #{e[:depth]}mm in #{e[:duration]}hrs (#{e[:intensity].round(2)} mm/hr)"
+end
+
+puts "\\nConsider both design storms AND historical events"`,
+
+  8: `# Chapter 8: Decision Support - Scenario Comparison
+# Compare multiple design scenarios
+
+scenarios = ['Baseline', 'Option_A_Pipes', 'Option_B_Storage', 'Option_C_SuDS']
+
+puts "Decision Support Analysis"
+puts "=" * 50
+
+scenarios.each do |scenario|
+  # In practice, load each scenario's results
+  puts "\\nScenario: #{scenario}"
+  puts "  - Peak flow reduction: [from results]"
+  puts "  - Flood volume: [from results]"
+  puts "  - Cost estimate: [from analysis]"
+  puts "  - Carbon footprint: [from LCA]"
+end
+
+puts "\\nKey Decision Criteria:"
+puts "  1. Does it meet regulatory requirements?"
+puts "  2. Is it cost-effective?"
+puts "  3. Is it resilient to climate change?"
+puts "  4. Does it provide co-benefits?"`,
+
+  9: `# Chapter 9: Objective Function Calculator
+# Calculate performance metrics for model evaluation
+
+def calculate_nse(observed, simulated)
+  return nil if observed.length != simulated.length
+  
+  mean_obs = observed.sum / observed.length.to_f
+  
+  numerator = observed.zip(simulated).map { |o, s| (o - s) ** 2 }.sum
+  denominator = observed.map { |o| (o - mean_obs) ** 2 }.sum
+  
+  return denominator == 0 ? nil : 1 - (numerator / denominator)
+end
+
+def calculate_pbias(observed, simulated)
+  sum_obs = observed.sum
+  diff_sum = observed.zip(simulated).map { |o, s| o - s }.sum
+  
+  return sum_obs == 0 ? nil : (diff_sum / sum_obs) * 100
+end
+
+# Example usage
+observed = [0.5, 1.2, 2.1, 1.8, 1.0, 0.6]
+simulated = [0.4, 1.1, 2.3, 1.7, 0.9, 0.5]
+
+puts "Performance Metrics:"
+puts "  NSE: #{calculate_nse(observed, simulated)&.round(3)}"
+puts "  PBIAS: #{calculate_pbias(observed, simulated)&.round(2)}%"
+puts "\\nNo single metric tells the whole story!"`,
+
+  10: `# Chapter 10: Sensitivity Analysis Framework
+# Systematically vary parameters and record output changes
+
+net = WSApplication.current_network
+
+# Define parameters to test
+sensitivity_params = [
+  { name: 'Impervious %', field: 'pct_impervious', range: [-20, -10, 0, 10, 20] },
+  { name: 'Roughness', field: 'mannings_n', range: [-30, -15, 0, 15, 30] },
+  { name: 'Slope', field: 'slope', range: [-25, 0, 25] }
+]
+
+puts "Sensitivity Analysis Setup"
+puts "=" * 50
+
+sensitivity_params.each do |param|
+  puts "\\nParameter: #{param[:name]}"
+  puts "  Field: #{param[:field]}"
+  puts "  Variations: #{param[:range].map { |v| "#{v}%" }.join(', ')}"
+end
+
+puts "\\nProcedure:"
+puts "  1. Run baseline simulation"
+puts "  2. Vary each parameter individually"
+puts "  3. Record output changes (peak, volume, timing)"
+puts "  4. Rank parameters by influence"
+puts "  5. Focus calibration on most sensitive parameters"`,
+
+  11: `# Chapter 11: Uncertainty Quantification
+# Monte Carlo simulation setup for uncertainty analysis
+
+# Define uncertain parameters with distributions
+uncertain_params = [
+  { name: 'Impervious %', mean: 45, std_dev: 10, distribution: 'normal' },
+  { name: 'Roughness n', mean: 0.013, std_dev: 0.002, distribution: 'normal' },
+  { name: 'Rainfall depth', mean: 50, std_dev: 8, distribution: 'normal' }
+]
+
+n_simulations = 100
+results = []
+
+puts "Monte Carlo Uncertainty Analysis"
+puts "=" * 50
+puts "\\nParameter Distributions:"
+
+uncertain_params.each do |p|
+  puts "  #{p[:name]}: #{p[:distribution]} (μ=#{p[:mean]}, σ=#{p[:std_dev]})"
+end
+
+puts "\\nPlanned simulations: #{n_simulations}"
+puts "\\nOutputs to track:"
+puts "  - Peak flow (5th, 50th, 95th percentiles)"
+puts "  - Total volume confidence bounds"
+puts "  - Flood extent probability maps"
+puts "\\nPresent results as ranges, not single values!"`,
+
+  12: `# Chapter 12: Verification and Validation Workflow
+# Split-sample testing for model validation
+
+net = WSApplication.current_network
+
+# Define calibration and validation events
+calibration_events = ['Event_2019_07', 'Event_2020_03', 'Event_2020_09']
+validation_events = ['Event_2021_05', 'Event_2021_11']
+
+puts "Verification & Validation Protocol"
+puts "=" * 50
+
+puts "\\nCalibration Events (for parameter adjustment):"
+calibration_events.each { |e| puts "  - #{e}" }
+
+puts "\\nValidation Events (independent testing):"
+validation_events.each { |e| puts "  - #{e}" }
+
+puts "\\nValidation Criteria:"
+puts "  - NSE > 0.5 (acceptable)"
+puts "  - NSE > 0.7 (good)"
+puts "  - PBIAS < ±25%"
+puts "  - Timing within ±15 minutes"
+
+puts "\\nWarning Signs:"
+puts "  - Validation much worse than calibration → overfitting"
+puts "  - Systematic bias → model structure issue"`,
+
+  13: `# Chapter 13: Model Documentation Generator
+# Generate comprehensive model documentation
+
+net = WSApplication.current_network
+timestamp = Time.now.strftime("%Y-%m-%d %H:%M")
+
+puts "=" * 60
+puts "MODEL DOCUMENTATION REPORT"
+puts "Generated: #{timestamp}"
+puts "=" * 60
+
+# Model inventory
+puts "\\n1. MODEL INVENTORY"
+puts "-" * 40
+elements = {
+  'Subcatchments' => net.row_objects('hw_subcatchment').length,
+  'Nodes' => net.row_objects('hw_node').length,
+  'Conduits' => net.row_objects('hw_conduit').length,
+  'Pumps' => net.row_objects('hw_pump').length
+}
+elements.each { |k, v| puts "   #{k}: #{v}" }
+
+puts "\\n2. DATA SOURCES"
+puts "-" * 40
+puts "   [Document your data sources here]"
+puts "   - Pipe survey: [source, date, confidence]"
+puts "   - Rainfall: [gauge, period, QC status]"
+puts "   - Land use: [GIS source, vintage]"
+
+puts "\\n3. CALIBRATION SUMMARY"
+puts "-" * 40
+puts "   [Document calibration events and results]"
+
+puts "\\n4. KNOWN LIMITATIONS"
+puts "-" * 40
+puts "   [Document model limitations and assumptions]"`,
+
+  14: `# Chapter 14: Parameter Estimation from GIS Data
+# Derive model parameters from spatial datasets
+
+net = WSApplication.current_network
+
+# Land use to impervious mapping (example)
+land_use_imperv = {
+  'Commercial' => 85,
+  'Industrial' => 72,
+  'Residential_High' => 65,
+  'Residential_Med' => 45,
+  'Residential_Low' => 25,
+  'Open_Space' => 5
+}
+
+puts "Parameter Estimation from GIS"
+puts "=" * 50
+
+puts "\\nLand Use → Impervious % Lookup:"
+land_use_imperv.each { |lu, imp| puts "  #{lu}: #{imp}%" }
+
+# Soil type to infiltration mapping
+soil_infiltration = {
+  'A' => { horton_max: 75, horton_min: 25 },
+  'B' => { horton_max: 50, horton_min: 15 },
+  'C' => { horton_max: 25, horton_min: 8 },
+  'D' => { horton_max: 12, horton_min: 3 }
+}
+
+puts "\\nSoil Group → Infiltration Parameters:"
+soil_infiltration.each do |sg, params|
+  puts "  Group #{sg}: Max=#{params[:horton_max]}, Min=#{params[:horton_min]} mm/hr"
+end
+
+puts "\\nRemember: Field-verify GIS-derived parameters!"`,
+
+  15: `# Chapter 15: Error Analysis and Diagnostics
+# Analyze residuals to identify systematic model errors
+
+def analyze_residuals(observed, simulated)
+  residuals = observed.zip(simulated).map { |o, s| o - s }
+  
+  mean_residual = residuals.sum / residuals.length.to_f
+  std_residual = Math.sqrt(residuals.map { |r| (r - mean_residual) ** 2 }.sum / residuals.length)
+  
+  # Check for bias
+  bias = mean_residual.abs > (std_residual * 0.5) ? 'BIASED' : 'OK'
+  
+  {
+    mean: mean_residual,
+    std: std_residual,
+    max: residuals.max,
+    min: residuals.min,
+    bias_check: bias
+  }
+end
+
+# Example analysis
+observed = [1.0, 2.5, 3.2, 2.8, 1.5]
+simulated = [0.9, 2.3, 3.5, 2.6, 1.4]
+
+results = analyze_residuals(observed, simulated)
+
+puts "Error Analysis Report"
+puts "=" * 50
+puts "  Mean Residual: #{results[:mean].round(3)}"
+puts "  Std Residual: #{results[:std].round(3)}"
+puts "  Max Error: #{results[:max].round(3)}"
+puts "  Min Error: #{results[:min].round(3)}"
+puts "  Bias Check: #{results[:bias_check]}"
+puts "\\nSystematic errors need model structure changes!"`,
+
+  16: `# Chapter 16: Continuous Modeling Optimization
+# Best practices for efficient long-term simulations
+
+net = WSApplication.current_network
+
+puts "Continuous Modeling Best Practices"
+puts "=" * 50
+
+puts "\\n1. SIMULATION SETTINGS"
+puts "   - Use FAST simulation engine"
+puts "   - Adaptive timestep: ON"
+puts "   - Minimum timestep: 1-5 seconds"
+puts "   - Maximum timestep: 60-300 seconds"
+
+puts "\\n2. OUTPUT MANAGEMENT"
+puts "   - Report timestep: 5-15 minutes (not every second!)"
+puts "   - Store only key nodes/links"
+puts "   - Use statistical summaries where possible"
+
+puts "\\n3. WATER BALANCE CHECKS"
+net.row_objects('hw_subcatchment').each do |sc|
+  total_area = sc['total_area'] || 0
+  imperv = sc['pct_impervious'] || 0
+  puts "   #{sc['subcatchment_id']}: #{total_area} ha, #{imperv}% imperv"
+end
+
+puts "\\n4. RUNTIME ESTIMATES"
+puts "   - 1 year continuous: ~5-30 minutes"
+puts "   - 10 year continuous: ~30-180 minutes"
+puts "   - Depends on network size and 2D usage"`,
+
+  17: `# Chapter 17: Future Directions - Advanced Automation
+# Examples of emerging capabilities in ICM Ruby scripting
+
+puts "Future Directions in ICM Automation"
+puts "=" * 50
+
+puts "\\n1. MACHINE LEARNING INTEGRATION"
+puts <<-CODE
+   # Example: ML-assisted parameter estimation
+   require 'json'
+   
+   # Export data for ML training
+   training_data = subcatchments.map do |sc|
+     { features: extract_features(sc), target: observed_runoff(sc) }
+   end
+   File.write('training_data.json', training_data.to_json)
+CODE
+
+puts "\\n2. REAL-TIME FORECASTING (ICM Live)"
+puts "   - Telemetry data integration"
+puts "   - Ensemble forecasting"
+puts "   - Alert generation"
+
+puts "\\n3. CLIMATE CHANGE SCENARIOS"
+puts "   - Automated rainfall uplift"
+puts "   - Batch scenario generation"
+puts "   - Sensitivity to climate factors"
+
+puts "\\n4. API INTEGRATION"
+puts "   - REST API for external systems"
+puts "   - Dashboard data feeds"
+puts "   - Automated reporting"
+
+puts "\\nThe future is automated, integrated, and data-driven!"`
 }
 
 const chapterExamples: Record<number, ChapterExamples> = {
@@ -1342,6 +1837,24 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                       ))}
                     </ul>
                   </div>
+                  
+                  {/* Ruby Code Example */}
+                  {icmRubyCode[chapterNumber] && (
+                    <div className="bg-slate-900 rounded-lg p-4 border border-green-500/30">
+                      <h4 className="font-semibold text-green-400 mb-3 flex items-center gap-2">
+                        <Code className="w-4 h-4" />
+                        ICM Ruby Code Example
+                      </h4>
+                      <ScrollArea className="h-[300px]">
+                        <pre className="text-xs text-slate-300 font-mono whitespace-pre-wrap overflow-x-auto">
+                          <code>{icmRubyCode[chapterNumber]}</code>
+                        </pre>
+                      </ScrollArea>
+                      <p className="text-xs text-slate-400 mt-3 italic">
+                        💎 Run this in ICM's Ruby Console (Tools → Ruby Console) or save as .rb file
+                      </p>
+                    </div>
+                  )}
                   
                   <div className="mt-4 pt-4 border-t border-green-500/20 space-y-2">
                     <a 
