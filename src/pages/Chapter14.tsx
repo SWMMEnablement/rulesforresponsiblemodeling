@@ -267,6 +267,21 @@ graph TD
               <span>Parameter uncertainty should be quantified and communicated</span>
             </li>
           </ul>
+
+          <Card className="p-6 bg-background/50 mt-6">
+            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Parameter Optimization</h3>
+            <p className="text-muted-foreground italic mb-3">
+              "Optimization is a powerful tool, but it is not magic. A well-optimized poor model 
+              will still give poor predictions. Optimization should follow, not replace, careful 
+              model construction and should always be accompanied by uncertainty analysis of the 
+              resulting parameter values."
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Dr. James emphasized that optimization algorithms find the best parameters for a given 
+              model structure, but cannot compensate for structural inadequacy. The modeler must first 
+              ensure the model represents essential physics before investing effort in optimization.
+            </p>
+          </Card>
         </section>
 
         <section>

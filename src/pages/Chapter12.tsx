@@ -82,6 +82,21 @@ graph LR
               <span>Optimization problem formulation</span>
             </li>
           </ul>
+
+          <Card className="p-6 bg-background/50 mt-6">
+            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on State Space Methods</h3>
+            <p className="text-muted-foreground italic mb-3">
+              "State variable representation provides a unified framework for understanding model behavior. 
+              It reveals how different parts of the system interact, where instabilities may arise, and 
+              what combinations of conditions lead to extreme outcomes. This perspective is essential 
+              for designing robust control strategies."
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Dr. James applied state space concepts to water system optimization, showing how this 
+              framework enables systematic exploration of system behavior across the full range of 
+              operating conditions rather than isolated scenarios.
+            </p>
+          </Card>
         </section>
 
         <section>

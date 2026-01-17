@@ -83,6 +83,22 @@ graph TD
               <span>Ethical practice requires honesty about what models can and cannot do</span>
             </li>
           </ul>
+
+          <Card className="p-6 bg-background/50 mt-6">
+            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James's Concluding Perspective</h3>
+            <p className="text-muted-foreground italic mb-3">
+              "The rules for responsible modeling are not arbitrary constraints—they are lessons learned 
+              from decades of practice. Each rule addresses a common failure mode that has led to poor 
+              decisions, wasted resources, or damaged credibility. Following these rules is not about 
+              methodological purity; it is about producing models that actually help people make 
+              better decisions about water systems."
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Throughout his career, Dr. James championed the view that modeling is fundamentally a 
+              service profession. The ultimate measure of a model's success is not its technical 
+              sophistication but its contribution to better water management outcomes for communities.
+            </p>
+          </Card>
         </section>
 
         <section>

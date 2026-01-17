@@ -83,6 +83,21 @@ graph TD
               <span>Risk-based decision thresholds incorporating uncertainty</span>
             </li>
           </ul>
+
+          <Card className="p-6 bg-background/50 mt-6">
+            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Model Certainty</h3>
+            <p className="text-muted-foreground italic mb-3">
+              "Model error is not a sign of failure—it is an inherent characteristic of all models. 
+              The responsible approach is not to minimize error at any cost, but to characterize it 
+              honestly and communicate it effectively. Decision-makers deserve to know the confidence 
+              they should place in model predictions."
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Dr. James advocated for transparent uncertainty communication, arguing that false precision 
+              undermines trust and leads to poor decisions. Real-time systems should display uncertainty 
+              bounds prominently, enabling operators to calibrate their responses appropriately.
+            </p>
+          </Card>
         </section>
 
         <section>

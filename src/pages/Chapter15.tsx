@@ -74,6 +74,21 @@ graph LR
               <span>Integration of expert knowledge into model frameworks</span>
             </li>
           </ul>
+
+          <Card className="p-6 bg-background/50 mt-6">
+            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Fuzzy Approaches</h3>
+            <p className="text-muted-foreground italic mb-3">
+              "Fuzzy logic excels where traditional crisp models struggle—in situations where expert 
+              knowledge is available but precise mathematical relationships are not. It provides a 
+              bridge between human reasoning and computational models, particularly valuable for 
+              real-time decision support where operators must act quickly with imperfect information."
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Dr. James recognized that many water management decisions involve qualitative judgments 
+              that resist precise quantification. Fuzzy methods provide a formal framework for 
+              incorporating this expertise into automated systems.
+            </p>
+          </Card>
         </section>
 
         <section>

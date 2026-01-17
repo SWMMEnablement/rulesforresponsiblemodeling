@@ -21,6 +21,22 @@ const Chapter8 = () => {
             with enhanced <GlossaryTooltip term="GIS" /> integration.
           </p>
 
+          <Card className="p-6 bg-secondary/5 border-l-4 border-l-secondary mb-6">
+            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Decision Support Systems</h3>
+            <p className="text-muted-foreground italic mb-3">
+              "A decision support system is more than a model with a pretty interface. It is a framework 
+              that integrates data management, modeling, analysis, and communication into a coherent 
+              workflow that supports the entire decision-making process—from problem definition through 
+              implementation monitoring."
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Dr. James, as a key developer of PCSWMM at CHI, emphasized that effective decision support 
+              bridges the gap between sophisticated modeling capabilities and practical decision-making needs. 
+              The system should guide users toward appropriate methods while maintaining transparency about 
+              underlying assumptions and limitations.
+            </p>
+          </Card>
+
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph TD

@@ -21,6 +21,21 @@ const Chapter3 = () => {
             <GlossaryTooltip term="Aleatory Uncertainty" /> is fundamental to data quality management.
           </p>
 
+          <Card className="p-6 bg-secondary/5 border-l-4 border-l-secondary mb-6">
+            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Data Reliability</h3>
+            <p className="text-muted-foreground italic mb-3">
+              "Garbage in, garbage out is an oversimplification. The real challenge is that imperfect 
+              data, when carefully characterized and properly propagated through uncertainty analysis, 
+              can still support sound decisions. Unknown data quality is far more dangerous than 
+              known imperfection."
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Dr. James stressed that data quality assessment should be systematic and documented. 
+              The goal is not perfect data—which rarely exists—but rather honest characterization 
+              of data limitations and their impact on model reliability.
+            </p>
+          </Card>
+
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph LR

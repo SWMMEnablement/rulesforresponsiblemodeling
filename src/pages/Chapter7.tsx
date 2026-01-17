@@ -84,6 +84,21 @@ graph LR
               <span>Critical duration and path identification</span>
             </li>
           </ul>
+
+          <Card className="p-6 bg-background/50 mt-6">
+            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Spatial Rainfall</h3>
+            <p className="text-muted-foreground italic mb-3">
+              "Urban watersheds are often smaller than individual storm cells. This means the spatial 
+              structure and movement of rainfall across the catchment can dramatically affect peak flows—
+              sometimes more than total rainfall depth. Models that ignore storm kinematics may 
+              seriously underestimate or overestimate flood risk."
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Dr. James's research demonstrated that storm velocity and direction interact with catchment 
+              geometry to produce widely varying responses. Conservative design should evaluate critical 
+              storm paths rather than assuming uniform or stationary rainfall.
+            </p>
+          </Card>
         </section>
 
         <section>

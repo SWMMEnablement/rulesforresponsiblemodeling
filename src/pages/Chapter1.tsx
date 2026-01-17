@@ -41,7 +41,7 @@ const Chapter1 = () => {
               for responsible modeling practice.
             </p>
 
-            <Card className="p-6 bg-primary/5 border-l-4 border-l-primary mb-6">
+          <Card className="p-6 bg-primary/5 border-l-4 border-l-primary mb-6">
               <h3 className="text-lg font-bold text-foreground mb-2">George Box's Famous Quote</h3>
               <p className="text-muted-foreground italic">
                 "All models are wrong, but some are useful."
@@ -50,6 +50,21 @@ const Chapter1 = () => {
                 This statement captures the essence of modeling philosophy: we don't seek perfection, 
                 we seek utility. A model's value lies not in its ability to perfectly replicate reality, 
                 but in its capacity to provide insights and support decision-making.
+              </p>
+            </Card>
+
+            <Card className="p-6 bg-secondary/5 border-l-4 border-l-secondary mb-6">
+              <h3 className="text-lg font-bold text-foreground mb-2">Dr. James's Perspective on Model Purpose</h3>
+              <p className="text-muted-foreground italic mb-3">
+                "The purpose of modeling is not to predict the future perfectly, but to inform decisions 
+                about future actions. A model that helps you make better decisions is valuable, even if 
+                its predictions contain uncertainty."
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Dr. William James emphasized that models serve as decision support tools rather than 
+                crystal balls. The key question is not "Is this model correct?" but rather "Does this 
+                model help us make better decisions?" This shift in perspective fundamentally changes 
+                how we approach model development, validation, and application.
               </p>
             </Card>
           </div>
