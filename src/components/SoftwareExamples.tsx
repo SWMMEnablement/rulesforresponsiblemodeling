@@ -1746,8 +1746,8 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
           </DialogDescription>
         </DialogHeader>
         
-        <Tabs defaultValue="swmm5" className="mt-4 flex-1 flex flex-col overflow-hidden">
-          <TabsList className="grid w-full grid-cols-4">
+        <Tabs defaultValue="swmm5" className="mt-4 flex-1 flex flex-col min-h-0">
+          <TabsList className="grid w-full grid-cols-4 flex-shrink-0">
             <TabsTrigger value="swmm5" className="text-xs sm:text-sm font-medium">
               🔵 EPA SWMM5
             </TabsTrigger>
@@ -1763,7 +1763,7 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
             </TabsTrigger>
           </TabsList>
           
-          <ScrollArea className="flex-1 mt-4">
+          <div className="flex-1 mt-4 overflow-y-auto min-h-0">
             <TabsContent value="swmm5" className="mt-0 space-y-4">
               <Card className="p-6 border-l-4 border-l-blue-500">
                 <h3 className="text-xl font-bold text-foreground mb-2">{examples.swmm5.title}</h3>
@@ -2013,7 +2013,7 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                 </p>
               </Card>
             </TabsContent>
-          </ScrollArea>
+          </div>
         </Tabs>
         
         <div className="mt-4 text-xs text-muted-foreground text-center border-t pt-4">
