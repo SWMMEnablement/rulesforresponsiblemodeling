@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { ArrowLeft, ExternalLink, BookOpen, FileText, Code, Users, GraduationCap, Database, GitBranch, Terminal } from "lucide-react";
 import { AbbreviationsSearch } from "@/components/AbbreviationsSearch";
 import SoftwareExamplesSearch from "@/components/SoftwareExamplesSearch";
+import { RubyScriptsSearch } from "@/components/RubyScriptsSearch";
 
 const Resources = () => {
   return (
@@ -528,6 +529,11 @@ const Resources = () => {
         </section>
 
       </div>
+
+        {/* Ruby Scripts Search */}
+        <section className="max-w-7xl mx-auto px-6 py-8">
+          <RubyScriptsSearch />
+        </section>
 
         {/* Software Examples Search */}
         <section>
