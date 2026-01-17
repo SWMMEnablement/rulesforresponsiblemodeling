@@ -1,4 +1,4 @@
-import { BookOpen, Activity, TrendingUp, Code2, FileDown } from "lucide-react";
+import { BookOpen, Activity, TrendingUp, Code2, FileDown, ExternalLink, Github } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
@@ -13,15 +13,19 @@ export const Hero = () => {
       <div className="relative z-10 max-w-5xl mx-auto text-center">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white mb-6 animate-fade-in">
           <Activity className="w-4 h-4" />
-          <span className="text-sm font-medium">4th Edition</span>
+          <span className="text-sm font-medium">4th Edition • 2005</span>
         </div>
         
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-slide-up">
           Rules for Responsible Modeling
         </h1>
         
-        <p className="text-xl md:text-2xl text-white/90 mb-4 animate-slide-up" style={{ animationDelay: "0.1s" }}>
-          by William James reinterpretation by Robert Dickinson in a Vibe APP
+        <p className="text-xl md:text-2xl text-white/90 mb-2 animate-slide-up" style={{ animationDelay: "0.1s" }}>
+          by <span className="font-semibold">William James, Ph.D., P.Eng.</span>
+        </p>
+        
+        <p className="text-base md:text-lg text-white/70 mb-6 italic animate-slide-up" style={{ animationDelay: "0.15s" }}>
+          Interactive Edition — Reimagined by Robert Dickinson
         </p>
         
         <p className="text-lg md:text-xl text-white/80 mb-12 max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: "0.2s" }}>
@@ -57,8 +61,8 @@ export const Hero = () => {
               size="lg"
               className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg"
             >
-              <FileDown className="w-5 h-5 mr-2" />
-              Download Original PDF
+              <ExternalLink className="w-5 h-5 mr-2" />
+              View Original Publication
             </Button>
           </a>
           
@@ -72,20 +76,38 @@ export const Hero = () => {
             View Source Code
           </Button>
         </div>
+        
+        <p className="mt-4 text-sm text-white/60 animate-slide-up" style={{ animationDelay: "0.5s" }}>
+          Original publication hosted by CHI (Computational Hydraulics International)
+        </p>
       </div>
       
       <Dialog open={showCodeDialog} onOpenChange={setShowCodeDialog}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>View Source Code</DialogTitle>
-            <DialogDescription className="space-y-3 pt-2">
-              <p>This Vibe APP is built with React, TypeScript, and Tailwind CSS.</p>
-              <div className="space-y-2">
-                <p className="font-semibold">To view the code:</p>
-                <ul className="list-disc list-inside space-y-1 text-sm">
-                  <li><strong>Desktop:</strong> Click the Dev Mode toggle (code icon) in the top area of the preview</li>
-                  <li><strong>Export to GitHub:</strong> Click the GitHub button in the top right to connect and sync this project to your repository</li>
-                </ul>
+            <DialogTitle className="flex items-center gap-2">
+              <Code2 className="w-5 h-5" />
+              View Source Code
+            </DialogTitle>
+            <DialogDescription className="space-y-4 pt-4">
+              <p>This interactive edition is built with React, TypeScript, Tailwind CSS, and shadcn/ui components.</p>
+              
+              <div className="space-y-3">
+                <div className="p-3 rounded-lg bg-muted/50">
+                  <p className="font-semibold text-foreground mb-2">Option 1: Dev Mode (in Lovable)</p>
+                  <p className="text-sm">Click the code icon <Code2 className="w-4 h-4 inline mx-1" /> in the top toolbar to toggle the code editor view.</p>
+                </div>
+                
+                <div className="p-3 rounded-lg bg-muted/50">
+                  <p className="font-semibold text-foreground mb-2">Option 2: Export to GitHub</p>
+                  <p className="text-sm">Click the <Github className="w-4 h-4 inline mx-1" /> GitHub button in the top right to connect and sync to your repository.</p>
+                </div>
+              </div>
+              
+              <div className="pt-2 border-t">
+                <p className="text-xs text-muted-foreground">
+                  Tech stack: React 18 • TypeScript • Vite • Tailwind CSS • shadcn/ui • Mermaid.js
+                </p>
               </div>
             </DialogDescription>
           </DialogHeader>
