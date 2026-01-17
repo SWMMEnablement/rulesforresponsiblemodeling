@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Hash } from "lucide-react";
 
 interface RubySyntaxHighlighterProps {
   code: string;
+  defaultShowLineNumbers?: boolean;
 }
 
 // Ruby keywords
@@ -225,7 +229,11 @@ const getTokenClassName = (type: string): string => {
   }
 };
 
-export const RubySyntaxHighlighter: React.FC<RubySyntaxHighlighterProps> = ({ code }) => {
+export const RubySyntaxHighlighter: React.FC<RubySyntaxHighlighterProps> = ({ 
+  code, 
+  defaultShowLineNumbers = true 
+}) => {
+  const [showLineNumbers, setShowLineNumbers] = useState(defaultShowLineNumbers);
   const tokens = tokenize(code);
   
   // Split code into lines for line numbering
@@ -262,28 +270,60 @@ export const RubySyntaxHighlighter: React.FC<RubySyntaxHighlighterProps> = ({ co
 
   return (
     <div className="text-xs font-mono leading-relaxed">
-      <table className="w-full border-collapse">
-        <tbody>
+      {/* Line Numbers Toggle */}
+      <div className="flex items-center justify-end gap-2 mb-2 pb-2 border-b border-slate-700/50">
+        <Hash className="w-3.5 h-3.5 text-slate-500" />
+        <Label htmlFor="line-numbers" className="text-xs text-slate-400 cursor-pointer">
+          Line numbers
+        </Label>
+        <Switch
+          id="line-numbers"
+          checked={showLineNumbers}
+          onCheckedChange={setShowLineNumbers}
+          className="scale-75"
+        />
+      </div>
+      
+      {showLineNumbers ? (
+        <table className="w-full border-collapse">
+          <tbody>
+            {tokensByLine.map((lineTokens, lineIndex) => (
+              <tr key={lineIndex} className="hover:bg-slate-800/50">
+                <td className="select-none text-right pr-4 text-slate-600 align-top w-8 border-r border-slate-700/50">
+                  {String(lineIndex + 1).padStart(lineNumberWidth, ' ')}
+                </td>
+                <td className="pl-4 whitespace-pre-wrap break-all">
+                  {lineTokens.length > 0 ? (
+                    lineTokens.map((token, tokenIndex) => (
+                      <span key={tokenIndex} className={getTokenClassName(token.type)}>
+                        {token.value}
+                      </span>
+                    ))
+                  ) : (
+                    <span>&nbsp;</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className="whitespace-pre-wrap break-all">
           {tokensByLine.map((lineTokens, lineIndex) => (
-            <tr key={lineIndex} className="hover:bg-slate-800/50">
-              <td className="select-none text-right pr-4 text-slate-600 align-top w-8 border-r border-slate-700/50">
-                {String(lineIndex + 1).padStart(lineNumberWidth, ' ')}
-              </td>
-              <td className="pl-4 whitespace-pre-wrap break-all">
-                {lineTokens.length > 0 ? (
-                  lineTokens.map((token, tokenIndex) => (
-                    <span key={tokenIndex} className={getTokenClassName(token.type)}>
-                      {token.value}
-                    </span>
-                  ))
-                ) : (
-                  <span>&nbsp;</span>
-                )}
-              </td>
-            </tr>
+            <div key={lineIndex} className="hover:bg-slate-800/50 px-2">
+              {lineTokens.length > 0 ? (
+                lineTokens.map((token, tokenIndex) => (
+                  <span key={tokenIndex} className={getTokenClassName(token.type)}>
+                    {token.value}
+                  </span>
+                ))
+              ) : (
+                <span>&nbsp;</span>
+              )}
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      )}
     </div>
   );
 };
