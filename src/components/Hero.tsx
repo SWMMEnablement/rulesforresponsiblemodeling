@@ -1,4 +1,4 @@
-import { BookOpen, Activity, TrendingUp, Code2 } from "lucide-react";
+import { BookOpen, Activity, TrendingUp, Code2, FileDown } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
@@ -47,16 +47,31 @@ export const Hero = () => {
           </div>
         </div>
         
-        <Button 
-          onClick={() => setShowCodeDialog(true)}
-          variant="outline"
-          size="lg"
-          className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 animate-slide-up"
-          style={{ animationDelay: "0.4s" }}
-        >
-          <Code2 className="w-5 h-5 mr-2" />
-          View Source Code
-        </Button>
+        <div className="flex flex-wrap justify-center gap-4 animate-slide-up" style={{ animationDelay: "0.4s" }}>
+          <a 
+            href="https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button 
+              size="lg"
+              className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg"
+            >
+              <FileDown className="w-5 h-5 mr-2" />
+              Download Original PDF
+            </Button>
+          </a>
+          
+          <Button 
+            onClick={() => setShowCodeDialog(true)}
+            variant="outline"
+            size="lg"
+            className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20"
+          >
+            <Code2 className="w-5 h-5 mr-2" />
+            View Source Code
+          </Button>
+        </div>
       </div>
       
       <Dialog open={showCodeDialog} onOpenChange={setShowCodeDialog}>
