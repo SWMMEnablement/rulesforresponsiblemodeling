@@ -5,6 +5,7 @@ import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
+import { SoftwareExamples } from "@/components/SoftwareExamples";
 
 const Chapter13 = () => {
   return (
@@ -12,6 +13,9 @@ const Chapter13 = () => {
       <Navigation />
       <ChapterLayout chapterNumber={13} title="Performance Evaluation">
       <div className="space-y-12">
+        <div className="flex justify-center mb-8">
+          <SoftwareExamples chapterNumber={13} />
+        </div>
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Comprehensive Evaluation Survey</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">

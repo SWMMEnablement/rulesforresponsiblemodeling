@@ -6,6 +6,7 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 import { SensitivityCalculator } from "@/components/SensitivityCalculator";
+import { SoftwareExamples } from "@/components/SoftwareExamples";
 
 const Chapter11 = () => {
   return (
@@ -13,6 +14,9 @@ const Chapter11 = () => {
       <Navigation />
       <ChapterLayout chapterNumber={11} title="Sensitivity Analysis">
       <div className="space-y-12">
+        <div className="flex justify-center mb-8">
+          <SoftwareExamples chapterNumber={11} />
+        </div>
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Parameter Influence Assessment</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">

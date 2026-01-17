@@ -5,6 +5,7 @@ import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
+import { SoftwareExamples } from "@/components/SoftwareExamples";
 
 const Chapter14 = () => {
   return (
@@ -12,6 +13,9 @@ const Chapter14 = () => {
       <Navigation />
       <ChapterLayout chapterNumber={14} title="Parameter Optimization">
       <div className="space-y-12">
+        <div className="flex justify-center mb-8">
+          <SoftwareExamples chapterNumber={14} />
+        </div>
         {/* Introduction */}
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Overview</h2>

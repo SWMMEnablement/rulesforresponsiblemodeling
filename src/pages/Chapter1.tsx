@@ -5,6 +5,7 @@ import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
+import { SoftwareExamples } from "@/components/SoftwareExamples";
 
 const Chapter1 = () => {
   return (
@@ -12,6 +13,9 @@ const Chapter1 = () => {
       <Navigation />
       <ChapterLayout chapterNumber={1} title="Introduction">
       <div className="space-y-12">
+        <div className="flex justify-center mb-8">
+          <SoftwareExamples chapterNumber={1} />
+        </div>
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">What is a Model?</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">

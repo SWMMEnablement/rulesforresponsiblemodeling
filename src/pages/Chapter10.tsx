@@ -6,6 +6,7 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 import { MonteCarloCalculator } from "@/components/MonteCarloCalculator";
+import { SoftwareExamples } from "@/components/SoftwareExamples";
 
 const Chapter10 = () => {
   return (
@@ -13,6 +14,9 @@ const Chapter10 = () => {
       <Navigation />
       <ChapterLayout chapterNumber={10} title="Uncertainty Analysis">
       <div className="space-y-12">
+        <div className="flex justify-center mb-8">
+          <SoftwareExamples chapterNumber={10} />
+        </div>
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Sources of Uncertainty</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
