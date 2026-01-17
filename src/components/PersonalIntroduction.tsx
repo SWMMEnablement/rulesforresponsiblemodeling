@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Droplets, Award, BookOpen, Users, Quote, ExternalLink, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PDFReferenceCard } from "@/components/PDFReferenceCard";
 
 export const PersonalIntroduction = () => {
   return (
@@ -81,16 +82,19 @@ export const PersonalIntroduction = () => {
                   my technical knowledge. This app captures the <em>philosophy</em> that should guide 
                   how we use that knowledge.
                 </p>
-                <a 
-                  href="https://swmm5.org" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" size="sm" className="mt-2 gap-2">
-                    <ExternalLink className="w-4 h-4" />
-                    Visit SWMM5.org
-                  </Button>
-                </a>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  <a 
+                    href="https://swmm5.org" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <ExternalLink className="w-4 h-4" />
+                      Visit SWMM5.org
+                    </Button>
+                  </a>
+                  <PDFReferenceCard variant="compact" />
+                </div>
               </div>
             </div>
           </div>

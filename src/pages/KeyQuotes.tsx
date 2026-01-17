@@ -8,6 +8,7 @@ import { ArrowLeft, Quote, ExternalLink, BookOpen, Brain } from "lucide-react";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { KeyQuotesFlashcards } from "@/components/KeyQuotesFlashcards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PDFReferenceCard } from "@/components/PDFReferenceCard";
 
 const KeyQuotes = () => {
   const quotes = [
@@ -168,6 +169,9 @@ const KeyQuotes = () => {
                   </div>
                 </div>
               </Card>
+              
+              <PDFReferenceCard className="mb-6" />
+              
               <KeyQuotesFlashcards />
             </TabsContent>
             
