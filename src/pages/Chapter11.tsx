@@ -5,6 +5,7 @@ import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
+import { SensitivityCalculator } from "@/components/SensitivityCalculator";
 
 const Chapter11 = () => {
   return (
@@ -101,6 +102,15 @@ graph TD
               less influential parameters.
             </p>
           </Card>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Try It Yourself: Sensitivity Demonstrator</h2>
+          <p className="text-muted-foreground mb-6">
+            Use this interactive tool to explore how different parameters affect model output. 
+            Adjust the sliders to see the relative sensitivity of each parameter.
+          </p>
+          <SensitivityCalculator />
         </section>
 
         <section>
