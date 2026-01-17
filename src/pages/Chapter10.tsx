@@ -5,6 +5,7 @@ import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
+import { MonteCarloCalculator } from "@/components/MonteCarloCalculator";
 
 const Chapter10 = () => {
   return (
@@ -227,6 +228,15 @@ graph TD
     style J fill:#f59e0b,stroke:#d97706,color:#fff
             `} />
           </Card>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-6">Try It Yourself: Monte Carlo Simulator</h2>
+          <p className="text-muted-foreground mb-6">
+            Use this interactive tool to explore how parameter uncertainty propagates through a model. 
+            Adjust the mean and standard deviation of input parameters to see how they affect output uncertainty.
+          </p>
+          <MonteCarloCalculator />
         </section>
 
         <section>
