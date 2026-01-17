@@ -1,10 +1,13 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { ArrowLeft, Quote, ExternalLink, BookOpen } from "lucide-react";
+import { ArrowLeft, Quote, ExternalLink, BookOpen, Brain } from "lucide-react";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
+import { KeyQuotesFlashcards } from "@/components/KeyQuotesFlashcards";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const KeyQuotes = () => {
   const quotes = [
@@ -138,6 +141,37 @@ const KeyQuotes = () => {
         </header>
 
         <div className="max-w-7xl mx-auto px-6 py-12 space-y-12">
+          
+          {/* Tabs for Browse vs Study Mode */}
+          <Tabs defaultValue="study" className="w-full">
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
+              <TabsTrigger value="study" className="gap-2">
+                <Brain className="h-4 w-4" />
+                Flashcard Study
+              </TabsTrigger>
+              <TabsTrigger value="browse" className="gap-2">
+                <Quote className="h-4 w-4" />
+                Browse Quotes
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="study" className="mt-8">
+              <Card className="p-6 mb-6 bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
+                <div className="flex items-start gap-4">
+                  <Brain className="w-8 h-8 text-primary shrink-0" />
+                  <div>
+                    <h2 className="text-xl font-bold text-foreground mb-2">Spaced Repetition Study Mode</h2>
+                    <p className="text-muted-foreground">
+                      Master Dr. James's key principles using scientifically-proven spaced repetition. 
+                      Cards you find difficult will appear more often, while mastered concepts are reviewed less frequently.
+                    </p>
+                  </div>
+                </div>
+              </Card>
+              <KeyQuotesFlashcards />
+            </TabsContent>
+            
+            <TabsContent value="browse" className="mt-8 space-y-12">
           
           {/* Source Reference Card */}
           <Card className="p-6 bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
@@ -327,6 +361,8 @@ graph LR
               </Link>
             </div>
           </Card>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
       <Footer />
