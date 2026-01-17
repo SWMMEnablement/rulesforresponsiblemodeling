@@ -28,6 +28,7 @@ import AboutAuthor from "./pages/AboutAuthor";
 import Resources from "./pages/Resources";
 import Glossary from "./pages/Glossary";
 import StudyGuide from "./pages/StudyGuide";
+import KeyQuotes from "./pages/KeyQuotes";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,7 @@ const App = () => (
           <Route path="/resources" element={<Resources />} />
           <Route path="/glossary" element={<Glossary />} />
           <Route path="/study-guide" element={<StudyGuide />} />
+          <Route path="/key-quotes" element={<KeyQuotes />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
