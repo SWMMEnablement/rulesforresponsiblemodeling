@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Code, Laptop, Scale, ExternalLink } from "lucide-react";
+import { Code, Laptop, Scale, ExternalLink, Youtube } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -1205,7 +1205,7 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                     </ul>
                   </div>
                   
-                  <div className="mt-4 pt-4 border-t border-blue-500/20">
+                  <div className="mt-4 pt-4 border-t border-blue-500/20 space-y-2">
                     <a 
                       href="https://www.epa.gov/water-research/storm-water-management-model-swmm" 
                       target="_blank" 
@@ -1215,6 +1215,26 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                       <ExternalLink className="w-4 h-4" />
                       EPA SWMM Official Documentation
                     </a>
+                    <div className="flex flex-col gap-1">
+                      <a 
+                        href="https://www.youtube.com/watch?v=w0F_RXzP7KY" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
+                      >
+                        <Youtube className="w-4 h-4" />
+                        EPA SWMM5 Getting Started Tutorial
+                      </a>
+                      <a 
+                        href="https://www.youtube.com/watch?v=0k5PNE4xKsI" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
+                      >
+                        <Youtube className="w-4 h-4" />
+                        SWMM5 Complete Course Playlist
+                      </a>
+                    </div>
                   </div>
                 </div>
               </Card>
@@ -1254,7 +1274,7 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                     </ul>
                   </div>
                   
-                  <div className="mt-4 pt-4 border-t border-purple-500/20">
+                  <div className="mt-4 pt-4 border-t border-purple-500/20 space-y-2">
                     <a 
                       href="https://help.autodesk.com/view/IWICMS/2025/ENU/" 
                       target="_blank" 
@@ -1264,6 +1284,26 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                       <ExternalLink className="w-4 h-4" />
                       Autodesk ICM SWMM Documentation
                     </a>
+                    <div className="flex flex-col gap-1">
+                      <a 
+                        href="https://www.youtube.com/watch?v=VYx3rG_HXGU" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
+                      >
+                        <Youtube className="w-4 h-4" />
+                        ICM SWMM Network Fundamentals
+                      </a>
+                      <a 
+                        href="https://www.youtube.com/watch?v=dN3Iq_s8iMQ" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
+                      >
+                        <Youtube className="w-4 h-4" />
+                        Migrating from SWMM5 to ICM SWMM
+                      </a>
+                    </div>
                   </div>
                 </div>
               </Card>
@@ -1303,7 +1343,7 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                     </ul>
                   </div>
                   
-                  <div className="mt-4 pt-4 border-t border-green-500/20">
+                  <div className="mt-4 pt-4 border-t border-green-500/20 space-y-2">
                     <a 
                       href="https://help.autodesk.com/view/IWICMS/2025/ENU/" 
                       target="_blank" 
@@ -1313,6 +1353,26 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                       <ExternalLink className="w-4 h-4" />
                       Autodesk ICM InfoWorks Documentation
                     </a>
+                    <div className="flex flex-col gap-1">
+                      <a 
+                        href="https://www.youtube.com/watch?v=wBpfZ4BGQEY" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
+                      >
+                        <Youtube className="w-4 h-4" />
+                        InfoWorks ICM Introduction
+                      </a>
+                      <a 
+                        href="https://www.youtube.com/watch?v=3p6yDdMnRAs" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
+                      >
+                        <Youtube className="w-4 h-4" />
+                        ICM 2D Modeling Tutorial
+                      </a>
+                    </div>
                   </div>
                 </div>
               </Card>
