@@ -227,17 +227,64 @@ const getTokenClassName = (type: string): string => {
 
 export const RubySyntaxHighlighter: React.FC<RubySyntaxHighlighterProps> = ({ code }) => {
   const tokens = tokenize(code);
+  
+  // Split code into lines for line numbering
+  const lines = code.split('\n');
+  const lineCount = lines.length;
+  const lineNumberWidth = String(lineCount).length;
+
+  // Group tokens by line
+  const tokensByLine: { type: string; value: string }[][] = [];
+  let currentLine: { type: string; value: string }[] = [];
+  
+  tokens.forEach(token => {
+    if (token.type === 'whitespace' && token.value.includes('\n')) {
+      // Split whitespace tokens that contain newlines
+      const parts = token.value.split('\n');
+      parts.forEach((part, index) => {
+        if (part) {
+          currentLine.push({ type: 'whitespace', value: part });
+        }
+        if (index < parts.length - 1) {
+          tokensByLine.push(currentLine);
+          currentLine = [];
+        }
+      });
+    } else {
+      currentLine.push(token);
+    }
+  });
+  
+  // Don't forget the last line
+  if (currentLine.length > 0 || tokensByLine.length < lineCount) {
+    tokensByLine.push(currentLine);
+  }
 
   return (
-    <pre className="text-xs font-mono whitespace-pre-wrap overflow-x-auto leading-relaxed">
-      <code>
-        {tokens.map((token, index) => (
-          <span key={index} className={getTokenClassName(token.type)}>
-            {token.value}
-          </span>
-        ))}
-      </code>
-    </pre>
+    <div className="text-xs font-mono leading-relaxed">
+      <table className="w-full border-collapse">
+        <tbody>
+          {tokensByLine.map((lineTokens, lineIndex) => (
+            <tr key={lineIndex} className="hover:bg-slate-800/50">
+              <td className="select-none text-right pr-4 text-slate-600 align-top w-8 border-r border-slate-700/50">
+                {String(lineIndex + 1).padStart(lineNumberWidth, ' ')}
+              </td>
+              <td className="pl-4 whitespace-pre-wrap break-all">
+                {lineTokens.length > 0 ? (
+                  lineTokens.map((token, tokenIndex) => (
+                    <span key={tokenIndex} className={getTokenClassName(token.type)}>
+                      {token.value}
+                    </span>
+                  ))
+                ) : (
+                  <span>&nbsp;</span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
