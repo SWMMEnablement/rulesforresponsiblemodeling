@@ -5,6 +5,7 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft, ExternalLink, BookOpen, FileText, Code, Users, GraduationCap, Database, GitBranch, Terminal } from "lucide-react";
 import { AbbreviationsSearch } from "@/components/AbbreviationsSearch";
+import SoftwareExamplesSearch from "@/components/SoftwareExamplesSearch";
 
 const Resources = () => {
   return (
@@ -527,6 +528,11 @@ const Resources = () => {
         </section>
 
       </div>
+
+        {/* Software Examples Search */}
+        <section>
+          <SoftwareExamplesSearch />
+        </section>
 
       {/* Footer */}
       <footer className="bg-muted/30 py-8 px-6 mt-16">
