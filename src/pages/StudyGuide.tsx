@@ -3,11 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { ArrowLeft, BookOpen, CheckCircle, HelpCircle, Target, Brain, Compass } from "lucide-react";
+import { ArrowLeft, BookOpen, CheckCircle, HelpCircle, Target, Brain, Compass, Map, ClipboardList } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FlashcardDeck } from "@/components/FlashcardDeck";
 import { ReadingPathways } from "@/components/ReadingPathways";
+import { FrameworkMindMap } from "@/components/FrameworkMindMap";
+import { PracticalExercises } from "@/components/PracticalExercises";
 
 interface ChapterGuide {
   chapter: number;
@@ -458,18 +460,26 @@ const StudyGuide = () => {
       <div className="max-w-7xl mx-auto px-6 py-12">
         
         <Tabs defaultValue="pathways" className="space-y-8">
-          <TabsList className="grid w-full max-w-lg mx-auto grid-cols-3">
-            <TabsTrigger value="pathways" className="gap-2">
+          <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-5">
+            <TabsTrigger value="pathways" className="gap-2 text-xs sm:text-sm">
               <Compass className="h-4 w-4" />
-              Pathways
+              <span className="hidden sm:inline">Pathways</span>
             </TabsTrigger>
-            <TabsTrigger value="guide" className="gap-2">
+            <TabsTrigger value="guide" className="gap-2 text-xs sm:text-sm">
               <BookOpen className="h-4 w-4" />
-              Study Guide
+              <span className="hidden sm:inline">Guide</span>
             </TabsTrigger>
-            <TabsTrigger value="flashcards" className="gap-2">
+            <TabsTrigger value="exercises" className="gap-2 text-xs sm:text-sm">
+              <ClipboardList className="h-4 w-4" />
+              <span className="hidden sm:inline">Exercises</span>
+            </TabsTrigger>
+            <TabsTrigger value="diagrams" className="gap-2 text-xs sm:text-sm">
+              <Map className="h-4 w-4" />
+              <span className="hidden sm:inline">Diagrams</span>
+            </TabsTrigger>
+            <TabsTrigger value="flashcards" className="gap-2 text-xs sm:text-sm">
               <Brain className="h-4 w-4" />
-              Flashcards
+              <span className="hidden sm:inline">Flashcards</span>
             </TabsTrigger>
           </TabsList>
 
@@ -693,6 +703,16 @@ const StudyGuide = () => {
             </Link>
           </Card>
         </div>
+          </TabsContent>
+
+          {/* Exercises Tab */}
+          <TabsContent value="exercises" className="space-y-6">
+            <PracticalExercises />
+          </TabsContent>
+
+          {/* Diagrams Tab */}
+          <TabsContent value="diagrams" className="space-y-6">
+            <FrameworkMindMap />
           </TabsContent>
 
           {/* Flashcards Tab */}
