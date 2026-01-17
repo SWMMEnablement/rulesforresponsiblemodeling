@@ -16,10 +16,20 @@ const Chapter5 = () => {
           <h2 className="text-3xl font-bold text-foreground mb-4">Long-Term Sustainability Modeling</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
             <GlossaryTooltip term="Continuous Simulation" /> models run over extended periods to capture seasonal variations, 
-            ecosystem processes, and long-term trends. These models are essential for sustainability 
-            assessment, climate impact studies, and ethical water resource management. Key concepts include 
-            <GlossaryTooltip term="Water Balance" />, <GlossaryTooltip term="Baseflow" />, and <GlossaryTooltip term="Split-Sample Validation" />.
+            ecosystem processes, and long-term trends. Dr. James emphasizes that continuous modeling is essential 
+            because unlike "event" models that use arbitrary startup conditions, continuous models include 
+            dry-weather processes (pollutant build-up, evapo-transpiration) and provide critical frequency-concentration 
+            information that only long-term simulations can offer.
           </p>
+
+          <Card className="p-6 bg-primary/5 border-l-4 border-l-primary mb-6">
+            <h3 className="text-lg font-bold text-foreground mb-2">Key Insight from James</h3>
+            <p className="text-muted-foreground italic">
+              "Continuous models are necessary for sustainability analysis. Only long-term simulations 
+              (e.g., 75 years) can provide the frequency-concentration information needed for informed 
+              environmental design decisions."
+            </p>
+          </Card>
 
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
@@ -28,18 +38,105 @@ graph LR
     B --> C[Runoff Generation]
     B --> D[Infiltration]
     B --> E[Evapotranspiration]
+    B --> B1[Pollutant Build-up]
     C --> F[Water Balance]
     D --> F
     E --> F
-    F --> G[Ecosystem Impact]
+    B1 --> F
+    F --> G[Frequency Analysis]
     F --> H[Sustainability Metrics]
-    G --> I[Long-term Analysis]
+    G --> I[Long-term Design]
     H --> I
     
     style A fill:#3b82f6,stroke:#2563eb,color:#fff
     style I fill:#10b981,stroke:#059669,color:#fff
     style F fill:#f59e0b,stroke:#d97706,color:#fff
             `} />
+          </Card>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Continuous vs. Event Modeling</h2>
+          <p className="text-muted-foreground leading-relaxed mb-6">
+            Dr. James distinguishes between event-based and continuous modeling approaches:
+          </p>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="p-6 border-l-4 border-l-destructive">
+              <h3 className="text-xl font-bold text-primary mb-3">Event-Based Models</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Simulate individual storm events with specified initial conditions.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-destructive">−</span>
+                  <span>Arbitrary startup conditions (initial moisture, storage)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-destructive">−</span>
+                  <span>Cannot capture antecedent conditions naturally</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-destructive">−</span>
+                  <span>Miss dry-weather processes (pollutant accumulation)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary">+</span>
+                  <span>Computationally efficient for design storms</span>
+                </li>
+              </ul>
+            </Card>
+
+            <Card className="p-6 border-l-4 border-l-primary">
+              <h3 className="text-xl font-bold text-primary mb-3">Continuous Models</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Simulate extended periods including inter-event processes.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-primary">+</span>
+                  <span>Natural evolution of antecedent conditions</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary">+</span>
+                  <span>Capture pollutant build-up and washoff dynamics</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary">+</span>
+                  <span>Enable frequency analysis from synthetic record</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary">+</span>
+                  <span>Required for sustainability and climate analysis</span>
+                </li>
+              </ul>
+            </Card>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">The Calibration Rule for Continuous Models</h2>
+          <Card className="p-6 bg-muted/30">
+            <p className="text-muted-foreground leading-relaxed mb-4">
+              Dr. James provides a practical insight: <strong>short, accurate observed time series are sufficient 
+              for parameter optimization</strong>; long-term inferential runs can use transposed or synthetic 
+              rainfall data.
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="p-4 bg-background rounded">
+                <h4 className="font-semibold text-foreground mb-2">Short-term Calibration</h4>
+                <p className="text-sm text-muted-foreground">
+                  Use high-quality observed data (1-3 years) to calibrate parameters. Focus on accuracy 
+                  over duration.
+                </p>
+              </div>
+              <div className="p-4 bg-background rounded">
+                <h4 className="font-semibold text-foreground mb-2">Long-term Inference</h4>
+                <p className="text-sm text-muted-foreground">
+                  Once calibrated, run the model with extended or synthetic rainfall (25-100+ years) for 
+                  frequency analysis.
+                </p>
+              </div>
+            </div>
           </Card>
         </section>
 
