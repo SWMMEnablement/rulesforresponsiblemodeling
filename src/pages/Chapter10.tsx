@@ -17,9 +17,18 @@ const Chapter10 = () => {
           <p className="text-muted-foreground leading-relaxed mb-6">
             Every model prediction contains uncertainty from multiple sources. Understanding and quantifying 
             these uncertainties through <GlossaryTooltip term="Uncertainty Analysis" /> is essential for responsible modeling. 
-            Methods like <GlossaryTooltip term="Monte Carlo Simulation" /> help propagate and quantify uncertainty, 
-            while recognizing <GlossaryTooltip term="Equifinality" /> in parameter identification.
+            As Dr. James emphasizes, "all models are wrong" — the key is understanding <em>how</em> wrong and 
+            <em>when</em> they remain useful. Methods like <GlossaryTooltip term="Monte Carlo Simulation" /> help propagate 
+            and quantify uncertainty, while recognizing <GlossaryTooltip term="Equifinality" /> in parameter identification.
           </p>
+
+          <Card className="p-6 bg-primary/5 border-l-4 border-l-primary mb-6">
+            <h3 className="text-lg font-bold text-foreground mb-2">Key Insight from James</h3>
+            <p className="text-muted-foreground italic">
+              "Model error arises from discretization (spatial and temporal resolution choices) and monitoring 
+              (measurement uncertainty in calibration data). Both must be quantified to understand prediction reliability."
+            </p>
+          </Card>
 
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
@@ -31,6 +40,7 @@ graph TD
     
     B --> F[Rainfall Measurement]
     B --> G[Initial Conditions]
+    B --> B1[Discretization Error]
     
     C --> H[Physical Parameters]
     C --> I[Empirical Coefficients]
@@ -38,8 +48,9 @@ graph TD
     D --> J[Model Structure]
     D --> K[Process Representation]
     
-    E --> L[Objective Function]
+    E --> L[Objective Function Choice]
     E --> M[Equifinality]
+    E --> N[Monitoring Error]
     
     style A fill:#dc2626,stroke:#b91c1c,color:#fff
     style B fill:#f59e0b,stroke:#d97706,color:#fff
@@ -48,6 +59,56 @@ graph TD
     style E fill:#f59e0b,stroke:#d97706,color:#fff
             `} />
           </Card>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-4">Discretization and Monitoring Errors</h2>
+          <p className="text-muted-foreground leading-relaxed mb-6">
+            Dr. James identifies two fundamental sources of model error that must be addressed in any uncertainty analysis:
+          </p>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="p-6 border-l-4 border-l-primary">
+              <h3 className="text-xl font-bold text-primary mb-3">Discretization Error</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Errors arising from spatial and temporal resolution choices in model setup.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-primary">•</span>
+                  <span><strong>Spatial:</strong> Subcatchment size, node spacing, conduit segmentation</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary">•</span>
+                  <span><strong>Temporal:</strong> Time step selection, rainfall aggregation</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary">•</span>
+                  <span><strong>Numerical:</strong> Solution method convergence tolerances</span>
+                </li>
+              </ul>
+            </Card>
+
+            <Card className="p-6 border-l-4 border-l-secondary">
+              <h3 className="text-xl font-bold text-primary mb-3">Monitoring Error</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Errors in the observed data used for calibration and validation.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-primary">•</span>
+                  <span><strong>Rainfall:</strong> Gauge density, spatial variability, missing data</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary">•</span>
+                  <span><strong>Flow:</strong> Rating curve uncertainty, sensor drift, debris</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary">•</span>
+                  <span><strong>Quality:</strong> Sampling frequency, lab accuracy, representativeness</span>
+                </li>
+              </ul>
+            </Card>
+          </div>
         </section>
 
         <section>
