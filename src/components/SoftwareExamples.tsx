@@ -3,9 +3,10 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Code, Laptop, Scale, ExternalLink, Youtube } from "lucide-react";
+import { Code, Laptop, Scale, ExternalLink, Youtube, Copy, Check, Download } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useToast } from "@/hooks/use-toast";
 
 interface SoftwareExample {
   title: string;
@@ -1615,6 +1616,104 @@ const chapterExamples: Record<number, ChapterExamples> = {
   }
 };
 
+// Ruby Code Block Component with Copy and Download functionality
+const RubyCodeBlock = ({ 
+  code, 
+  chapterNumber, 
+  chapterTitle 
+}: { 
+  code: string; 
+  chapterNumber: number; 
+  chapterTitle: string;
+}) => {
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      toast({
+        title: "Copied to clipboard!",
+        description: "Ruby code has been copied successfully.",
+      });
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      toast({
+        title: "Failed to copy",
+        description: "Please try selecting and copying manually.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDownload = () => {
+    const filename = `icm_chapter_${chapterNumber}_${chapterTitle.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.rb`;
+    const blob = new Blob([code], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "Download started!",
+      description: `${filename} is being downloaded.`,
+    });
+  };
+
+  return (
+    <div className="bg-slate-900 rounded-lg p-4 border border-green-500/30">
+      <div className="flex items-center justify-between mb-3">
+        <h4 className="font-semibold text-green-400 flex items-center gap-2">
+          <Code className="w-4 h-4" />
+          ICM Ruby Code Example
+        </h4>
+        <div className="flex gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleCopy}
+            className="h-8 px-2 text-slate-400 hover:text-white hover:bg-slate-700"
+          >
+            {copied ? (
+              <>
+                <Check className="w-4 h-4 mr-1 text-green-400" />
+                <span className="text-xs">Copied!</span>
+              </>
+            ) : (
+              <>
+                <Copy className="w-4 h-4 mr-1" />
+                <span className="text-xs">Copy</span>
+              </>
+            )}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleDownload}
+            className="h-8 px-2 text-slate-400 hover:text-white hover:bg-slate-700"
+          >
+            <Download className="w-4 h-4 mr-1" />
+            <span className="text-xs">Download .rb</span>
+          </Button>
+        </div>
+      </div>
+      <ScrollArea className="h-[300px]">
+        <pre className="text-xs text-slate-300 font-mono whitespace-pre-wrap overflow-x-auto">
+          <code>{code}</code>
+        </pre>
+      </ScrollArea>
+      <p className="text-xs text-slate-400 mt-3 italic">
+        💎 Run this in ICM's Ruby Console (Tools → Ruby Console) or save as .rb file
+      </p>
+    </div>
+  );
+};
+
 interface SoftwareExamplesProps {
   chapterNumber: number;
 }
@@ -1840,20 +1939,11 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                   
                   {/* Ruby Code Example */}
                   {icmRubyCode[chapterNumber] && (
-                    <div className="bg-slate-900 rounded-lg p-4 border border-green-500/30">
-                      <h4 className="font-semibold text-green-400 mb-3 flex items-center gap-2">
-                        <Code className="w-4 h-4" />
-                        ICM Ruby Code Example
-                      </h4>
-                      <ScrollArea className="h-[300px]">
-                        <pre className="text-xs text-slate-300 font-mono whitespace-pre-wrap overflow-x-auto">
-                          <code>{icmRubyCode[chapterNumber]}</code>
-                        </pre>
-                      </ScrollArea>
-                      <p className="text-xs text-slate-400 mt-3 italic">
-                        💎 Run this in ICM's Ruby Console (Tools → Ruby Console) or save as .rb file
-                      </p>
-                    </div>
+                    <RubyCodeBlock 
+                      code={icmRubyCode[chapterNumber]} 
+                      chapterNumber={chapterNumber}
+                      chapterTitle={examples.icm.title}
+                    />
                   )}
                   
                   <div className="mt-4 pt-4 border-t border-green-500/20 space-y-2">
