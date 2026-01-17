@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Code, Laptop, Scale } from "lucide-react";
+import { Code, Laptop, Scale, ExternalLink } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -1204,6 +1204,18 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                       ))}
                     </ul>
                   </div>
+                  
+                  <div className="mt-4 pt-4 border-t border-blue-500/20">
+                    <a 
+                      href="https://www.epa.gov/water-research/storm-water-management-model-swmm" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      EPA SWMM Official Documentation
+                    </a>
+                  </div>
                 </div>
               </Card>
             </TabsContent>
@@ -1241,6 +1253,18 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                       ))}
                     </ul>
                   </div>
+                  
+                  <div className="mt-4 pt-4 border-t border-purple-500/20">
+                    <a 
+                      href="https://help.autodesk.com/view/IWICMS/2025/ENU/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm text-purple-600 hover:text-purple-700 font-medium transition-colors"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      Autodesk ICM SWMM Documentation
+                    </a>
+                  </div>
                 </div>
               </Card>
             </TabsContent>
@@ -1277,6 +1301,18 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                         </li>
                       ))}
                     </ul>
+                  </div>
+                  
+                  <div className="mt-4 pt-4 border-t border-green-500/20">
+                    <a 
+                      href="https://help.autodesk.com/view/IWICMS/2025/ENU/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm text-green-600 hover:text-green-700 font-medium transition-colors"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      Autodesk ICM InfoWorks Documentation
+                    </a>
                   </div>
                 </div>
               </Card>
