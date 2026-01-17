@@ -21,6 +21,22 @@ const Chapter9 = () => {
             <GlossaryTooltip term="PBIAS" />, and <GlossaryTooltip term="KGE" />.
           </p>
 
+          <Card className="p-6 bg-secondary/5 border-l-4 border-l-secondary mb-6">
+            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Objective Functions</h3>
+            <p className="text-muted-foreground italic mb-3">
+              "The choice of objective function is itself a modeling decision that deserves careful 
+              consideration. Different objectives will lead to different 'optimal' parameter sets, 
+              and no single metric captures all aspects of model performance. The objective function 
+              should reflect what matters most for your specific application."
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Dr. James cautioned against blindly adopting standard metrics without considering project 
+              context. For flood management, peak accuracy may be paramount. For water supply, long-term 
+              volumes matter most. For ecological applications, low-flow simulation could be critical. 
+              Match your metrics to your decisions.
+            </p>
+          </Card>
+
           <Card className="p-8 bg-gradient-to-br from-card to-accent/10">
             <MermaidDiagram chart={`
 graph TD

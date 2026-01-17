@@ -86,6 +86,24 @@ graph TD
         </section>
 
         <section>
+          <Card className="p-6 bg-secondary/5 border-l-4 border-l-secondary">
+            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Sensitivity Analysis</h3>
+            <p className="text-muted-foreground italic mb-3">
+              "Sensitivity analysis is not merely a diagnostic tool—it is fundamental to responsible 
+              modeling. It tells us where to focus our calibration efforts, which data to collect, 
+              and how confident we can be in our predictions. A model that has not been subjected 
+              to thorough sensitivity analysis is not yet ready for application."
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Dr. James emphasized that sensitivity analysis should precede calibration, not follow it. 
+              Understanding which parameters most strongly influence outputs allows modelers to focus 
+              limited resources on the most important factors and accept reasonable defaults for 
+              less influential parameters.
+            </p>
+          </Card>
+        </section>
+
+        <section>
           <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
           <Quiz
             questions={[

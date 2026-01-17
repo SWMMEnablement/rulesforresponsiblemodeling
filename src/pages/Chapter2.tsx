@@ -27,6 +27,21 @@ const Chapter2 = () => {
             essential for ensuring numerical stability.
           </p>
 
+          <Card className="p-6 bg-secondary/5 border-l-4 border-l-secondary mb-6">
+            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Discretization Error</h3>
+            <p className="text-muted-foreground italic mb-3">
+              "Discretization error is often the largest source of model uncertainty, yet it is frequently 
+              overlooked in favor of parameter uncertainty. The choice of spatial and temporal resolution 
+              should be treated with the same rigor as parameter calibration."
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Dr. James emphasized that discretization errors arise from approximating continuous processes 
+              with discrete calculations. These errors can dominate total model uncertainty, particularly 
+              when spatial or temporal gradients are steep—such as during flash flood events or in areas 
+              with complex topography.
+            </p>
+          </Card>
+
           <Card className="p-6 bg-muted/50 border-l-4 border-l-primary">
             <h3 className="text-xl font-bold text-foreground mb-3">The Discretization Dilemma</h3>
             <p className="text-muted-foreground leading-relaxed">

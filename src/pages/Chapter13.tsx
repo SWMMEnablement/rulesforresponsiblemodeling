@@ -77,6 +77,21 @@ graph TD
               <span>Align metrics with modeling objectives and decision context</span>
             </li>
           </ul>
+
+          <Card className="p-6 bg-background/50 mt-6">
+            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Performance Evaluation</h3>
+            <p className="text-muted-foreground italic mb-3">
+              "Performance evaluation functions are not neutral—they embody value judgments about 
+              what aspects of model behavior matter most. A high Nash-Sutcliffe efficiency does not 
+              guarantee a model is fit for purpose. The modeler must consciously choose metrics that 
+              reflect the actual decision context."
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Dr. James's survey of performance evaluation functions revealed that no single metric 
+              is universally appropriate. The responsible modeler selects and reports multiple metrics 
+              that collectively address the range of model behaviors relevant to the intended application.
+            </p>
+          </Card>
         </section>
 
         <section>
