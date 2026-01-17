@@ -5,7 +5,7 @@ import { Quiz } from "@/components/Quiz";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
-
+import { WaterBalanceCalculator } from "@/components/WaterBalanceCalculator";
 const Chapter5 = () => {
   return (
     <>
@@ -142,7 +142,7 @@ graph LR
 
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-4">Key Applications</h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
             <Card className="p-6">
               <h3 className="text-xl font-bold text-primary mb-2">Water Balance</h3>
               <p className="text-muted-foreground text-sm">Long-term accounting of inputs, outputs, and storage changes</p>
@@ -156,6 +156,8 @@ graph LR
               <p className="text-muted-foreground text-sm">Impact assessment over multi-decadal periods</p>
             </Card>
           </div>
+          
+          <WaterBalanceCalculator />
         </section>
 
         <section className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg p-8">
