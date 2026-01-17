@@ -40,36 +40,36 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-        <CommandPalette />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/chapter/1" element={<Chapter1 />} />
-          <Route path="/chapter/2" element={<Chapter2 />} />
-          <Route path="/chapter/3" element={<Chapter3 />} />
-          <Route path="/chapter/4" element={<Chapter4 />} />
-          <Route path="/chapter/5" element={<Chapter5 />} />
-          <Route path="/chapter/6" element={<Chapter6 />} />
-          <Route path="/chapter/7" element={<Chapter7 />} />
-          <Route path="/chapter/8" element={<Chapter8 />} />
-          <Route path="/chapter/9" element={<Chapter9 />} />
-          <Route path="/chapter/10" element={<Chapter10 />} />
-          <Route path="/chapter/11" element={<Chapter11 />} />
-          <Route path="/chapter/12" element={<Chapter12 />} />
-          <Route path="/chapter/13" element={<Chapter13 />} />
-          <Route path="/chapter/14" element={<Chapter14 />} />
-          <Route path="/chapter/15" element={<Chapter15 />} />
-          <Route path="/chapter/16" element={<Chapter16 />} />
-          <Route path="/chapter/17" element={<Chapter17 />} />
-          <Route path="/notes" element={<AllNotes />} />
-          <Route path="/about-author" element={<AboutAuthor />} />
-          <Route path="/resources" element={<Resources />} />
-          <Route path="/glossary" element={<Glossary />} />
-          <Route path="/study-guide" element={<StudyGuide />} />
-          <Route path="/key-quotes" element={<KeyQuotes />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+          <CommandPalette />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/chapter/1" element={<Chapter1 />} />
+            <Route path="/chapter/2" element={<Chapter2 />} />
+            <Route path="/chapter/3" element={<Chapter3 />} />
+            <Route path="/chapter/4" element={<Chapter4 />} />
+            <Route path="/chapter/5" element={<Chapter5 />} />
+            <Route path="/chapter/6" element={<Chapter6 />} />
+            <Route path="/chapter/7" element={<Chapter7 />} />
+            <Route path="/chapter/8" element={<Chapter8 />} />
+            <Route path="/chapter/9" element={<Chapter9 />} />
+            <Route path="/chapter/10" element={<Chapter10 />} />
+            <Route path="/chapter/11" element={<Chapter11 />} />
+            <Route path="/chapter/12" element={<Chapter12 />} />
+            <Route path="/chapter/13" element={<Chapter13 />} />
+            <Route path="/chapter/14" element={<Chapter14 />} />
+            <Route path="/chapter/15" element={<Chapter15 />} />
+            <Route path="/chapter/16" element={<Chapter16 />} />
+            <Route path="/chapter/17" element={<Chapter17 />} />
+            <Route path="/notes" element={<AllNotes />} />
+            <Route path="/about-author" element={<AboutAuthor />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/glossary" element={<Glossary />} />
+            <Route path="/study-guide" element={<StudyGuide />} />
+            <Route path="/key-quotes" element={<KeyQuotes />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
