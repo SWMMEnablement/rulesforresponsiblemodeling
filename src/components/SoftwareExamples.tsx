@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Code, Laptop, Scale } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface SoftwareExample {
   title: string;
@@ -16,11 +17,13 @@ interface SoftwareExample {
 interface ComparisonItem {
   feature: string;
   swmm5: string;
+  icmSwmm: string;
   icm: string;
 }
 
 interface ChapterExamples {
   swmm5: SoftwareExample;
+  icmSwmm: SoftwareExample;
   icm: SoftwareExample;
   comparison: ComparisonItem[];
 }
@@ -45,6 +48,25 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "The model is a decision tool, not a crystal ball"
       ]
     },
+    icmSwmm: {
+      title: "Creating Your First ICM SWMM Model",
+      description: "Build a subcatchment model using the SWMM engine within the ICM platform for familiar SWMM workflows with enhanced tools.",
+      steps: [
+        "Create a new SWMM Network in ICM",
+        "Set the coordinate system and import background maps",
+        "Draw or import a subcatchment polygon",
+        "Define SWMM-style properties: Area, Width, % Impervious, Slope",
+        "Add junction and outfall nodes",
+        "Create conduits connecting the network",
+        "Set up rainfall using SWMM time series format",
+        "Run SWMM simulation and view results"
+      ],
+      tips: [
+        "ICM SWMM uses the EPA SWMM engine—results match standalone SWMM5",
+        "Benefit from ICM's GIS tools while keeping SWMM compatibility",
+        "Easy to import existing SWMM5 .inp files directly"
+      ]
+    },
     icm: {
       title: "Creating Your First ICM Model",
       description: "Build a catchment model in InfoWorks ICM to experience the full modeling cycle from conceptualization to results.",
@@ -64,12 +86,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Interface", swmm5: "Simple, lightweight GUI", icm: "Feature-rich GIS-integrated interface" },
-      { feature: "Learning Curve", swmm5: "Easier for beginners", icm: "Steeper but more powerful" },
-      { feature: "Cost", swmm5: "Free, open-source (EPA)", icm: "Commercial license required" },
-      { feature: "2D Capability", swmm5: "Limited (requires external tools)", icm: "Fully integrated 1D/2D" },
-      { feature: "GIS Integration", swmm5: "Basic import/export", icm: "Native geodatabase support" },
-      { feature: "Model Size", swmm5: "Best for small-medium models", icm: "Scales to very large networks" }
+      { feature: "Interface", swmm5: "Simple, lightweight GUI", icmSwmm: "ICM platform with SWMM engine", icm: "Feature-rich GIS-integrated interface" },
+      { feature: "Learning Curve", swmm5: "Easiest for beginners", icmSwmm: "Familiar SWMM with ICM tools", icm: "Steeper but most powerful" },
+      { feature: "Cost", swmm5: "Free, open-source (EPA)", icmSwmm: "Commercial license required", icm: "Commercial license required" },
+      { feature: "2D Capability", swmm5: "Limited (external tools)", icmSwmm: "Available via ICM coupling", icm: "Fully integrated 1D/2D" },
+      { feature: "GIS Integration", swmm5: "Basic import/export", icmSwmm: "Full ICM GIS capabilities", icm: "Native geodatabase support" },
+      { feature: "SWMM Compatibility", swmm5: "Native format", icmSwmm: "Direct .inp import/export", icm: "Import only, different engine" }
     ]
   },
   2: {
@@ -91,6 +113,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Match discretization to your available data quality"
       ]
     },
+    icmSwmm: {
+      title: "Subcatchment Discretization in ICM SWMM",
+      description: "Use ICM's GIS tools to efficiently discretize catchments while maintaining SWMM compatibility.",
+      steps: [
+        "Import catchment boundary from GIS",
+        "Use ICM's polygon tools to subdivide based on drainage areas",
+        "Auto-calculate areas and derive widths from geometry",
+        "Connect subcatchments to appropriate nodes",
+        "Run baseline and refined discretization models",
+        "Use Results Analysis to compare hydrographs",
+        "Export final model as SWMM .inp if needed"
+      ],
+      tips: [
+        "ICM's spatial tools make discretization faster than manual SWMM5 work",
+        "Width calculation can be automated from subcatchment geometry",
+        "Maintain SWMM5 compatibility for regulatory submittals"
+      ]
+    },
     icm: {
       title: "Grid-Based vs. Subcatchment Discretization in ICM",
       description: "Compare polygon-based and grid-based spatial representations in ICM.",
@@ -110,12 +150,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Spatial Resolution", swmm5: "User-defined subcatchments", icm: "Flexible polygon or mesh-based" },
-      { feature: "Routing Options", swmm5: "Kinematic or dynamic wave", icm: "Multiple routing engines including 2D" },
-      { feature: "Auto-Discretization", swmm5: "Manual or external tools", icm: "Built-in mesh generation" },
-      { feature: "Terrain Handling", swmm5: "Simplified slope parameters", icm: "Direct DEM integration" },
-      { feature: "Performance", swmm5: "Fast for 1D networks", icm: "Optimized for large 1D/2D models" },
-      { feature: "Visual Feedback", swmm5: "Basic profile/map views", icm: "3D visualization, animations" }
+      { feature: "Spatial Resolution", swmm5: "User-defined subcatchments", icmSwmm: "User-defined with GIS assist", icm: "Flexible polygon or mesh-based" },
+      { feature: "Routing Options", swmm5: "Kinematic or dynamic wave", icmSwmm: "SWMM routing engines", icm: "Multiple engines including 2D" },
+      { feature: "Auto-Discretization", swmm5: "Manual or external tools", icmSwmm: "GIS-based subdivision tools", icm: "Built-in mesh generation" },
+      { feature: "Width Calculation", swmm5: "Manual input", icmSwmm: "Auto-calculate from geometry", icm: "N/A (different hydrology)" },
+      { feature: "Performance", swmm5: "Fast for 1D networks", icmSwmm: "Similar to SWMM5", icm: "Optimized for large 1D/2D" },
+      { feature: "Visual Feedback", swmm5: "Basic profile/map views", icmSwmm: "ICM visualization suite", icm: "3D visualization, animations" }
     ]
   },
   3: {
@@ -137,6 +177,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Missing data is better acknowledged than silently interpolated"
       ]
     },
+    icmSwmm: {
+      title: "Data Validation in ICM SWMM Networks",
+      description: "Leverage ICM's data management while maintaining SWMM data structures.",
+      steps: [
+        "Import SWMM .inp file or GIS data into ICM SWMM network",
+        "Use Validate Network to find connectivity and data issues",
+        "Run SQL queries to identify suspicious parameter values",
+        "Cross-reference with survey data and aerial imagery",
+        "Flag uncertain data using user-defined fields",
+        "Document data sources in model notes",
+        "Export cleaned model for SWMM5 if required"
+      ],
+      tips: [
+        "ICM's validation catches errors SWMM5 might miss",
+        "SQL queries help find outliers across large networks",
+        "Maintain data quality documentation in the ICM database"
+      ]
+    },
     icm: {
       title: "GIS Integration and Data Validation in ICM",
       description: "Leverage ICM's GIS capabilities to import, validate, and quality-control input data.",
@@ -156,12 +214,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Data Import", swmm5: "CSV, text files, basic GIS", icm: "Native geodatabase, ODBC, many formats" },
-      { feature: "Validation Tools", swmm5: "Basic error checking", icm: "Comprehensive network validation suite" },
-      { feature: "SQL Queries", swmm5: "Not available", icm: "Built-in SQL for data analysis" },
-      { feature: "Data Flagging", swmm5: "Manual notes only", icm: "Custom fields for confidence levels" },
-      { feature: "Audit Trail", swmm5: "Manual documentation", icm: "Built-in versioning and history" },
-      { feature: "Reporting", swmm5: "Basic text reports", icm: "Customizable report templates" }
+      { feature: "Data Import", swmm5: "CSV, text files, basic GIS", icmSwmm: "GIS + direct .inp import", icm: "Native geodatabase, ODBC, many formats" },
+      { feature: "Validation Tools", swmm5: "Basic error checking", icmSwmm: "ICM validation suite", icm: "Comprehensive validation suite" },
+      { feature: "SQL Queries", swmm5: "Not available", icmSwmm: "Full SQL support", icm: "Built-in SQL for data analysis" },
+      { feature: "Data Flagging", swmm5: "Manual notes only", icmSwmm: "Custom fields available", icm: "Custom fields for confidence levels" },
+      { feature: "SWMM Export", swmm5: "Native format", icmSwmm: "Direct .inp export", icm: "Not applicable" },
+      { feature: "Reporting", swmm5: "Basic text reports", icmSwmm: "ICM report templates", icm: "Customizable report templates" }
     ]
   },
   4: {
@@ -183,6 +241,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Over-parameterized models can calibrate well but predict poorly"
       ]
     },
+    icmSwmm: {
+      title: "Complexity Selection in ICM SWMM Networks",
+      description: "Balance SWMM model complexity with ICM's enhanced visualization and analysis tools.",
+      steps: [
+        "Start with a simple SWMM network in ICM",
+        "Run and review results using ICM's analysis tools",
+        "Progressively add complexity (subcatchments, LIDs, controls)",
+        "Use scenario management to compare complexity levels",
+        "Leverage ICM's 2D if surface flooding detail is needed",
+        "Document the optimal complexity for your project goals",
+        "Maintain SWMM export compatibility where required"
+      ],
+      tips: [
+        "ICM SWMM lets you add 2D selectively without leaving SWMM",
+        "Use scenarios to test different complexity levels efficiently",
+        "Match model complexity to project questions, not software capability"
+      ]
+    },
     icm: {
       title: "1D vs. 1D/2D Model Complexity in ICM",
       description: "Evaluate when integrated 2D modeling adds value vs. unnecessary complexity.",
@@ -202,12 +278,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Model Types", swmm5: "1D hydrology and hydraulics", icm: "1D, 2D, and coupled 1D/2D" },
-      { feature: "LID/SUDS", swmm5: "Built-in LID controls", icm: "SUDS via runoff surfaces and RTCs" },
-      { feature: "Water Quality", swmm5: "Integrated WQ module", icm: "Separate but powerful WQ engine" },
-      { feature: "Groundwater", swmm5: "Simplified aquifer model", icm: "Groundwater infiltration module" },
-      { feature: "RTC", swmm5: "Basic control rules", icm: "Advanced RTC with scripting" },
-      { feature: "Optimization", swmm5: "External tools required", icm: "Built-in optimization capabilities" }
+      { feature: "Model Types", swmm5: "1D hydrology and hydraulics", icmSwmm: "SWMM 1D + optional ICM 2D", icm: "1D, 2D, and coupled 1D/2D" },
+      { feature: "LID/SUDS", swmm5: "Built-in LID controls", icmSwmm: "Full SWMM LID support", icm: "SUDS via runoff surfaces and RTCs" },
+      { feature: "Water Quality", swmm5: "Integrated WQ module", icmSwmm: "SWMM WQ module", icm: "Separate but powerful WQ engine" },
+      { feature: "Groundwater", swmm5: "Simplified aquifer model", icmSwmm: "SWMM aquifer model", icm: "Groundwater infiltration module" },
+      { feature: "2D Integration", swmm5: "Not available", icmSwmm: "Can couple with ICM 2D", icm: "Fully integrated" },
+      { feature: "Optimization", swmm5: "External tools required", icmSwmm: "ICM optimization available", icm: "Built-in optimization capabilities" }
     ]
   },
   5: {
@@ -229,6 +305,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Antecedent moisture conditions dramatically affect peak flows"
       ]
     },
+    icmSwmm: {
+      title: "Continuous Simulation in ICM SWMM",
+      description: "Run long-term SWMM simulations with ICM's enhanced data handling and analysis.",
+      steps: [
+        "Import multi-year rainfall and evaporation time series",
+        "Configure SWMM network for continuous simulation",
+        "Set up initial conditions and groundwater if needed",
+        "Use ICM's simulation scheduling for long runs",
+        "Analyze results using ICM's statistics tools",
+        "Generate flow duration curves and CSO statistics",
+        "Export results or model for external use"
+      ],
+      tips: [
+        "ICM handles large time series more efficiently than standalone SWMM5",
+        "Use ICM's statistics tools to analyze continuous results",
+        "Results remain SWMM-compatible for regulatory purposes"
+      ]
+    },
     icm: {
       title: "Long-Term Simulation in ICM",
       description: "Configure ICM for continuous simulation with full water balance tracking.",
@@ -248,12 +342,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Simulation Speed", swmm5: "Good for moderate periods", icm: "FAST engine for multi-year runs" },
-      { feature: "Water Balance", swmm5: "Complete hydrologic cycle", icm: "Detailed runoff surface accounting" },
-      { feature: "Evaporation", swmm5: "Daily or monthly data", icm: "Flexible temporal resolution" },
-      { feature: "Initial Conditions", swmm5: "User-specified or hotstart", icm: "Hotstart files, initial state editor" },
-      { feature: "Statistics", swmm5: "Post-processing required", icm: "Built-in flow duration curves" },
-      { feature: "CSO Analysis", swmm5: "Manual event counting", icm: "Automated CSO volume/frequency stats" }
+      { feature: "Simulation Speed", swmm5: "Good for moderate periods", icmSwmm: "Improved data handling", icm: "FAST engine for multi-year runs" },
+      { feature: "Water Balance", swmm5: "Complete hydrologic cycle", icmSwmm: "SWMM hydrologic cycle", icm: "Detailed runoff surface accounting" },
+      { feature: "Evaporation", swmm5: "Daily or monthly data", icmSwmm: "Flexible temporal resolution", icm: "Flexible temporal resolution" },
+      { feature: "Initial Conditions", swmm5: "User-specified or hotstart", icmSwmm: "Hotstart files supported", icm: "Hotstart files, initial state editor" },
+      { feature: "Statistics", swmm5: "Post-processing required", icmSwmm: "ICM statistics tools", icm: "Built-in flow duration curves" },
+      { feature: "CSO Analysis", swmm5: "Manual event counting", icmSwmm: "ICM CSO tools available", icm: "Automated CSO volume/frequency stats" }
     ]
   },
   6: {
@@ -275,6 +369,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Monte Carlo results are only as good as your rainfall generator"
       ]
     },
+    icmSwmm: {
+      title: "Probabilistic Analysis in ICM SWMM",
+      description: "Use ICM's batch capabilities for Monte Carlo analysis of SWMM networks.",
+      steps: [
+        "Generate synthetic rainfall series externally or via ICM tools",
+        "Create scenario matrix with varying rainfall inputs",
+        "Configure ICM batch runs for efficiency",
+        "Run SWMM simulations across all scenarios",
+        "Post-process results using ICM statistics tools",
+        "Create probability distributions of key outputs",
+        "Document uncertainty ranges in deliverables"
+      ],
+      tips: [
+        "ICM's batch runner streamlines Monte Carlo for SWMM models",
+        "Maintain traceability between scenarios and results",
+        "Synthetic rainfall statistics should match your project location"
+      ]
+    },
     icm: {
       title: "Synthetic Rainfall and Ensemble Runs in ICM",
       description: "Use ICM's capabilities for probabilistic analysis with synthetic rainfall inputs.",
@@ -294,12 +406,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Rainfall Generation", swmm5: "External tools (SSOAP, etc.)", icm: "External or built-in patterns" },
-      { feature: "Batch Processing", swmm5: "Command-line scripting", icm: "ICM Exchange automation" },
-      { feature: "Parameter Variation", swmm5: "Manual or Python scripts", icm: "Scenario manager, sensitivity tool" },
-      { feature: "Monte Carlo", swmm5: "External implementation", icm: "Can be set up with Exchange" },
-      { feature: "Results Statistics", swmm5: "External post-processing", icm: "Built-in statistics and graphs" },
-      { feature: "Automation", swmm5: "Python, MATLAB interfaces", icm: "Ruby API, Exchange platform" }
+      { feature: "Rainfall Generation", swmm5: "External tools (SSOAP, etc.)", icmSwmm: "External or ICM patterns", icm: "External or built-in patterns" },
+      { feature: "Batch Processing", swmm5: "Command-line scripting", icmSwmm: "ICM batch runner", icm: "ICM Exchange automation" },
+      { feature: "Parameter Variation", swmm5: "Manual or Python scripts", icmSwmm: "Scenario manager", icm: "Scenario manager, sensitivity tool" },
+      { feature: "SWMM Compatibility", swmm5: "Native", icmSwmm: "Full compatibility", icm: "Import only" },
+      { feature: "Results Statistics", swmm5: "External post-processing", icmSwmm: "ICM statistics tools", icm: "Built-in statistics and graphs" },
+      { feature: "Automation", swmm5: "Python, MATLAB interfaces", icmSwmm: "ICM Ruby API", icm: "Ruby API, Exchange platform" }
     ]
   },
   7: {
@@ -321,6 +433,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "This analysis is crucial for long, narrow catchments"
       ]
     },
+    icmSwmm: {
+      title: "Spatial Rainfall in ICM SWMM Networks",
+      description: "Model spatial rainfall patterns in SWMM networks using ICM's enhanced rainfall tools.",
+      steps: [
+        "Set up SWMM network with multiple rain gages",
+        "Assign subcatchments to appropriate rain gages",
+        "Create moving storm scenarios by lagging rainfall inputs",
+        "Use ICM's rainfall tools to generate spatial patterns",
+        "Run scenarios and compare peak flows",
+        "Identify critical storm directions for your system",
+        "Document spatial sensitivity in project reports"
+      ],
+      tips: [
+        "ICM's rainfall tools simplify spatial pattern creation for SWMM",
+        "Multiple rain gages in SWMM allow spatial variation",
+        "Moving storm analysis is critical for elongated catchments"
+      ]
+    },
     icm: {
       title: "Spatial Rainfall Variation in ICM",
       description: "Model spatial and temporal rainfall patterns to capture storm dynamics.",
@@ -340,12 +470,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Spatial Rainfall", swmm5: "Rain gage assignment per subcatch", icm: "TVD, grid, radar options" },
-      { feature: "Radar Data", swmm5: "Not directly supported", icm: "Native radar rainfall import" },
-      { feature: "Moving Storms", swmm5: "Manual lag implementation", icm: "Spatial profiles with timing" },
-      { feature: "Visualization", swmm5: "Static rain gage map", icm: "Animated rainfall display" },
-      { feature: "Large Catchments", swmm5: "Cumbersome for many gages", icm: "Efficient for regional models" },
-      { feature: "Climate Scenarios", swmm5: "Manual factor application", icm: "Scenario-based rainfall factors" }
+      { feature: "Spatial Rainfall", swmm5: "Rain gage assignment", icmSwmm: "Multi-gage + ICM tools", icm: "TVD, grid, radar options" },
+      { feature: "Radar Data", swmm5: "Not directly supported", icmSwmm: "Via ICM rainfall tools", icm: "Native radar rainfall import" },
+      { feature: "Moving Storms", swmm5: "Manual lag implementation", icmSwmm: "Easier with ICM tools", icm: "Spatial profiles with timing" },
+      { feature: "Visualization", swmm5: "Static rain gage map", icmSwmm: "ICM rainfall display", icm: "Animated rainfall display" },
+      { feature: "Large Catchments", swmm5: "Cumbersome for many gages", icmSwmm: "Better gage management", icm: "Efficient for regional models" },
+      { feature: "Climate Scenarios", swmm5: "Manual factor application", icmSwmm: "Scenario-based factors", icm: "Scenario-based rainfall factors" }
     ]
   },
   8: {
@@ -367,6 +497,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Peak timing in synthetic storms can be unrealistic—be aware of limitations"
       ]
     },
+    icmSwmm: {
+      title: "Design Storms in ICM SWMM Networks",
+      description: "Apply design storms to SWMM networks with ICM's rainfall generation tools.",
+      steps: [
+        "Use ICM's rainfall tools to create design storm profiles",
+        "Apply standard distributions (SCS, Chicago, etc.)",
+        "Set up multiple return period scenarios",
+        "Run SWMM simulations for each scenario",
+        "Compare results to regulatory requirements",
+        "Use ICM's comparison tools for analysis",
+        "Export results for regulatory submittals"
+      ],
+      tips: [
+        "ICM's rainfall generator simplifies design storm creation",
+        "Maintain SWMM export capability for regulatory agencies",
+        "Design storms remain regulatory tools—understand their limitations"
+      ]
+    },
     icm: {
       title: "Design Rainfall Application in ICM",
       description: "Implement design storms using ICM's flexible rainfall tools.",
@@ -386,12 +534,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Storm Types", swmm5: "User-defined time series", icm: "Built-in generator for standard types" },
-      { feature: "IDF Curves", swmm5: "Manual input", icm: "IDF database with interpolation" },
-      { feature: "Return Periods", swmm5: "One storm per run", icm: "Scenario matrix for multiple" },
-      { feature: "Chicago Storm", swmm5: "Manual creation", icm: "Automatic generation" },
-      { feature: "Climate Factors", swmm5: "Manual scaling", icm: "Built-in uplift factors" },
-      { feature: "Nested Storms", swmm5: "Manual nesting", icm: "Standard nested storm options" }
+      { feature: "Storm Types", swmm5: "User-defined time series", icmSwmm: "ICM generator + SWMM format", icm: "Built-in generator for standard types" },
+      { feature: "IDF Curves", swmm5: "Manual input", icmSwmm: "ICM IDF tools available", icm: "IDF database with interpolation" },
+      { feature: "Return Periods", swmm5: "One storm per run", icmSwmm: "Scenario matrix", icm: "Scenario matrix for multiple" },
+      { feature: "Chicago Storm", swmm5: "Manual creation", icmSwmm: "Auto-generation available", icm: "Automatic generation" },
+      { feature: "Climate Factors", swmm5: "Manual scaling", icmSwmm: "Built-in uplift factors", icm: "Built-in uplift factors" },
+      { feature: "Regulatory Export", swmm5: "Native format", icmSwmm: "Direct SWMM export", icm: "Various export options" }
     ]
   },
   9: {
@@ -410,6 +558,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
       tips: [
         "Extreme events are where model uncertainty is highest",
         "Extrapolation beyond data range requires humility in predictions",
+        "Failure modes matter as much as capacity checks"
+      ]
+    },
+    icmSwmm: {
+      title: "Extreme Events in ICM SWMM Networks",
+      description: "Model extreme scenarios using SWMM with optional ICM 2D for flood mapping.",
+      steps: [
+        "Set up extreme rainfall scenarios in ICM",
+        "Run SWMM simulations for extreme return periods",
+        "Identify surcharge and flooding locations",
+        "Optionally couple with ICM 2D for surface flooding",
+        "Map flood extents using ICM's visualization",
+        "Document uncertainty ranges in results",
+        "Present findings with appropriate caveats"
+      ],
+      tips: [
+        "ICM 2D can enhance SWMM results for surface flood mapping",
+        "Extreme event uncertainty should be clearly communicated",
         "Failure modes matter as much as capacity checks"
       ]
     },
@@ -432,12 +598,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Extreme Storms", swmm5: "Standard input, no special handling", icm: "Same, but better flood mapping" },
-      { feature: "Flood Mapping", swmm5: "Requires external GIS", icm: "Built-in flood mapping tools" },
-      { feature: "Dam Break", swmm5: "Not supported", icm: "Built-in dam break modeling" },
-      { feature: "Hazard Rating", swmm5: "Manual calculation", icm: "Automatic DxV hazard maps" },
-      { feature: "Levee Failure", swmm5: "Not supported", icm: "Breach modeling available" },
-      { feature: "Uncertainty Display", swmm5: "Manual in reports", icm: "Scenario comparison tools" }
+      { feature: "Extreme Storms", swmm5: "Standard input", icmSwmm: "ICM rainfall tools", icm: "Same, better flood mapping" },
+      { feature: "Flood Mapping", swmm5: "Requires external GIS", icmSwmm: "ICM mapping + optional 2D", icm: "Built-in flood mapping tools" },
+      { feature: "Dam Break", swmm5: "Not supported", icmSwmm: "Via ICM 2D coupling", icm: "Built-in dam break modeling" },
+      { feature: "Hazard Rating", swmm5: "Manual calculation", icmSwmm: "ICM hazard tools", icm: "Automatic DxV hazard maps" },
+      { feature: "Levee Failure", swmm5: "Not supported", icmSwmm: "Via ICM 2D coupling", icm: "Breach modeling available" },
+      { feature: "SWMM Export", swmm5: "Native", icmSwmm: "Full export capability", icm: "Not applicable" }
     ]
   },
   10: {
@@ -459,6 +625,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Uncertainty is not a weakness—it's honest communication"
       ]
     },
+    icmSwmm: {
+      title: "Uncertainty Analysis in ICM SWMM",
+      description: "Quantify uncertainty in SWMM networks using ICM's sensitivity tools.",
+      steps: [
+        "Identify key uncertain parameters in SWMM network",
+        "Use ICM's sensitivity analysis to rank parameter importance",
+        "Set up parameter ranges and distributions",
+        "Configure batch runs for Monte Carlo analysis",
+        "Run multiple SWMM simulations systematically",
+        "Analyze output distributions using ICM tools",
+        "Present results with confidence intervals"
+      ],
+      tips: [
+        "ICM's sensitivity tool works with SWMM parameters",
+        "Focus uncertainty effort on dominant parameters",
+        "Maintain SWMM export for regulatory documentation"
+      ]
+    },
     icm: {
       title: "Probabilistic Analysis in ICM",
       description: "Leverage ICM's capabilities for systematic uncertainty quantification.",
@@ -478,12 +662,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Sensitivity Analysis", swmm5: "Manual parameter variation", icm: "Built-in sensitivity tool" },
-      { feature: "Monte Carlo", swmm5: "External implementation", icm: "Can be automated via Exchange" },
-      { feature: "Batch Runs", swmm5: "Command-line, scripting", icm: "Scenario manager, scheduling" },
-      { feature: "Parameter Ranges", swmm5: "User tracks externally", icm: "Stored in model database" },
-      { feature: "Results Comparison", swmm5: "External post-processing", icm: "Built-in comparison tools" },
-      { feature: "Confidence Bounds", swmm5: "Calculate externally", icm: "Statistical output options" }
+      { feature: "Sensitivity Analysis", swmm5: "Manual parameter variation", icmSwmm: "ICM sensitivity tool", icm: "Built-in sensitivity tool" },
+      { feature: "Monte Carlo", swmm5: "External implementation", icmSwmm: "ICM batch automation", icm: "Can be automated via Exchange" },
+      { feature: "Batch Runs", swmm5: "Command-line, scripting", icmSwmm: "ICM batch runner", icm: "Scenario manager, scheduling" },
+      { feature: "Parameter Ranges", swmm5: "User tracks externally", icmSwmm: "Stored in ICM", icm: "Stored in model database" },
+      { feature: "Results Comparison", swmm5: "External post-processing", icmSwmm: "ICM comparison tools", icm: "Built-in comparison tools" },
+      { feature: "SWMM Export", swmm5: "Native format", icmSwmm: "Full export capability", icm: "Not applicable" }
     ]
   },
   11: {
@@ -505,6 +689,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Perfect calibration on one event often means overfitting"
       ]
     },
+    icmSwmm: {
+      title: "Calibration in ICM SWMM Networks",
+      description: "Calibrate SWMM networks using ICM's calibration tools.",
+      steps: [
+        "Import observed flow data into ICM",
+        "Define SWMM calibration parameters and ranges",
+        "Use ICM's calibration tools for systematic adjustment",
+        "Run calibration simulations and compare results",
+        "Review parameter values for physical reasonableness",
+        "Validate with independent events",
+        "Export calibrated model for SWMM5 if needed"
+      ],
+      tips: [
+        "ICM's calibration tools streamline SWMM parameter adjustment",
+        "Maintain physical realism in calibrated parameters",
+        "Calibrated SWMM models can be exported for external use"
+      ]
+    },
     icm: {
       title: "Automated Calibration in ICM",
       description: "Use ICM's calibration tools to efficiently optimize model parameters.",
@@ -524,12 +726,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Observed Data", swmm5: "Manual time series import", icm: "Calibration database with QA tools" },
-      { feature: "Auto-Calibration", swmm5: "External tools (PEST, etc.)", icm: "Built-in optimizer" },
-      { feature: "Objective Functions", swmm5: "Calculate externally", icm: "Multiple built-in options" },
-      { feature: "Parameter Bounds", swmm5: "Track manually", icm: "Stored with optimization setup" },
-      { feature: "Validation", swmm5: "Separate runs, manual compare", icm: "Validation events in same setup" },
-      { feature: "Reporting", swmm5: "Manual report creation", icm: "Auto-generated calibration reports" }
+      { feature: "Observed Data", swmm5: "Manual time series import", icmSwmm: "ICM calibration database", icm: "Calibration database with QA tools" },
+      { feature: "Auto-Calibration", swmm5: "External tools (PEST, etc.)", icmSwmm: "ICM optimizer available", icm: "Built-in optimizer" },
+      { feature: "Objective Functions", swmm5: "Calculate externally", icmSwmm: "ICM objective functions", icm: "Multiple built-in options" },
+      { feature: "Parameter Bounds", swmm5: "Track manually", icmSwmm: "ICM parameter management", icm: "Stored with optimization setup" },
+      { feature: "Validation", swmm5: "Separate runs, manual compare", icmSwmm: "ICM validation workflow", icm: "Validation events in same setup" },
+      { feature: "SWMM Export", swmm5: "Native format", icmSwmm: "Export calibrated model", icm: "Not applicable" }
     ]
   },
   12: {
@@ -551,6 +753,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "A model validated under limited conditions should note those limits"
       ]
     },
+    icmSwmm: {
+      title: "Validation in ICM SWMM Networks",
+      description: "Validate SWMM models using ICM's comparison and analysis tools.",
+      steps: [
+        "Set up validation events separate from calibration",
+        "Run SWMM model with calibrated parameters",
+        "Use ICM comparison tools for observed vs. simulated plots",
+        "Calculate performance statistics automatically",
+        "Check water balance and continuity",
+        "Document validation results and limitations",
+        "Export validated model for regulatory use"
+      ],
+      tips: [
+        "ICM's comparison tools simplify validation visualization",
+        "Validation scope should match intended model use",
+        "Document limitations clearly in project deliverables"
+      ]
+    },
     icm: {
       title: "Comprehensive Model Validation in ICM",
       description: "Use ICM's validation tools for rigorous model testing.",
@@ -570,12 +790,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Validation Events", swmm5: "Same workflow as calibration", icm: "Dedicated validation datasets" },
-      { feature: "Comparison Plots", swmm5: "Export for external plotting", icm: "Built-in overlay charts" },
-      { feature: "Statistics", swmm5: "External calculation", icm: "Automatic performance metrics" },
-      { feature: "Water Balance", swmm5: "Summary in status report", icm: "Detailed balance reports" },
-      { feature: "Multi-Event", swmm5: "Run each separately", icm: "Batch validation possible" },
-      { feature: "Documentation", swmm5: "Manual report writing", icm: "Template-based reports" }
+      { feature: "Validation Events", swmm5: "Same workflow as calibration", icmSwmm: "ICM validation datasets", icm: "Dedicated validation datasets" },
+      { feature: "Comparison Plots", swmm5: "Export for external plotting", icmSwmm: "Built-in overlay charts", icm: "Built-in overlay charts" },
+      { feature: "Statistics", swmm5: "External calculation", icmSwmm: "Automatic metrics", icm: "Automatic performance metrics" },
+      { feature: "Water Balance", swmm5: "Summary in status report", icmSwmm: "ICM balance reports", icm: "Detailed balance reports" },
+      { feature: "Multi-Event", swmm5: "Run each separately", icmSwmm: "Batch validation possible", icm: "Batch validation possible" },
+      { feature: "SWMM Export", swmm5: "Native format", icmSwmm: "Full export capability", icm: "Not applicable" }
     ]
   },
   13: {
@@ -597,6 +817,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Document not just what you did, but why"
       ]
     },
+    icmSwmm: {
+      title: "Documentation in ICM SWMM Networks",
+      description: "Prepare SWMM networks for peer review using ICM's documentation features.",
+      steps: [
+        "Use ICM notes to document key model decisions",
+        "Generate parameter summary reports",
+        "Export calibration/validation plots",
+        "Create transportable database for reviewer",
+        "Document data sources and quality ratings",
+        "Export SWMM .inp for independent verification",
+        "Prepare limitation and caveat documentation"
+      ],
+      tips: [
+        "ICM's embedded notes travel with the model",
+        "Transportable databases preserve model integrity",
+        "SWMM export allows review in free SWMM5 software"
+      ]
+    },
     icm: {
       title: "Model Documentation in ICM",
       description: "Leverage ICM's documentation features for thorough peer review preparation.",
@@ -616,12 +854,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Documentation", swmm5: "External documents", icm: "Notes embedded in database" },
-      { feature: "Version Control", swmm5: "Manual file naming", icm: "Model groups, scenarios" },
-      { feature: "Parameter Export", swmm5: "Report or manual tables", icm: "Direct database queries" },
-      { feature: "Transferability", swmm5: "Send INP + data files", icm: "Transportable database" },
-      { feature: "Audit Trail", swmm5: "Manual logging", icm: "Built-in modification tracking" },
-      { feature: "Reviewer Access", swmm5: "Needs SWMM5 (free)", icm: "Needs ICM license" }
+      { feature: "Documentation", swmm5: "External documents", icmSwmm: "ICM embedded notes", icm: "Notes embedded in database" },
+      { feature: "Version Control", swmm5: "Manual file naming", icmSwmm: "ICM model groups", icm: "Model groups, scenarios" },
+      { feature: "Parameter Export", swmm5: "Report or manual tables", icmSwmm: "ICM reports + SWMM export", icm: "Direct database queries" },
+      { feature: "Transferability", swmm5: "Send INP + data files", icmSwmm: "Transportable DB + INP", icm: "Transportable database" },
+      { feature: "Reviewer Access", swmm5: "Needs SWMM5 (free)", icmSwmm: "ICM or free SWMM5", icm: "Needs ICM license" },
+      { feature: "Audit Trail", swmm5: "Manual logging", icmSwmm: "ICM modification tracking", icm: "Built-in modification tracking" }
     ]
   },
   14: {
@@ -643,6 +881,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Uncertainty is valuable information, not a weakness"
       ]
     },
+    icmSwmm: {
+      title: "Results Communication in ICM SWMM",
+      description: "Use ICM's visualization for effective stakeholder communication of SWMM results.",
+      steps: [
+        "Use ICM's thematic mapping for spatial results",
+        "Create profile plots and long sections",
+        "Generate time series charts for key locations",
+        "Export results to GIS for integration",
+        "Create scenario comparison visualizations",
+        "Prepare uncertainty ranges in results",
+        "Develop stakeholder-friendly summaries"
+      ],
+      tips: [
+        "ICM visualization enhances SWMM results presentation",
+        "Focus on decision-relevant information",
+        "Use scenarios to bracket the decision space"
+      ]
+    },
     icm: {
       title: "Results Visualization in ICM",
       description: "Use ICM's visualization tools to communicate effectively with stakeholders.",
@@ -662,12 +918,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Visualization", swmm5: "Basic maps and graphs", icm: "Advanced 3D, animations" },
-      { feature: "GIS Export", swmm5: "Shapefiles with post-processing", icm: "Native geodatabase export" },
-      { feature: "Animations", swmm5: "Limited capability", icm: "Full flood progression animations" },
-      { feature: "Long Sections", swmm5: "Profile plots available", icm: "Interactive long sections" },
-      { feature: "Dashboards", swmm5: "External tools needed", icm: "Built-in results analysis" },
-      { feature: "Report Generation", swmm5: "Manual report creation", icm: "Template-based reporting" }
+      { feature: "Visualization", swmm5: "Basic maps and graphs", icmSwmm: "ICM visualization suite", icm: "Advanced 3D, animations" },
+      { feature: "GIS Export", swmm5: "Shapefiles with post-processing", icmSwmm: "Native geodatabase export", icm: "Native geodatabase export" },
+      { feature: "Animations", swmm5: "Limited capability", icmSwmm: "ICM animation tools", icm: "Full flood progression animations" },
+      { feature: "Long Sections", swmm5: "Profile plots available", icmSwmm: "Interactive long sections", icm: "Interactive long sections" },
+      { feature: "Dashboards", swmm5: "External tools needed", icmSwmm: "ICM results analysis", icm: "Built-in results analysis" },
+      { feature: "Report Generation", swmm5: "Manual report creation", icmSwmm: "ICM report templates", icm: "Template-based reporting" }
     ]
   },
   15: {
@@ -689,6 +945,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "The goal is decision support, not prediction precision"
       ]
     },
+    icmSwmm: {
+      title: "Scenario Management in ICM SWMM",
+      description: "Use ICM's scenario tools for efficient SWMM alternative analysis.",
+      steps: [
+        "Create baseline SWMM scenario in ICM",
+        "Use scenario inheritance for alternatives",
+        "Modify SWMM parameters using overrides",
+        "Set up batch runs for multiple scenarios",
+        "Use Results Analysis for comparison",
+        "Generate difference maps between scenarios",
+        "Export scenarios to SWMM if needed"
+      ],
+      tips: [
+        "Scenario inheritance prevents duplication errors",
+        "ICM's comparison tools streamline alternative analysis",
+        "SWMM export maintains regulatory compatibility"
+      ]
+    },
     icm: {
       title: "Scenario Management in ICM",
       description: "Use ICM's scenario tools for efficient alternative analysis.",
@@ -708,12 +982,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Scenario Setup", swmm5: "Copy and modify INP files", icm: "Scenario inheritance system" },
-      { feature: "Parameter Overrides", swmm5: "Edit each file separately", icm: "Override tables by scenario" },
-      { feature: "Batch Processing", swmm5: "Command-line scripting", icm: "Built-in batch runner" },
-      { feature: "Comparison", swmm5: "External post-processing", icm: "Built-in comparison tools" },
-      { feature: "Difference Maps", swmm5: "GIS post-processing", icm: "Direct scenario differencing" },
-      { feature: "Traceability", swmm5: "Manual documentation", icm: "Scenario tree visualization" }
+      { feature: "Scenario Setup", swmm5: "Copy and modify INP files", icmSwmm: "ICM scenario inheritance", icm: "Scenario inheritance system" },
+      { feature: "Parameter Overrides", swmm5: "Edit each file separately", icmSwmm: "Override tables", icm: "Override tables by scenario" },
+      { feature: "Batch Processing", swmm5: "Command-line scripting", icmSwmm: "Built-in batch runner", icm: "Built-in batch runner" },
+      { feature: "Comparison", swmm5: "External post-processing", icmSwmm: "ICM comparison tools", icm: "Built-in comparison tools" },
+      { feature: "Difference Maps", swmm5: "GIS post-processing", icmSwmm: "Direct scenario differencing", icm: "Direct scenario differencing" },
+      { feature: "SWMM Export", swmm5: "Native format", icmSwmm: "Export each scenario", icm: "Not applicable" }
     ]
   },
   16: {
@@ -735,6 +1009,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Coordinate with operations staff on realistic constraints"
       ]
     },
+    icmSwmm: {
+      title: "RTC in ICM SWMM Networks",
+      description: "Implement control rules in SWMM networks with ICM's enhanced RTC capabilities.",
+      steps: [
+        "Set up controllable elements in SWMM network",
+        "Define control rules using SWMM syntax or ICM RTC",
+        "Test rules with simple scenarios",
+        "Use ICM's RTC debugging tools",
+        "Evaluate performance over continuous simulation",
+        "Compare controlled vs. baseline operation",
+        "Document control logic thoroughly"
+      ],
+      tips: [
+        "ICM RTC can supplement SWMM's native control rules",
+        "RTC debugging tools help identify logic errors",
+        "Export final model with SWMM-compatible controls"
+      ]
+    },
     icm: {
       title: "Advanced RTC Modeling in ICM",
       description: "Leverage ICM's powerful RTC capabilities for smart infrastructure modeling.",
@@ -754,12 +1046,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Control Rules", swmm5: "IF-THEN control statements", icm: "Full scripting language" },
-      { feature: "Variables", swmm5: "Depth, flow, time", icm: "Any model variable" },
-      { feature: "Logic Complexity", swmm5: "Basic conditional logic", icm: "Advanced logic, loops, arrays" },
-      { feature: "Optimization", swmm5: "Not built-in", icm: "MPC optimization possible" },
-      { feature: "Debugging", swmm5: "Trial and error", icm: "RTC trace and debugging" },
-      { feature: "Export", swmm5: "Manual result extraction", icm: "Control time series export" }
+      { feature: "Control Rules", swmm5: "IF-THEN control statements", icmSwmm: "SWMM rules + ICM RTC option", icm: "Full scripting language" },
+      { feature: "Variables", swmm5: "Depth, flow, time", icmSwmm: "SWMM variables + ICM access", icm: "Any model variable" },
+      { feature: "Logic Complexity", swmm5: "Basic conditional logic", icmSwmm: "Basic to advanced", icm: "Advanced logic, loops, arrays" },
+      { feature: "Optimization", swmm5: "Not built-in", icmSwmm: "ICM optimization available", icm: "MPC optimization possible" },
+      { feature: "Debugging", swmm5: "Trial and error", icmSwmm: "ICM RTC trace tools", icm: "RTC trace and debugging" },
+      { feature: "SWMM Export", swmm5: "Native format", icmSwmm: "Export SWMM controls", icm: "Not applicable" }
     ]
   },
   17: {
@@ -781,6 +1073,24 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "The next modeler may be you, years from now"
       ]
     },
+    icmSwmm: {
+      title: "Model Lifecycle in ICM SWMM",
+      description: "Manage SWMM network lifecycle using ICM's data management features.",
+      steps: [
+        "Use model groups for version control",
+        "Document updates in ICM notes and logs",
+        "Set up backup schedules for ICM database",
+        "Periodically validate against new data",
+        "Track data age using custom fields",
+        "Export SWMM versions for archive",
+        "Create handover documentation for successors"
+      ],
+      tips: [
+        "ICM's versioning supports long-term model management",
+        "SWMM exports provide insurance for data portability",
+        "Embedded documentation survives personnel changes"
+      ]
+    },
     icm: {
       title: "Model Lifecycle Management in ICM",
       description: "Use ICM's data management features for long-term model sustainability.",
@@ -800,12 +1110,12 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ]
     },
     comparison: [
-      { feature: "Version Control", swmm5: "File naming, manual", icm: "Model groups, scenarios" },
-      { feature: "Collaboration", swmm5: "File sharing", icm: "Multi-user workgroups" },
-      { feature: "Backup", swmm5: "Manual or IT systems", icm: "Built-in backup tools" },
-      { feature: "Data Management", swmm5: "External databases/GIS", icm: "Integrated database" },
-      { feature: "Documentation", swmm5: "External documents", icm: "Embedded notes and metadata" },
-      { feature: "Training", swmm5: "Free software, docs online", icm: "Vendor training available" }
+      { feature: "Version Control", swmm5: "File naming, manual", icmSwmm: "ICM model groups", icm: "Model groups, scenarios" },
+      { feature: "Collaboration", swmm5: "File sharing", icmSwmm: "ICM multi-user", icm: "Multi-user workgroups" },
+      { feature: "Backup", swmm5: "Manual or IT systems", icmSwmm: "ICM backup tools", icm: "Built-in backup tools" },
+      { feature: "Data Management", swmm5: "External databases/GIS", icmSwmm: "Integrated + SWMM export", icm: "Integrated database" },
+      { feature: "Documentation", swmm5: "External documents", icmSwmm: "ICM notes + external", icm: "Embedded notes and metadata" },
+      { feature: "Portability", swmm5: "Universal INP format", icmSwmm: "INP export available", icm: "ICM-specific format" }
     ]
   }
 };
@@ -826,139 +1136,186 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
       <DialogTrigger asChild>
         <Button 
           variant="outline" 
-          className="gap-2 bg-gradient-to-r from-blue-500/10 to-green-500/10 hover:from-blue-500/20 hover:to-green-500/20 border-primary/20"
+          className="gap-2 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-green-500/10 hover:from-blue-500/20 hover:via-purple-500/20 hover:to-green-500/20 border-primary/20"
         >
           <Laptop className="w-4 h-4" />
-          <span>Software Examples: SWMM5 & ICM InfoWorks</span>
+          <span>Software Examples: SWMM5, ICM SWMM & ICM</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-5xl max-h-[85vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-2xl flex items-center gap-2">
             <Code className="w-6 h-6 text-primary" />
             Chapter {chapterNumber}: Practical Software Examples
           </DialogTitle>
+          <DialogDescription>
+            Compare implementation approaches across EPA SWMM5, ICM SWMM Networks, and InfoWorks ICM
+          </DialogDescription>
         </DialogHeader>
         
-        <Tabs defaultValue="swmm5" className="mt-4">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="swmm5" className="text-sm font-medium">
+        <Tabs defaultValue="swmm5" className="mt-4 flex-1 flex flex-col overflow-hidden">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="swmm5" className="text-xs sm:text-sm font-medium">
               🔵 EPA SWMM5
             </TabsTrigger>
-            <TabsTrigger value="icm" className="text-sm font-medium">
+            <TabsTrigger value="icmSwmm" className="text-xs sm:text-sm font-medium">
+              🟣 ICM SWMM
+            </TabsTrigger>
+            <TabsTrigger value="icm" className="text-xs sm:text-sm font-medium">
               🟢 ICM InfoWorks
             </TabsTrigger>
-            <TabsTrigger value="compare" className="text-sm font-medium">
+            <TabsTrigger value="compare" className="text-xs sm:text-sm font-medium">
               <Scale className="w-4 h-4 mr-1" />
               Compare
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="swmm5" className="mt-4 space-y-4">
-            <Card className="p-6 border-l-4 border-l-blue-500">
-              <h3 className="text-xl font-bold text-foreground mb-2">{examples.swmm5.title}</h3>
-              <p className="text-muted-foreground mb-4">{examples.swmm5.description}</p>
-              
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">Step-by-Step:</h4>
-                  <ol className="space-y-2">
-                    {examples.swmm5.steps.map((step, index) => (
-                      <li key={index} className="flex gap-3 text-sm text-muted-foreground">
-                        <span className="flex-shrink-0 w-6 h-6 bg-blue-500/20 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">
-                          {index + 1}
-                        </span>
-                        <span>{step}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
+          <ScrollArea className="flex-1 mt-4">
+            <TabsContent value="swmm5" className="mt-0 space-y-4">
+              <Card className="p-6 border-l-4 border-l-blue-500">
+                <h3 className="text-xl font-bold text-foreground mb-2">{examples.swmm5.title}</h3>
+                <p className="text-muted-foreground mb-4">{examples.swmm5.description}</p>
                 
-                <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/20">
-                  <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
-                    💡 Practical Tips
-                  </h4>
-                  <ul className="space-y-1">
-                    {examples.swmm5.tips.map((tip, index) => (
-                      <li key={index} className="text-sm text-muted-foreground flex gap-2">
-                        <span className="text-blue-500">•</span>
-                        {tip}
-                      </li>
-                    ))}
-                  </ul>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-2">Step-by-Step:</h4>
+                    <ol className="space-y-2">
+                      {examples.swmm5.steps.map((step, index) => (
+                        <li key={index} className="flex gap-3 text-sm text-muted-foreground">
+                          <span className="flex-shrink-0 w-6 h-6 bg-blue-500/20 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">
+                            {index + 1}
+                          </span>
+                          <span>{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                  
+                  <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/20">
+                    <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                      💡 Practical Tips
+                    </h4>
+                    <ul className="space-y-1">
+                      {examples.swmm5.tips.map((tip, index) => (
+                        <li key={index} className="text-sm text-muted-foreground flex gap-2">
+                          <span className="text-blue-500">•</span>
+                          {tip}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="icm" className="mt-4 space-y-4">
-            <Card className="p-6 border-l-4 border-l-green-500">
-              <h3 className="text-xl font-bold text-foreground mb-2">{examples.icm.title}</h3>
-              <p className="text-muted-foreground mb-4">{examples.icm.description}</p>
-              
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">Step-by-Step:</h4>
-                  <ol className="space-y-2">
-                    {examples.icm.steps.map((step, index) => (
-                      <li key={index} className="flex gap-3 text-sm text-muted-foreground">
-                        <span className="flex-shrink-0 w-6 h-6 bg-green-500/20 text-green-600 rounded-full flex items-center justify-center text-xs font-bold">
-                          {index + 1}
-                        </span>
-                        <span>{step}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="icmSwmm" className="mt-0 space-y-4">
+              <Card className="p-6 border-l-4 border-l-purple-500">
+                <h3 className="text-xl font-bold text-foreground mb-2">{examples.icmSwmm.title}</h3>
+                <p className="text-muted-foreground mb-4">{examples.icmSwmm.description}</p>
                 
-                <div className="bg-green-500/5 rounded-lg p-4 border border-green-500/20">
-                  <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
-                    💡 Practical Tips
-                  </h4>
-                  <ul className="space-y-1">
-                    {examples.icm.tips.map((tip, index) => (
-                      <li key={index} className="text-sm text-muted-foreground flex gap-2">
-                        <span className="text-green-500">•</span>
-                        {tip}
-                      </li>
-                    ))}
-                  </ul>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-2">Step-by-Step:</h4>
+                    <ol className="space-y-2">
+                      {examples.icmSwmm.steps.map((step, index) => (
+                        <li key={index} className="flex gap-3 text-sm text-muted-foreground">
+                          <span className="flex-shrink-0 w-6 h-6 bg-purple-500/20 text-purple-600 rounded-full flex items-center justify-center text-xs font-bold">
+                            {index + 1}
+                          </span>
+                          <span>{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                  
+                  <div className="bg-purple-500/5 rounded-lg p-4 border border-purple-500/20">
+                    <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                      💡 Practical Tips
+                    </h4>
+                    <ul className="space-y-1">
+                      {examples.icmSwmm.tips.map((tip, index) => (
+                        <li key={index} className="text-sm text-muted-foreground flex gap-2">
+                          <span className="text-purple-500">•</span>
+                          {tip}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="compare" className="mt-4">
-            <Card className="p-6">
-              <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <Scale className="w-5 h-5 text-primary" />
-                Feature Comparison: SWMM5 vs ICM InfoWorks
-              </h3>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="font-bold">Feature</TableHead>
-                      <TableHead className="font-bold text-blue-600">🔵 SWMM5</TableHead>
-                      <TableHead className="font-bold text-green-600">🟢 ICM InfoWorks</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {examples.comparison.map((item, index) => (
-                      <TableRow key={index}>
-                        <TableCell className="font-medium">{item.feature}</TableCell>
-                        <TableCell className="text-sm text-muted-foreground">{item.swmm5}</TableCell>
-                        <TableCell className="text-sm text-muted-foreground">{item.icm}</TableCell>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="icm" className="mt-0 space-y-4">
+              <Card className="p-6 border-l-4 border-l-green-500">
+                <h3 className="text-xl font-bold text-foreground mb-2">{examples.icm.title}</h3>
+                <p className="text-muted-foreground mb-4">{examples.icm.description}</p>
+                
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-2">Step-by-Step:</h4>
+                    <ol className="space-y-2">
+                      {examples.icm.steps.map((step, index) => (
+                        <li key={index} className="flex gap-3 text-sm text-muted-foreground">
+                          <span className="flex-shrink-0 w-6 h-6 bg-green-500/20 text-green-600 rounded-full flex items-center justify-center text-xs font-bold">
+                            {index + 1}
+                          </span>
+                          <span>{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                  
+                  <div className="bg-green-500/5 rounded-lg p-4 border border-green-500/20">
+                    <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                      💡 Practical Tips
+                    </h4>
+                    <ul className="space-y-1">
+                      {examples.icm.tips.map((tip, index) => (
+                        <li key={index} className="text-sm text-muted-foreground flex gap-2">
+                          <span className="text-green-500">•</span>
+                          {tip}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="compare" className="mt-0">
+              <Card className="p-6">
+                <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                  <Scale className="w-5 h-5 text-primary" />
+                  Feature Comparison: SWMM5 vs ICM SWMM vs ICM InfoWorks
+                </h3>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="font-bold min-w-[120px]">Feature</TableHead>
+                        <TableHead className="font-bold text-blue-600 min-w-[150px]">🔵 SWMM5</TableHead>
+                        <TableHead className="font-bold text-purple-600 min-w-[150px]">🟣 ICM SWMM</TableHead>
+                        <TableHead className="font-bold text-green-600 min-w-[150px]">🟢 ICM InfoWorks</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-              <p className="text-xs text-muted-foreground mt-4 text-center">
-                Both tools are excellent—choose based on project needs, budget, and team expertise.
-              </p>
-            </Card>
-          </TabsContent>
+                    </TableHeader>
+                    <TableBody>
+                      {examples.comparison.map((item, index) => (
+                        <TableRow key={index}>
+                          <TableCell className="font-medium">{item.feature}</TableCell>
+                          <TableCell className="text-sm text-muted-foreground">{item.swmm5}</TableCell>
+                          <TableCell className="text-sm text-muted-foreground">{item.icmSwmm}</TableCell>
+                          <TableCell className="text-sm text-muted-foreground">{item.icm}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+                <p className="text-xs text-muted-foreground mt-4 text-center">
+                  All three platforms are excellent—choose based on project needs, budget, team expertise, and regulatory requirements.
+                </p>
+              </Card>
+            </TabsContent>
+          </ScrollArea>
         </Tabs>
         
         <div className="mt-4 text-xs text-muted-foreground text-center border-t pt-4">
