@@ -13,23 +13,125 @@ interface SearchResult {
 }
 
 const searchData = [
-  { number: 1, title: "Introduction", description: "Understanding models and their role in resolving complex problems", topics: ["Model Definition", "Design Problems", "Applications"] },
-  { number: 2, title: "Discretization & Complexity", description: "Breaking down systems into manageable spatial and temporal components", topics: ["Spatial Resolution", "Temporal Resolution", "Data Management"] },
-  { number: 3, title: "Reliability of Input", description: "Managing data quality, uncertainty, and file documentation", topics: ["Data Categories", "GIS Concepts", "File Management"] },
-  { number: 4, title: "Optimal Complexity", description: "Finding the balance between detail and computational efficiency", topics: ["Complexity Measures", "Data Availability", "Uncertainty"] },
-  { number: 5, title: "Continuous Models", description: "Long-term modeling for sustainability and ecosystem impacts", topics: ["Sustainability", "Ecosystem Processes", "Ethics"] },
-  { number: 6, title: "Rain Input Generation", description: "Stochastic and disaggregation models for rainfall patterns", topics: ["Stochastic Models", "Disaggregation", "Analysis Techniques"] },
-  { number: 7, title: "Dynamic Rain Systems", description: "Understanding storm cell kinematics and timing uncertainties", topics: ["Storm Velocity", "Timing Error", "Sensitivity"] },
-  { number: 8, title: "Decision Support", description: "Tools and systems like PCSWMM for practical implementation", topics: ["PCSWMM", "Software Tools", "Integration"] },
-  { number: 9, title: "Objective Functions", description: "Measuring and evaluating model performance", topics: ["Response Functions", "Multi-objective", "Statistics"] },
-  { number: 10, title: "Uncertainty Analysis", description: "Sources of error and methods for quantifying model reliability", topics: ["Error Sources", "Analysis Methods", "Model Reliability"] },
-  { number: 11, title: "Sensitivity Analysis", description: "Testing how parameters impact model outputs", topics: ["Sensitivity Gradients", "Parameter Testing", "Hydrological Models"] },
-  { number: 12, title: "State Variable Space", description: "Mathematical representation of system states", topics: ["State Variables", "Sub-spaces", "Mathematical Framework"] },
-  { number: 13, title: "Performance Evaluation", description: "Comprehensive survey of evaluation functions", topics: ["Evaluation Metrics", "Function Survey", "Best Practices"] },
-  { number: 14, title: "Parameter Optimization", description: "Calibration techniques including genetic algorithms", topics: ["Genetic Algorithms", "Calibration", "Validation"] },
-  { number: 15, title: "Fuzzy Logic", description: "Applying fuzzy reasoning to handle imprecision", topics: ["Fuzzification", "Defuzzification", "Reasoning"] },
-  { number: 16, title: "Real-Time Uncertainty", description: "Presenting model reliability and uncertainty continuously", topics: ["Parameter Uncertainty", "Error Analysis", "Real-Time Display"] },
-  { number: 17, title: "Conclusions", description: "Framework for continuous modeling and recommendations", topics: ["Framework", "Recommendations", "Best Practices"] }
+  { 
+    number: 1, 
+    title: "Introduction", 
+    description: "Understanding models and their role in resolving complex problems", 
+    topics: ["Model Definition", "Design Problems", "Applications"],
+    keywords: ["purpose", "representation", "simulation", "prediction", "stormwater", "SWMM", "urban drainage", "modeling philosophy", "responsible modeling"]
+  },
+  { 
+    number: 2, 
+    title: "Discretization & Complexity", 
+    description: "Breaking down systems into manageable spatial and temporal components", 
+    topics: ["Spatial Resolution", "Temporal Resolution", "Data Management"],
+    keywords: ["grid", "mesh", "time step", "subcatchments", "nodes", "links", "computational", "discretization error", "numerical stability"]
+  },
+  { 
+    number: 3, 
+    title: "Reliability of Input", 
+    description: "Managing data quality, uncertainty, and file documentation", 
+    topics: ["Data Categories", "GIS Concepts", "File Management"],
+    keywords: ["data quality", "input data", "GIS", "geographic", "documentation", "metadata", "reliability", "data sources", "measurements"]
+  },
+  { 
+    number: 4, 
+    title: "Optimal Complexity", 
+    description: "Finding the balance between detail and computational efficiency", 
+    topics: ["Complexity Measures", "Data Availability", "Uncertainty"],
+    keywords: ["parsimony", "Occam's razor", "over-fitting", "under-fitting", "optimal order", "model complexity", "trade-off", "simplicity"]
+  },
+  { 
+    number: 5, 
+    title: "Continuous Models", 
+    description: "Long-term modeling for sustainability and ecosystem impacts", 
+    topics: ["Sustainability", "Ecosystem Processes", "Ethics"],
+    keywords: ["long-term", "continuous simulation", "water balance", "annual", "seasonal", "hydrologic cycle", "ecosystem", "sustainability"]
+  },
+  { 
+    number: 6, 
+    title: "Rain Input Generation", 
+    description: "Stochastic and disaggregation models for rainfall patterns", 
+    topics: ["Stochastic Models", "Disaggregation", "Analysis Techniques"],
+    keywords: ["rainfall", "precipitation", "synthetic", "IDF curves", "design storms", "temporal distribution", "spatial distribution", "rain gauge"]
+  },
+  { 
+    number: 7, 
+    title: "Dynamic Rain Systems", 
+    description: "Understanding storm cell kinematics and timing uncertainties", 
+    topics: ["Storm Velocity", "Timing Error", "Sensitivity"],
+    keywords: ["storm movement", "radar", "convective", "frontal", "storm tracking", "temporal", "spatial variability", "nowcasting"]
+  },
+  { 
+    number: 8, 
+    title: "Decision Support", 
+    description: "Tools and systems like PCSWMM for practical implementation", 
+    topics: ["PCSWMM", "Software Tools", "Integration"],
+    keywords: ["DSS", "decision support", "software", "interface", "GIS integration", "visualization", "real-time", "operational"]
+  },
+  { 
+    number: 9, 
+    title: "Objective Functions", 
+    description: "Measuring and evaluating model performance", 
+    topics: ["Response Functions", "Multi-objective", "Statistics"],
+    keywords: ["Nash-Sutcliffe", "RMSE", "R-squared", "bias", "goodness of fit", "performance metrics", "error", "residuals"]
+  },
+  { 
+    number: 10, 
+    title: "Uncertainty Analysis", 
+    description: "Sources of error and methods for quantifying model reliability", 
+    topics: ["Error Sources", "Analysis Methods", "Model Reliability"],
+    keywords: ["Monte Carlo", "confidence intervals", "probability", "error propagation", "epistemic", "aleatory", "stochastic", "reliability"]
+  },
+  { 
+    number: 11, 
+    title: "Sensitivity Analysis", 
+    description: "Testing how parameters impact model outputs", 
+    topics: ["Sensitivity Gradients", "Parameter Testing", "Hydrological Models"],
+    keywords: ["parameter sensitivity", "one-at-a-time", "Morris", "Sobol", "variance-based", "local", "global", "screening", "factorial"]
+  },
+  { 
+    number: 12, 
+    title: "State Variable Space", 
+    description: "Mathematical representation of system states", 
+    topics: ["State Variables", "Sub-spaces", "Mathematical Framework"],
+    keywords: ["state space", "phase space", "dimensionality", "system dynamics", "equations", "differential", "mathematical", "representation"]
+  },
+  { 
+    number: 13, 
+    title: "Performance Evaluation", 
+    description: "Comprehensive survey of evaluation functions", 
+    topics: ["Evaluation Metrics", "Function Survey", "Best Practices"],
+    keywords: ["validation", "verification", "calibration assessment", "model skill", "benchmarking", "comparison", "evaluation criteria"]
+  },
+  { 
+    number: 14, 
+    title: "Parameter Optimization", 
+    description: "Calibration techniques including genetic algorithms", 
+    topics: ["Genetic Algorithms", "Calibration", "Validation"],
+    keywords: ["optimization", "automatic calibration", "GA", "SCE-UA", "PEST", "parameter estimation", "inverse modeling", "fitting"]
+  },
+  { 
+    number: 15, 
+    title: "Fuzzy Logic", 
+    description: "Applying fuzzy reasoning to handle imprecision", 
+    topics: ["Fuzzification", "Defuzzification", "Reasoning"],
+    keywords: ["membership functions", "linguistic variables", "fuzzy sets", "fuzzy rules", "inference", "imprecision", "vagueness", "soft computing"]
+  },
+  { 
+    number: 16, 
+    title: "Real-Time Uncertainty", 
+    description: "Presenting model reliability and uncertainty continuously", 
+    topics: ["Parameter Uncertainty", "Error Analysis", "Real-Time Display"],
+    keywords: ["real-time control", "data assimilation", "Kalman filter", "updating", "forecasting", "operational", "adaptive", "online"]
+  },
+  { 
+    number: 17, 
+    title: "Conclusions", 
+    description: "Framework for continuous modeling and recommendations", 
+    topics: ["Framework", "Recommendations", "Best Practices"],
+    keywords: ["guidelines", "summary", "principles", "ethics", "professional practice", "future directions", "lessons learned"]
+  }
 ];
 
 export const SearchBar = () => {
@@ -44,6 +146,7 @@ export const SearchBar = () => {
     const matches: SearchResult[] = [];
 
     searchData.forEach((chapter) => {
+      // Check title
       if (chapter.title.toLowerCase().includes(searchTerm)) {
         matches.push({
           chapterNumber: chapter.number,
@@ -53,6 +156,7 @@ export const SearchBar = () => {
         });
       }
 
+      // Check description
       if (chapter.description.toLowerCase().includes(searchTerm)) {
         matches.push({
           chapterNumber: chapter.number,
@@ -62,6 +166,7 @@ export const SearchBar = () => {
         });
       }
 
+      // Check topics
       chapter.topics.forEach((topic) => {
         if (topic.toLowerCase().includes(searchTerm)) {
           matches.push({
@@ -72,9 +177,34 @@ export const SearchBar = () => {
           });
         }
       });
+
+      // Check keywords for comprehensive search
+      chapter.keywords.forEach((keyword) => {
+        if (keyword.toLowerCase().includes(searchTerm)) {
+          // Avoid duplicate matches for same chapter
+          const existingMatch = matches.find(
+            m => m.chapterNumber === chapter.number && m.matchText === keyword
+          );
+          if (!existingMatch) {
+            matches.push({
+              chapterNumber: chapter.number,
+              title: chapter.title,
+              matchType: "topic",
+              matchText: keyword
+            });
+          }
+        }
+      });
     });
 
-    return matches;
+    // Remove duplicate chapter entries for same match type
+    const uniqueMatches = matches.filter((match, index, self) => 
+      index === self.findIndex(m => 
+        m.chapterNumber === match.chapterNumber && m.matchText === match.matchText
+      )
+    );
+
+    return uniqueMatches;
   }, [query]);
 
   const handleResultClick = (chapterNumber: number) => {
