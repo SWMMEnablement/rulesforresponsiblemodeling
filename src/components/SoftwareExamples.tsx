@@ -7,6 +7,7 @@ import { Code, Laptop, Scale, ExternalLink, Youtube, Copy, Check, Download } fro
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
+import { RubySyntaxHighlighter } from "./RubySyntaxHighlighter";
 
 interface SoftwareExample {
   title: string;
@@ -1702,10 +1703,8 @@ const RubyCodeBlock = ({
           </Button>
         </div>
       </div>
-      <ScrollArea className="h-[300px]">
-        <pre className="text-xs text-slate-300 font-mono whitespace-pre-wrap overflow-x-auto">
-          <code>{code}</code>
-        </pre>
+      <ScrollArea className="h-[300px] bg-slate-950 rounded p-3">
+        <RubySyntaxHighlighter code={code} />
       </ScrollArea>
       <p className="text-xs text-slate-400 mt-3 italic">
         💎 Run this in ICM's Ruby Console (Tools → Ruby Console) or save as .rb file
