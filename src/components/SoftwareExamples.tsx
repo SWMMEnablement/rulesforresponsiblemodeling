@@ -525,6 +525,529 @@ puts "   - Automated reporting"
 puts "\\nThe future is automated, integrated, and data-driven!"`
 }
 
+// Ruby code examples for ICM SWMM Networks
+const icmSwmmRubyCode: Record<number, string> = {
+  1: `# Chapter 1: Creating Your First ICM SWMM Model with Ruby
+# This script creates a simple SWMM network using ICM's Ruby API
+
+net = WSApplication.current_network
+net.transaction_begin
+
+# Create a SWMM junction node
+junction = net.new_row_object('cswmm_node')
+junction['node_id'] = 'J1'
+junction['x'] = 100.0
+junction['y'] = 100.0
+junction['ground_level'] = 10.0
+junction['invert'] = 7.0
+junction.write
+
+# Create an outfall
+outfall = net.new_row_object('cswmm_node')
+outfall['node_id'] = 'OUT1'
+outfall['x'] = 200.0
+outfall['y'] = 100.0
+outfall['node_type'] = 'Outfall'
+outfall['ground_level'] = 8.0
+outfall['invert'] = 5.0
+outfall.write
+
+# Create a conduit between them
+conduit = net.new_row_object('cswmm_conduit')
+conduit['link_id'] = 'C1'
+conduit['us_node_id'] = 'J1'
+conduit['ds_node_id'] = 'OUT1'
+conduit['shape'] = 'CIRCULAR'
+conduit['geom1'] = 0.6  # diameter in meters
+conduit['length'] = 100.0
+conduit.write
+
+net.transaction_commit
+puts "SWMM Network created - remember: model wisely, decide responsibly!"`,
+
+  2: `# Chapter 2: SWMM Subcatchment Discretization Analysis
+# Analyze subcatchment properties for proper discretization
+
+net = WSApplication.current_network
+results = []
+
+# Get all SWMM subcatchments
+net.row_objects('cswmm_subcatchment').each do |sc|
+  area = sc['area'] || 0
+  width = sc['width'] || Math.sqrt(area * 10000)
+  imperv = sc['imperv'] || 0
+  
+  results << {
+    id: sc['subcatchment_id'],
+    area: area,
+    width: width,
+    imperv: imperv,
+    tc_estimate: (width / 100.0) * 60  # Simple Tc estimate
+  }
+end
+
+puts "SWMM Subcatchment Discretization Analysis:"
+puts "=" * 50
+results.each do |r| 
+  puts "#{r[:id]}: Area=#{r[:area]} ha, Width=#{r[:width]} m, Imperv=#{r[:imperv]}%"
+end
+puts "\\nRemember: Discretization should match your data resolution"`,
+
+  3: `# Chapter 3: SWMM Network Data Quality Check
+# Validate SWMM network data and identify issues
+
+net = WSApplication.current_network
+issues = []
+
+# Check SWMM conduits for data quality
+net.row_objects('cswmm_conduit').each do |link|
+  # Check for missing geometry
+  if link['geom1'].nil? || link['geom1'] <= 0
+    issues << "#{link['link_id']}: Missing or invalid geometry"
+  end
+  
+  # Check for valid length
+  if link['length'].nil? || link['length'] <= 0
+    issues << "#{link['link_id']}: Missing or invalid length"
+  end
+  
+  # Check roughness value
+  if link['roughness'] && (link['roughness'] < 0.01 || link['roughness'] > 0.03)
+    issues << "#{link['link_id']}: Unusual roughness value"
+  end
+end
+
+# Check SWMM nodes
+net.row_objects('cswmm_node').each do |node|
+  if node['invert'].nil?
+    issues << "#{node['node_id']}: Missing invert elevation"
+  end
+end
+
+puts "SWMM Data Quality Report:"
+puts "Found #{issues.length} potential issues:"
+issues.each { |i| puts "  - #{i}" }`,
+
+  4: `# Chapter 4: SWMM Model Complexity Metrics
+# Analyze model complexity for SWMM networks
+
+net = WSApplication.current_network
+
+# Count SWMM model elements
+stats = {
+  subcatchments: net.row_objects('cswmm_subcatchment').length,
+  junctions: net.row_objects('cswmm_node').count { |n| n['node_type'] != 'Outfall' },
+  outfalls: net.row_objects('cswmm_node').count { |n| n['node_type'] == 'Outfall' },
+  conduits: net.row_objects('cswmm_conduit').length,
+  pumps: net.row_objects('cswmm_pump').length,
+  orifices: net.row_objects('cswmm_orifice').length,
+  weirs: net.row_objects('cswmm_weir').length
+}
+
+total = stats.values.sum
+complexity = total + (stats[:pumps] * 5) + (stats[:orifices] * 3) + (stats[:weirs] * 3)
+
+puts "SWMM Model Complexity Analysis:"
+puts "=" * 50
+stats.each { |k, v| puts "  #{k.to_s.capitalize}: #{v}" }
+puts "\\nTotal elements: #{total}"
+puts "Complexity score: #{complexity}"
+puts "\\nApply parsimony - only add complexity when justified by data"`,
+
+  5: `# Chapter 5: SWMM Continuous Simulation Setup
+# Configure long-term simulation parameters
+
+net = WSApplication.current_network
+
+puts "SWMM Continuous Simulation Configuration"
+puts "=" * 50
+
+# Analyze subcatchment antecedent conditions
+net.row_objects('cswmm_subcatchment').each do |sc|
+  area = sc['area'] || 0
+  imperv = sc['imperv'] || 0
+  slope = sc['slope'] || 0
+  
+  # Estimate time to equilibrium
+  tte = (area * 10000) ** 0.5 / (slope ** 0.5 + 0.1) / 60
+  
+  puts "#{sc['subcatchment_id']}:"
+  puts "  Area: #{area} ha, Imperv: #{imperv}%"
+  puts "  Est. time to equilibrium: #{tte.round(1)} min"
+end
+
+puts "\\nContinuous Simulation Tips:"
+puts "  - Set adequate spin-up period (1-7 days)"
+puts "  - Check evaporation and recovery parameters"
+puts "  - Use Green-Ampt or Horton for infiltration"
+puts "  - Monitor groundwater if applicable"`,
+
+  6: `# Chapter 6: SWMM Calibration Helper
+# Setup calibration targets for SWMM network
+
+net = WSApplication.current_network
+
+# Define typical calibration parameters for SWMM
+calibration_params = [
+  { name: 'N-Imperv', typical: '0.01-0.015', affects: 'Peak timing' },
+  { name: 'N-Perv', typical: '0.1-0.8', affects: 'Pervious runoff timing' },
+  { name: 'Dstore-Imperv', typical: '0.05-0.1 in', affects: 'Initial abstraction' },
+  { name: 'Dstore-Perv', typical: '0.1-0.3 in', affects: 'Pervious losses' },
+  { name: '%Imperv', typical: 'Varies', affects: 'Volume' },
+  { name: 'Width', typical: 'Varies', affects: 'Peak magnitude/timing' }
+]
+
+puts "SWMM Calibration Parameter Guide"
+puts "=" * 50
+calibration_params.each do |p|
+  puts "  #{p[:name]}: #{p[:typical]} -> #{p[:affects]}"
+end
+
+puts "\\nCalibration Priority:"
+puts "  1. Match total runoff volume first"
+puts "  2. Adjust peak flow magnitude"
+puts "  3. Fine-tune timing"
+puts "  4. Check recession curve shape"
+puts "\\nKeep parameters within physically reasonable bounds!"`,
+
+  7: `# Chapter 7: SWMM Event Analysis
+# Analyze and compare rainfall events for SWMM modeling
+
+puts "SWMM Event Selection Guide"
+puts "=" * 50
+
+# Example synthetic design storms
+design_storms = [
+  { name: 'SCS Type II', duration: '24 hr', use: 'Urban design, Midwest/East US' },
+  { name: 'SCS Type I', duration: '24 hr', use: 'Pacific maritime climate' },
+  { name: 'Huff 1st Quartile', duration: 'Varies', use: 'Short, intense events' },
+  { name: 'Huff 4th Quartile', duration: 'Varies', use: 'Long, gradual events' },
+  { name: 'Chicago Storm', duration: 'User-defined', use: 'Custom IDF-based' }
+]
+
+puts "\\nDesign Storm Options:"
+design_storms.each do |ds|
+  puts "  #{ds[:name]} (#{ds[:duration]}): #{ds[:use]}"
+end
+
+puts "\\nHistorical Event Guidelines:"
+puts "  - Use for calibration/validation"
+puts "  - Include range of magnitudes"
+puts "  - Check antecedent conditions"
+puts "  - Document data source and quality"
+puts "\\nConsider both design AND historical events!"`,
+
+  8: `# Chapter 8: SWMM Decision Support Scenarios
+# Compare multiple design alternatives in SWMM
+
+scenarios = [
+  { name: 'Baseline', desc: 'Existing conditions' },
+  { name: 'Upsized_Pipes', desc: 'Increase pipe diameters 20%' },
+  { name: 'Detention_Pond', desc: 'Add detention storage' },
+  { name: 'LID_Controls', desc: 'Green infrastructure BMPs' }
+]
+
+puts "SWMM Decision Support Analysis"
+puts "=" * 50
+
+puts "\\nScenarios to Compare:"
+scenarios.each do |s|
+  puts "  #{s[:name]}: #{s[:desc]}"
+end
+
+puts "\\nMetrics to Evaluate:"
+puts "  - Peak flow at critical points"
+puts "  - Flood volume reduction"
+puts "  - CSO frequency (if applicable)"
+puts "  - Cost-effectiveness"
+
+puts "\\nSWMM LID Controls Available:"
+puts "  - Rain barrels, Cisterns"
+puts "  - Green roofs, Bio-retention"
+puts "  - Porous pavement, Infiltration trenches"
+puts "  - Vegetative swales, Rain gardens"
+puts "\\nModel informs decisions - decisions aren't automatic!"`,
+
+  9: `# Chapter 9: SWMM Performance Metrics
+# Calculate objective functions for SWMM calibration
+
+def nash_sutcliffe(obs, sim)
+  mean_obs = obs.sum / obs.length.to_f
+  numerator = obs.zip(sim).map { |o, s| (o - s) ** 2 }.sum
+  denominator = obs.map { |o| (o - mean_obs) ** 2 }.sum
+  denominator == 0 ? nil : 1 - (numerator / denominator)
+end
+
+def rmse(obs, sim)
+  Math.sqrt(obs.zip(sim).map { |o, s| (o - s) ** 2 }.sum / obs.length)
+end
+
+def peak_error(obs, sim)
+  ((sim.max - obs.max) / obs.max) * 100
+end
+
+# Example comparison
+observed = [0.2, 0.8, 1.5, 2.1, 1.8, 1.2, 0.6]
+simulated = [0.18, 0.75, 1.6, 2.0, 1.7, 1.1, 0.55]
+
+puts "SWMM Calibration Metrics"
+puts "=" * 50
+puts "  NSE: #{nash_sutcliffe(observed, simulated)&.round(3)}"
+puts "  RMSE: #{rmse(observed, simulated).round(4)} m³/s"
+puts "  Peak Error: #{peak_error(observed, simulated).round(1)}%"
+puts "\\nNo single metric tells the whole story!"`,
+
+  10: `# Chapter 10: SWMM Sensitivity Analysis
+# Systematic parameter sensitivity testing
+
+net = WSApplication.current_network
+
+# Key SWMM parameters for sensitivity analysis
+sensitivity_params = [
+  { param: '%Imperv', range: [-20, -10, 0, 10, 20], output: 'Volume, Peak' },
+  { param: 'Width', range: [-30, -15, 0, 15, 30], output: 'Peak, Timing' },
+  { param: 'N-Imperv', range: [-30, 0, 30], output: 'Peak timing' },
+  { param: 'Conduit roughness', range: [-20, 0, 20], output: 'Peak, HGL' },
+  { param: 'Dstore-Imperv', range: [-50, 0, 50], output: 'Initial loss' }
+]
+
+puts "SWMM Sensitivity Analysis Framework"
+puts "=" * 50
+
+sensitivity_params.each do |p|
+  puts "\\n#{p[:param]}:"
+  puts "  Variations: #{p[:range].map { |v| "#{v}%" }.join(', ')}"
+  puts "  Affects: #{p[:output]}"
+end
+
+puts "\\nProcedure:"
+puts "  1. Run baseline simulation"
+puts "  2. Vary ONE parameter at a time"
+puts "  3. Record change in key outputs"
+puts "  4. Rank by influence on results"
+puts "  5. Focus calibration effort on sensitive parameters"`,
+
+  11: `# Chapter 11: SWMM Uncertainty Quantification
+# Monte Carlo setup for SWMM uncertainty analysis
+
+# Define uncertain SWMM parameters
+uncertain_params = [
+  { name: '%Imperv', mean: 45, cv: 0.15, dist: 'Normal' },
+  { name: 'Width', mean: 150, cv: 0.25, dist: 'Normal' },
+  { name: 'Conduit_n', mean: 0.013, cv: 0.15, dist: 'Normal' },
+  { name: 'Rain depth', mean: 75, cv: 0.20, dist: 'Normal' }
+]
+
+n_runs = 100
+
+puts "SWMM Monte Carlo Uncertainty Analysis"
+puts "=" * 50
+
+puts "\\nUncertain Parameters:"
+uncertain_params.each do |p|
+  std = p[:mean] * p[:cv]
+  puts "  #{p[:name]}: μ=#{p[:mean]}, σ=#{std.round(3)} (CV=#{(p[:cv]*100).round}%)"
+end
+
+puts "\\nPlanned Simulations: #{n_runs}"
+puts "\\nOutputs to Track:"
+puts "  - Peak flow distribution (min, mean, max)"
+puts "  - Time to peak range"
+puts "  - Flooding probability at each node"
+puts "  - Surcharging frequency"
+puts "\\nPresent results as confidence intervals!"`,
+
+  12: `# Chapter 12: SWMM Verification & Validation
+# Split-sample testing for SWMM models
+
+calibration_events = ['Storm_2020_06_15', 'Storm_2021_03_22', 'Storm_2021_09_10']
+validation_events = ['Storm_2022_04_08', 'Storm_2022_11_17']
+
+puts "SWMM Verification & Validation Protocol"
+puts "=" * 50
+
+puts "\\nCalibration Events (parameter adjustment):"
+calibration_events.each { |e| puts "  - #{e}" }
+
+puts "\\nValidation Events (independent testing):"
+validation_events.each { |e| puts "  - #{e}" }
+
+puts "\\nAcceptance Criteria:"
+puts "  - Volume error < ±20%"
+puts "  - Peak error < ±25%"
+puts "  - NSE > 0.5 (acceptable), > 0.7 (good)"
+puts "  - Timing within ±15 minutes"
+
+puts "\\nSWMM Continuity Checks:"
+puts "  - Runoff continuity error < 1%"
+puts "  - Flow routing continuity error < 1%"
+puts "  - Review SWMM status report for warnings"`,
+
+  13: `# Chapter 13: SWMM Model Documentation
+# Generate comprehensive SWMM model documentation
+
+net = WSApplication.current_network
+timestamp = Time.now.strftime("%Y-%m-%d %H:%M")
+
+puts "=" * 60
+puts "SWMM MODEL DOCUMENTATION"
+puts "Generated: #{timestamp}"
+puts "=" * 60
+
+# Model inventory
+puts "\\n1. MODEL INVENTORY"
+puts "-" * 40
+inventory = {
+  'Subcatchments' => net.row_objects('cswmm_subcatchment').length,
+  'Junctions' => net.row_objects('cswmm_node').count { |n| n['node_type'] != 'Outfall' },
+  'Outfalls' => net.row_objects('cswmm_node').count { |n| n['node_type'] == 'Outfall' },
+  'Conduits' => net.row_objects('cswmm_conduit').length,
+  'Pumps' => net.row_objects('cswmm_pump').length,
+  'Storage Units' => net.row_objects('cswmm_storage').length
+}
+inventory.each { |k, v| puts "   #{k}: #{v}" }
+
+puts "\\n2. SWMM OPTIONS"
+puts "-" * 40
+puts "   [Document routing method, infiltration model, etc.]"
+
+puts "\\n3. CALIBRATION STATUS"
+puts "-" * 40
+puts "   [Document calibration events and performance]"`,
+
+  14: `# Chapter 14: SWMM Parameter Estimation
+# Derive SWMM parameters from GIS and field data
+
+# Land use to SWMM parameter mapping
+land_use_params = {
+  'Commercial' => { imperv: 85, n_imperv: 0.012, dstore_imperv: 0.05 },
+  'Industrial' => { imperv: 72, n_imperv: 0.012, dstore_imperv: 0.05 },
+  'Residential_HD' => { imperv: 65, n_imperv: 0.013, dstore_imperv: 0.06 },
+  'Residential_MD' => { imperv: 40, n_imperv: 0.013, dstore_imperv: 0.06 },
+  'Residential_LD' => { imperv: 20, n_imperv: 0.013, dstore_imperv: 0.08 },
+  'Open_Space' => { imperv: 5, n_imperv: 0.015, dstore_imperv: 0.10 }
+}
+
+puts "SWMM Parameter Estimation from GIS"
+puts "=" * 50
+
+puts "\\nLand Use → SWMM Parameters:"
+land_use_params.each do |lu, params|
+  puts "  #{lu}:"
+  puts "    %Imperv=#{params[:imperv]}, N-Imperv=#{params[:n_imperv]}, Dstore=#{params[:dstore_imperv]}"
+end
+
+# Soil to infiltration mapping (Green-Ampt)
+puts "\\nSoil Type → Green-Ampt Parameters:"
+puts "  Sand: Ks=4.74 in/hr, ψ=1.93 in, θd=0.34"
+puts "  Sandy Loam: Ks=0.43 in/hr, ψ=4.33 in, θd=0.33"
+puts "  Clay: Ks=0.01 in/hr, ψ=12.45 in, θd=0.23"
+puts "\\nAlways field-verify GIS-derived parameters!"`,
+
+  15: `# Chapter 15: SWMM Error Diagnostics
+# Analyze SWMM simulation errors and residuals
+
+def analyze_swmm_errors(obs, sim)
+  residuals = obs.zip(sim).map { |o, s| o - s }
+  
+  mean_res = residuals.sum / residuals.length.to_f
+  std_res = Math.sqrt(residuals.map { |r| (r - mean_res) ** 2 }.sum / residuals.length)
+  
+  # Check for timing errors (cross-correlation would be ideal)
+  peak_obs_idx = obs.index(obs.max)
+  peak_sim_idx = sim.index(sim.max)
+  timing_error = peak_sim_idx - peak_obs_idx  # timesteps
+  
+  {
+    mean_residual: mean_res,
+    std_residual: std_res,
+    timing_error: timing_error,
+    peak_ratio: sim.max / obs.max
+  }
+end
+
+observed = [0.3, 1.0, 2.5, 3.2, 2.8, 1.5, 0.7]
+simulated = [0.25, 0.9, 2.3, 3.0, 2.9, 1.6, 0.65]
+
+results = analyze_swmm_errors(observed, simulated)
+
+puts "SWMM Error Diagnostics"
+puts "=" * 50
+puts "  Mean Residual: #{results[:mean_residual].round(3)} m³/s"
+puts "  Std Residual: #{results[:std_residual].round(3)} m³/s"
+puts "  Timing Error: #{results[:timing_error]} timesteps"
+puts "  Peak Ratio: #{results[:peak_ratio].round(2)}"
+puts "\\nSystematic errors require structural changes!"`,
+
+  16: `# Chapter 16: SWMM Continuous Modeling Tips
+# Best practices for long-term SWMM simulations
+
+net = WSApplication.current_network
+
+puts "SWMM Continuous Modeling Best Practices"
+puts "=" * 50
+
+puts "\\n1. ROUTING OPTIONS"
+puts "   - Dynamic Wave: Most accurate, slowest"
+puts "   - Kinematic Wave: Good for steep pipes"
+puts "   - Choose based on network characteristics"
+
+puts "\\n2. TIMESTEP SETTINGS"
+puts "   - Routing timestep: 15-30 seconds typical"
+puts "   - Reporting timestep: 5-15 minutes"
+puts "   - Dry weather timestep: can be larger"
+
+puts "\\n3. ANTECEDENT CONDITIONS"
+puts "   - Set initial soil moisture"
+puts "   - Define groundwater table if used"
+puts "   - Include evaporation data"
+
+puts "\\n4. CONTINUITY CHECKS"
+puts "   - Target < 1% for both runoff and routing"
+puts "   - Review status report after each run"
+
+# Quick subcatchment summary
+puts "\\n5. MODEL SUMMARY"
+total_area = 0
+net.row_objects('cswmm_subcatchment').each do |sc|
+  total_area += sc['area'] || 0
+end
+puts "   Total catchment area: #{total_area.round(2)} ha"`,
+
+  17: `# Chapter 17: SWMM Future Directions
+# Advanced automation and integration capabilities
+
+puts "SWMM Future Directions in ICM"
+puts "=" * 50
+
+puts "\\n1. ENHANCED LID MODELING"
+puts "   - Layer-based LID representation"
+puts "   - Seasonal performance factors"
+puts "   - LID maintenance effects"
+
+puts "\\n2. CLIMATE CHANGE ANALYSIS"
+puts <<-CODE
+   # Automated rainfall scaling
+   climate_factors = [1.0, 1.1, 1.2, 1.3]  # RCP scenarios
+   climate_factors.each do |cf|
+     puts "Running #{(cf*100-100).round}% uplift scenario..."
+     # Modify rainfall and run
+   end
+CODE
+
+puts "\\n3. REAL-TIME CONTROL"
+puts "   - RTC rules for pump/gate operation"
+puts "   - Sensor-based triggers"
+puts "   - Optimization algorithms"
+
+puts "\\n4. BATCH PROCESSING"
+puts "   - Automated scenario runs"
+puts "   - Results extraction to CSV"
+puts "   - Report generation"
+
+puts "\\nThe future: Integrated, automated, climate-ready!"`
+}
+
 const chapterExamples: Record<number, ChapterExamples> = {
   1: {
     swmm5: {
@@ -1866,6 +2389,15 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                       ))}
                     </ul>
                   </div>
+                  
+                  {/* Ruby Code Example for ICM SWMM */}
+                  {icmSwmmRubyCode[chapterNumber] && (
+                    <RubyCodeBlock 
+                      code={icmSwmmRubyCode[chapterNumber]} 
+                      chapterNumber={chapterNumber}
+                      chapterTitle={examples.icmSwmm.title}
+                    />
+                  )}
                   
                   <div className="mt-4 pt-4 border-t border-purple-500/20 space-y-2">
                     <a 
