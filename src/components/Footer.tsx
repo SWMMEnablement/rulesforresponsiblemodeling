@@ -31,17 +31,6 @@ export const Footer = () => {
                   <Code2 className="w-4 h-4 mr-2" />
                   View Source Code
                 </Button>
-                <Button
-                  variant="link"
-                  className="h-auto p-0 text-sm justify-start"
-                  asChild
-                >
-                  <a href="https://docs.lovable.dev" target="_blank" rel="noopener noreferrer">
-                    <BookOpen className="w-4 h-4 mr-2" />
-                    Documentation
-                    <ExternalLink className="w-3 h-3 ml-1" />
-                  </a>
-                </Button>
               </div>
             </div>
 

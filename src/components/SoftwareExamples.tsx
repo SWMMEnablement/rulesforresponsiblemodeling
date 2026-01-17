@@ -3,7 +3,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Code, Laptop } from "lucide-react";
+import { Code, Laptop, Scale } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface SoftwareExample {
   title: string;
@@ -12,9 +13,16 @@ interface SoftwareExample {
   tips: string[];
 }
 
+interface ComparisonItem {
+  feature: string;
+  swmm5: string;
+  icm: string;
+}
+
 interface ChapterExamples {
   swmm5: SoftwareExample;
   icm: SoftwareExample;
+  comparison: ComparisonItem[];
 }
 
 const chapterExamples: Record<number, ChapterExamples> = {
@@ -54,7 +62,15 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "ICM's integrated 1D/2D capability doesn't mean you need 2D for every model",
         "Focus on whether results inform your decision, not pixel-perfect accuracy"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Interface", swmm5: "Simple, lightweight GUI", icm: "Feature-rich GIS-integrated interface" },
+      { feature: "Learning Curve", swmm5: "Easier for beginners", icm: "Steeper but more powerful" },
+      { feature: "Cost", swmm5: "Free, open-source (EPA)", icm: "Commercial license required" },
+      { feature: "2D Capability", swmm5: "Limited (requires external tools)", icm: "Fully integrated 1D/2D" },
+      { feature: "GIS Integration", swmm5: "Basic import/export", icm: "Native geodatabase support" },
+      { feature: "Model Size", swmm5: "Best for small-medium models", icm: "Scales to very large networks" }
+    ]
   },
   2: {
     swmm5: {
@@ -92,7 +108,15 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Mesh resolution should match your DEM accuracy",
         "The CFL condition controls timestep in 2D—finer mesh = slower runs"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Spatial Resolution", swmm5: "User-defined subcatchments", icm: "Flexible polygon or mesh-based" },
+      { feature: "Routing Options", swmm5: "Kinematic or dynamic wave", icm: "Multiple routing engines including 2D" },
+      { feature: "Auto-Discretization", swmm5: "Manual or external tools", icm: "Built-in mesh generation" },
+      { feature: "Terrain Handling", swmm5: "Simplified slope parameters", icm: "Direct DEM integration" },
+      { feature: "Performance", swmm5: "Fast for 1D networks", icm: "Optimized for large 1D/2D models" },
+      { feature: "Visual Feedback", swmm5: "Basic profile/map views", icm: "3D visualization, animations" }
+    ]
   },
   3: {
     swmm5: {
@@ -130,7 +154,15 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Don't trust GIS data blindly—field verify critical assets",
         "Separate 'as-built' confidence from 'assumed' values in your database"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Data Import", swmm5: "CSV, text files, basic GIS", icm: "Native geodatabase, ODBC, many formats" },
+      { feature: "Validation Tools", swmm5: "Basic error checking", icm: "Comprehensive network validation suite" },
+      { feature: "SQL Queries", swmm5: "Not available", icm: "Built-in SQL for data analysis" },
+      { feature: "Data Flagging", swmm5: "Manual notes only", icm: "Custom fields for confidence levels" },
+      { feature: "Audit Trail", swmm5: "Manual documentation", icm: "Built-in versioning and history" },
+      { feature: "Reporting", swmm5: "Basic text reports", icm: "Customizable report templates" }
+    ]
   },
   4: {
     swmm5: {
@@ -168,7 +200,15 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Partial 2D zones (hot-spots) often provide 80% of benefit at 20% cost",
         "Match complexity to project requirements and budget"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Model Types", swmm5: "1D hydrology and hydraulics", icm: "1D, 2D, and coupled 1D/2D" },
+      { feature: "LID/SUDS", swmm5: "Built-in LID controls", icm: "SUDS via runoff surfaces and RTCs" },
+      { feature: "Water Quality", swmm5: "Integrated WQ module", icm: "Separate but powerful WQ engine" },
+      { feature: "Groundwater", swmm5: "Simplified aquifer model", icm: "Groundwater infiltration module" },
+      { feature: "RTC", swmm5: "Basic control rules", icm: "Advanced RTC with scripting" },
+      { feature: "Optimization", swmm5: "External tools required", icm: "Built-in optimization capabilities" }
+    ]
   },
   5: {
     swmm5: {
@@ -206,7 +246,15 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Continuous simulation is essential for CSO compliance modeling",
         "Validate base flows before focusing on storm events"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Simulation Speed", swmm5: "Good for moderate periods", icm: "FAST engine for multi-year runs" },
+      { feature: "Water Balance", swmm5: "Complete hydrologic cycle", icm: "Detailed runoff surface accounting" },
+      { feature: "Evaporation", swmm5: "Daily or monthly data", icm: "Flexible temporal resolution" },
+      { feature: "Initial Conditions", swmm5: "User-specified or hotstart", icm: "Hotstart files, initial state editor" },
+      { feature: "Statistics", swmm5: "Post-processing required", icm: "Built-in flow duration curves" },
+      { feature: "CSO Analysis", swmm5: "Manual event counting", icm: "Automated CSO volume/frequency stats" }
+    ]
   },
   6: {
     swmm5: {
@@ -244,7 +292,15 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Synthetic rainfall analysis is critical for CSO long-term planning",
         "Document the statistical basis of your synthetic rainfall"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Rainfall Generation", swmm5: "External tools (SSOAP, etc.)", icm: "External or built-in patterns" },
+      { feature: "Batch Processing", swmm5: "Command-line scripting", icm: "ICM Exchange automation" },
+      { feature: "Parameter Variation", swmm5: "Manual or Python scripts", icm: "Scenario manager, sensitivity tool" },
+      { feature: "Monte Carlo", swmm5: "External implementation", icm: "Can be set up with Exchange" },
+      { feature: "Results Statistics", swmm5: "External post-processing", icm: "Built-in statistics and graphs" },
+      { feature: "Automation", swmm5: "Python, MATLAB interfaces", icm: "Ruby API, Exchange platform" }
+    ]
   },
   7: {
     swmm5: {
@@ -282,7 +338,15 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Uniform rainfall often underestimates peak flows in elongated catchments",
         "Spatial variability matters more for large catchments (>1 sq mile)"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Spatial Rainfall", swmm5: "Rain gage assignment per subcatch", icm: "TVD, grid, radar options" },
+      { feature: "Radar Data", swmm5: "Not directly supported", icm: "Native radar rainfall import" },
+      { feature: "Moving Storms", swmm5: "Manual lag implementation", icm: "Spatial profiles with timing" },
+      { feature: "Visualization", swmm5: "Static rain gage map", icm: "Animated rainfall display" },
+      { feature: "Large Catchments", swmm5: "Cumbersome for many gages", icm: "Efficient for regional models" },
+      { feature: "Climate Scenarios", swmm5: "Manual factor application", icm: "Scenario-based rainfall factors" }
+    ]
   },
   8: {
     swmm5: {
@@ -320,7 +384,15 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Design storms are regulatory tools—real storms behave differently",
         "Continuous simulation often gives more realistic risk assessment"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Storm Types", swmm5: "User-defined time series", icm: "Built-in generator for standard types" },
+      { feature: "IDF Curves", swmm5: "Manual input", icm: "IDF database with interpolation" },
+      { feature: "Return Periods", swmm5: "One storm per run", icm: "Scenario matrix for multiple" },
+      { feature: "Chicago Storm", swmm5: "Manual creation", icm: "Automatic generation" },
+      { feature: "Climate Factors", swmm5: "Manual scaling", icm: "Built-in uplift factors" },
+      { feature: "Nested Storms", swmm5: "Manual nesting", icm: "Standard nested storm options" }
+    ]
   },
   9: {
     swmm5: {
@@ -358,7 +430,15 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Model results for rare events should include uncertainty ranges",
         "Hazard mapping requires velocity as well as depth"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Extreme Storms", swmm5: "Standard input, no special handling", icm: "Same, but better flood mapping" },
+      { feature: "Flood Mapping", swmm5: "Requires external GIS", icm: "Built-in flood mapping tools" },
+      { feature: "Dam Break", swmm5: "Not supported", icm: "Built-in dam break modeling" },
+      { feature: "Hazard Rating", swmm5: "Manual calculation", icm: "Automatic DxV hazard maps" },
+      { feature: "Levee Failure", swmm5: "Not supported", icm: "Breach modeling available" },
+      { feature: "Uncertainty Display", swmm5: "Manual in reports", icm: "Scenario comparison tools" }
+    ]
   },
   10: {
     swmm5: {
@@ -383,286 +463,350 @@ const chapterExamples: Record<number, ChapterExamples> = {
       title: "Probabilistic Analysis in ICM",
       description: "Leverage ICM's capabilities for systematic uncertainty quantification.",
       steps: [
-        "Use Scenario Manager to create parameter variation runs",
-        "Vary key parameters: roughness, runoff coefficients, pipe conditions",
-        "Run multiple scenarios using batch processing",
-        "Use Results Analysis to compare across scenarios",
-        "Export to statistical software for distribution fitting",
-        "Generate confidence bounds on model predictions",
-        "Document parameter uncertainty in project reports"
+        "Use ICM's sensitivity analysis tool to identify key parameters",
+        "Set up parameter ranges and distributions",
+        "Configure batch runs using scenario management",
+        "Run multiple scenarios systematically",
+        "Use built-in results comparison tools",
+        "Generate probabilistic outputs and confidence bounds",
+        "Document parameter sensitivity rankings"
       ],
       tips: [
-        "ICM Exchange enables automated Monte Carlo runs",
-        "Focus uncertainty analysis on parameters that drive decisions",
-        "Sensitivity analysis first, then Monte Carlo on sensitive parameters"
+        "ICM's sensitivity tool quickly identifies dominant parameters",
+        "Focus uncertainty effort on parameters that matter most",
+        "Consider both input and structural uncertainty"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Sensitivity Analysis", swmm5: "Manual parameter variation", icm: "Built-in sensitivity tool" },
+      { feature: "Monte Carlo", swmm5: "External implementation", icm: "Can be automated via Exchange" },
+      { feature: "Batch Runs", swmm5: "Command-line, scripting", icm: "Scenario manager, scheduling" },
+      { feature: "Parameter Ranges", swmm5: "User tracks externally", icm: "Stored in model database" },
+      { feature: "Results Comparison", swmm5: "External post-processing", icm: "Built-in comparison tools" },
+      { feature: "Confidence Bounds", swmm5: "Calculate externally", icm: "Statistical output options" }
+    ]
   },
   11: {
     swmm5: {
-      title: "Sensitivity Analysis in SWMM5",
-      description: "Identify which parameters most influence model results.",
+      title: "Calibration Protocol in SWMM5",
+      description: "Systematically calibrate model parameters using observed data.",
       steps: [
-        "List all model parameters that have uncertainty",
-        "Define base case and ±10% or ±1 standard deviation variations",
-        "Run simulations varying one parameter at a time (OAT)",
-        "Calculate sensitivity indices (% change output / % change input)",
-        "Rank parameters by influence on key outputs",
-        "Focus calibration and data collection on sensitive parameters",
-        "Document insensitive parameters—they may not need refinement"
+        "Gather observed flow and rainfall data for calibration events",
+        "Set initial parameters based on physical measurements and literature",
+        "Run model and compare simulated vs. observed hydrographs",
+        "Adjust parameters systematically (infiltration, roughness, width)",
+        "Use objective functions (NSE, RMSE, PBIAS) to measure fit",
+        "Validate with independent events not used in calibration",
+        "Document final parameters and their justification"
       ],
       tips: [
-        "Width and % Impervious often dominate subcatchment sensitivity",
-        "Roughness matters most in long pipes with partial flow",
-        "Insensitive parameters can use default values confidently"
-      ]
-    },
-    icm: {
-      title: "Parameter Sensitivity in ICM",
-      description: "Use ICM tools to systematically evaluate parameter importance.",
-      steps: [
-        "Create a base case model with calibrated parameters",
-        "Use Scenario Manager to create parameter variation runs",
-        "Vary one parameter at a time across its uncertainty range",
-        "Run all scenarios and export key results",
-        "Calculate sensitivity ratios for each parameter-output pair",
-        "Create tornado diagrams to visualize sensitivities",
-        "Prioritize parameters for data collection and calibration"
-      ],
-      tips: [
-        "ICM's SQL can help batch-modify parameters efficiently",
-        "Global sensitivity methods (Morris, Sobol) are more robust than OAT",
-        "Sensitivity rankings may differ for different outputs (peak vs. volume)"
-      ]
-    }
-  },
-  12: {
-    swmm5: {
-      title: "Understanding State Variables in SWMM5",
-      description: "Visualize how system state (storage, flows) evolves through time.",
-      steps: [
-        "Set up a model with storage nodes (ponds, tanks, or surcharged manholes)",
-        "Run simulation and output detailed time series",
-        "Plot storage volume vs. time for key locations",
-        "Overlay inflow and outflow hydrographs",
-        "Identify state variable trajectories during events",
-        "Analyze how initial conditions affect the state path",
-        "Understand the 'memory' in your system"
-      ],
-      tips: [
-        "Storage nodes in SWMM5 are explicit state variables",
-        "Surcharged pipes also have 'state'—their water level",
-        "Initial conditions matter more for systems with storage"
-      ]
-    },
-    icm: {
-      title: "State Space Analysis in ICM",
-      description: "Explore system dynamics using ICM's results analysis and animation tools.",
-      steps: [
-        "Run a simulation with storage facilities or RTC elements",
-        "Use Long Section view to animate water levels through time",
-        "Plot storage facility volume and water level time series",
-        "Export state variable data for phase-space plots",
-        "Analyze how the system moves through state space during an event",
-        "Identify equilibrium points and transitions",
-        "Use animations to communicate system dynamics to stakeholders"
-      ],
-      tips: [
-        "ICM's animation tools are excellent for visualizing state evolution",
-        "RTC elements explicitly use state variables for control logic",
-        "Phase diagrams (volume vs. flow) reveal system behavior patterns"
-      ]
-    }
-  },
-  13: {
-    swmm5: {
-      title: "Model Performance Evaluation in SWMM5",
-      description: "Quantify how well your model reproduces observed data.",
-      steps: [
-        "Obtain observed flow data for calibration/validation periods",
-        "Run model for the same periods",
-        "Export modeled results at observation points",
-        "Calculate performance metrics: NSE, PBIAS, RMSE, R²",
-        "Create visual comparisons: hydrograph overlays, scatter plots",
-        "Evaluate volume balance (total modeled vs. observed)",
-        "Document performance and identify systematic biases"
-      ],
-      tips: [
-        "NSE > 0.5 is often considered 'acceptable', >0.75 is 'good'",
-        "Visual inspection catches issues metrics miss",
-        "Validate on independent events not used for calibration"
-      ]
-    },
-    icm: {
-      title: "Calibration Assessment in ICM",
-      description: "Use ICM's built-in tools to evaluate model-observation agreement.",
-      steps: [
-        "Import observed flow data as a Time Series Database or CSV",
-        "Set up observed data layers in the model",
-        "Run simulation and enable comparison mode",
-        "Use 'Compare Observed' in Results Analysis",
-        "Review scatter plots and time series overlays",
-        "Calculate statistics using ICM's built-in tools or export to Excel",
-        "Document calibration performance in project reports"
-      ],
-      tips: [
-        "ICM can display observed and modeled data on the same graph",
-        "Check timing (peak time) as well as magnitude (peak value)",
-        "Multiple metrics give a fuller picture than any single statistic"
-      ]
-    }
-  },
-  14: {
-    swmm5: {
-      title: "Parameter Optimization in SWMM5",
-      description: "Use systematic methods to find optimal parameter values.",
-      steps: [
-        "Identify parameters to optimize (typically 5-10 key parameters)",
-        "Define parameter bounds based on physical constraints",
-        "Choose an objective function (e.g., minimize RMSE, maximize NSE)",
-        "Use external optimization tools (PEST, Python scipy.optimize, R)",
-        "Link optimizer to SWMM5 via command-line execution",
-        "Run optimization and monitor convergence",
-        "Validate optimized parameters on independent data"
-      ],
-      tips: [
-        "SWMM5's .inp and .rpt files make external optimization straightforward",
-        "Multi-objective optimization avoids over-fitting to single metrics",
-        "Always validate—a well-calibrated model can still predict poorly"
+        "Calibrate to multiple events covering different conditions",
+        "Visual comparison matters as much as statistics",
+        "Perfect calibration on one event often means overfitting"
       ]
     },
     icm: {
       title: "Automated Calibration in ICM",
-      description: "Leverage ICM's optimization capabilities for efficient parameter estimation.",
+      description: "Use ICM's calibration tools to efficiently optimize model parameters.",
       steps: [
-        "Select parameters for optimization using Scenario Manager",
-        "Define parameter ranges and objective functions",
-        "Use ICM Exchange for automated batch runs if available",
-        "Alternatively, use external tools with Ruby/Python scripting",
-        "Run genetic algorithm or gradient-based optimization",
-        "Review Pareto front for multi-objective problems",
-        "Validate calibrated model on independent events"
+        "Import observed flow data into ICM's calibration database",
+        "Define calibration parameters and allowable ranges",
+        "Select objective functions (volume, peak, timing)",
+        "Use the auto-calibration tool or genetic algorithm optimizer",
+        "Review parameter values for physical reasonableness",
+        "Run validation simulations with final parameters",
+        "Generate calibration report with statistics and plots"
       ],
       tips: [
-        "ICM's Open Data Import/Export Centre enables scripted automation",
-        "Consider equifinality—multiple parameter sets may fit equally well",
-        "Document your objective function and optimization method"
+        "Auto-calibration finds optimal values faster, but review for realism",
+        "Multi-objective calibration reveals parameter trade-offs",
+        "Calibration should improve understanding, not just statistics"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Observed Data", swmm5: "Manual time series import", icm: "Calibration database with QA tools" },
+      { feature: "Auto-Calibration", swmm5: "External tools (PEST, etc.)", icm: "Built-in optimizer" },
+      { feature: "Objective Functions", swmm5: "Calculate externally", icm: "Multiple built-in options" },
+      { feature: "Parameter Bounds", swmm5: "Track manually", icm: "Stored with optimization setup" },
+      { feature: "Validation", swmm5: "Separate runs, manual compare", icm: "Validation events in same setup" },
+      { feature: "Reporting", swmm5: "Manual report creation", icm: "Auto-generated calibration reports" }
+    ]
+  },
+  12: {
+    swmm5: {
+      title: "Validation and Testing in SWMM5",
+      description: "Verify model performance on independent data and boundary conditions.",
+      steps: [
+        "Reserve independent events for validation (not used in calibration)",
+        "Run model with calibrated parameters on validation events",
+        "Calculate performance metrics (NSE, RMSE, etc.)",
+        "Test model at boundary conditions (dry weather, extreme events)",
+        "Check mass balance and continuity errors",
+        "Identify systematic biases and document limitations",
+        "Perform split-sample testing if data allows"
+      ],
+      tips: [
+        "Validation performance is usually worse than calibration—expect it",
+        "Test base flow accuracy separately from storm response",
+        "A model validated under limited conditions should note those limits"
+      ]
+    },
+    icm: {
+      title: "Comprehensive Model Validation in ICM",
+      description: "Use ICM's validation tools for rigorous model testing.",
+      steps: [
+        "Set up validation events separate from calibration dataset",
+        "Use the flow survey manager for observed data handling",
+        "Run validation simulations using calibrated parameters",
+        "Generate comparison plots (observed vs. simulated)",
+        "Calculate performance statistics automatically",
+        "Check water balance reports for continuity",
+        "Document validation results and model limitations"
+      ],
+      tips: [
+        "ICM's comparison tools make validation visualization easy",
+        "Include dry weather flow validation for combined sewer models",
+        "Validation scope should match intended model use"
+      ]
+    },
+    comparison: [
+      { feature: "Validation Events", swmm5: "Same workflow as calibration", icm: "Dedicated validation datasets" },
+      { feature: "Comparison Plots", swmm5: "Export for external plotting", icm: "Built-in overlay charts" },
+      { feature: "Statistics", swmm5: "External calculation", icm: "Automatic performance metrics" },
+      { feature: "Water Balance", swmm5: "Summary in status report", icm: "Detailed balance reports" },
+      { feature: "Multi-Event", swmm5: "Run each separately", icm: "Batch validation possible" },
+      { feature: "Documentation", swmm5: "Manual report writing", icm: "Template-based reports" }
+    ]
+  },
+  13: {
+    swmm5: {
+      title: "Peer Review Preparation in SWMM5",
+      description: "Document and organize model for external review and quality assurance.",
+      steps: [
+        "Organize project files in logical folder structure",
+        "Document all data sources with dates and quality ratings",
+        "Create a model development memo covering key decisions",
+        "Export summary tables of all model parameters",
+        "Generate comparison plots for calibration/validation",
+        "Prepare a list of model limitations and caveats",
+        "Package model for independent reviewer to run"
+      ],
+      tips: [
+        "If you can't explain a parameter value, reconsider it",
+        "Peer review improves models—embrace it, don't fear it",
+        "Document not just what you did, but why"
+      ]
+    },
+    icm: {
+      title: "Model Documentation in ICM",
+      description: "Leverage ICM's documentation features for thorough peer review preparation.",
+      steps: [
+        "Use model group descriptions to document purpose",
+        "Add notes to key elements explaining assumptions",
+        "Generate network summaries and parameter tables",
+        "Export calibration/validation reports",
+        "Use scenario descriptions for change documentation",
+        "Create a model run log with key results",
+        "Package transportable database for reviewer"
+      ],
+      tips: [
+        "ICM's built-in notes travel with the model—use them liberally",
+        "Transportable databases preserve model integrity for review",
+        "Version control through model groups aids transparency"
+      ]
+    },
+    comparison: [
+      { feature: "Documentation", swmm5: "External documents", icm: "Notes embedded in database" },
+      { feature: "Version Control", swmm5: "Manual file naming", icm: "Model groups, scenarios" },
+      { feature: "Parameter Export", swmm5: "Report or manual tables", icm: "Direct database queries" },
+      { feature: "Transferability", swmm5: "Send INP + data files", icm: "Transportable database" },
+      { feature: "Audit Trail", swmm5: "Manual logging", icm: "Built-in modification tracking" },
+      { feature: "Reviewer Access", swmm5: "Needs SWMM5 (free)", icm: "Needs ICM license" }
+    ]
+  },
+  14: {
+    swmm5: {
+      title: "Stakeholder Communication in SWMM5",
+      description: "Translate model results into meaningful information for decision-makers.",
+      steps: [
+        "Identify the key questions stakeholders need answered",
+        "Extract relevant results (not all model outputs)",
+        "Create clear visualizations (maps, charts, tables)",
+        "Translate technical terms to plain language",
+        "Prepare uncertainty ranges, not just single values",
+        "Develop scenarios that bracket the decision space",
+        "Present model limitations honestly but constructively"
+      ],
+      tips: [
+        "Stakeholders care about decisions, not model mechanics",
+        "Visual communication often beats numerical tables",
+        "Uncertainty is valuable information, not a weakness"
+      ]
+    },
+    icm: {
+      title: "Results Visualization in ICM",
+      description: "Use ICM's visualization tools to communicate effectively with stakeholders.",
+      steps: [
+        "Create thematic maps showing results spatially",
+        "Generate animations of flood progression",
+        "Use the long section tool for pipe capacity views",
+        "Export results to GIS for integration with other data",
+        "Create dashboard views for key performance indicators",
+        "Generate comparison plots for scenario analysis",
+        "Prepare presentation-quality graphics for reports"
+      ],
+      tips: [
+        "ICM's animations are powerful for public meetings",
+        "Maps communicate spatial patterns better than tables",
+        "Always show the uncertainty range, not just central estimates"
+      ]
+    },
+    comparison: [
+      { feature: "Visualization", swmm5: "Basic maps and graphs", icm: "Advanced 3D, animations" },
+      { feature: "GIS Export", swmm5: "Shapefiles with post-processing", icm: "Native geodatabase export" },
+      { feature: "Animations", swmm5: "Limited capability", icm: "Full flood progression animations" },
+      { feature: "Long Sections", swmm5: "Profile plots available", icm: "Interactive long sections" },
+      { feature: "Dashboards", swmm5: "External tools needed", icm: "Built-in results analysis" },
+      { feature: "Report Generation", swmm5: "Manual report creation", icm: "Template-based reporting" }
+    ]
   },
   15: {
     swmm5: {
-      title: "Real-Time Control Logic in SWMM5",
-      description: "Implement and test control rules that could incorporate fuzzy logic concepts.",
+      title: "Scenario Analysis in SWMM5",
+      description: "Compare alternatives systematically to support decision-making.",
       steps: [
-        "Identify control points (orifices, weirs, pumps) in your model",
-        "Define control rules using SWMM5's CONTROL section",
-        "Start with simple IF-THEN rules based on water levels",
-        "Test control behavior under various storm scenarios",
-        "Consider how 'fuzzy' transitions could smooth control",
-        "Implement membership function concepts via piecewise rules",
-        "Evaluate control performance and energy/cost metrics"
+        "Define baseline condition and document assumptions",
+        "Create alternative scenarios (future conditions, alternatives)",
+        "Modify only the relevant parameters for each scenario",
+        "Run all scenarios using consistent methods",
+        "Compile comparative results in tables and charts",
+        "Identify the scenarios that bracket the decision",
+        "Present trade-offs clearly for decision-makers"
       ],
       tips: [
-        "SWMM5 controls are crisp (IF-THEN), but can approximate fuzzy behavior",
-        "Smooth transitions prevent hydraulic shocks from sudden valve changes",
-        "Test controls under extreme conditions, not just design events"
+        "Change one thing at a time to understand impacts",
+        "Scenarios should span the realistic range of futures",
+        "The goal is decision support, not prediction precision"
       ]
     },
     icm: {
-      title: "Advanced RTC with Fuzzy Concepts in ICM",
-      description: "Use ICM's Real-Time Control to implement sophisticated control strategies.",
+      title: "Scenario Management in ICM",
+      description: "Use ICM's scenario tools for efficient alternative analysis.",
       steps: [
-        "Set up RTC elements (regulators, pumps) in your model",
-        "Define control logic using ICM's RTC module",
-        "Implement state-dependent rules that can emulate fuzzy transitions",
-        "Use lookup tables or piecewise functions for smooth control",
-        "Create 'linguistic' rule sets (e.g., IF level IS HIGH THEN...)",
-        "Test control performance under Monte Carlo storm inputs",
-        "Optimize control parameters for multiple objectives"
+        "Create a master scenario representing baseline",
+        "Use scenario inheritance for efficient alternative creation",
+        "Modify parameters using scenario-specific overrides",
+        "Set up batch runs for multiple scenarios",
+        "Use Results Analysis for scenario comparison",
+        "Generate difference maps (Scenario A vs. B)",
+        "Document scenario assumptions and rationale"
       ],
       tips: [
-        "ICM's RTC is very flexible—many fuzzy concepts can be implemented",
-        "Document control logic clearly for operators and future modelers",
-        "Fuzzy control reduces sensitivity to sensor uncertainty"
+        "Scenario inheritance prevents duplication and errors",
+        "Difference maps quickly show where scenarios diverge",
+        "Scenario descriptions are crucial for future users"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Scenario Setup", swmm5: "Copy and modify INP files", icm: "Scenario inheritance system" },
+      { feature: "Parameter Overrides", swmm5: "Edit each file separately", icm: "Override tables by scenario" },
+      { feature: "Batch Processing", swmm5: "Command-line scripting", icm: "Built-in batch runner" },
+      { feature: "Comparison", swmm5: "External post-processing", icm: "Built-in comparison tools" },
+      { feature: "Difference Maps", swmm5: "GIS post-processing", icm: "Direct scenario differencing" },
+      { feature: "Traceability", swmm5: "Manual documentation", icm: "Scenario tree visualization" }
+    ]
   },
   16: {
     swmm5: {
-      title: "Real-Time Forecast Uncertainty in SWMM5",
-      description: "Generate and communicate ensemble forecasts for real-time decision support.",
+      title: "Real-Time Control Modeling in SWMM5",
+      description: "Implement control rules and evaluate RTC strategies.",
       steps: [
-        "Set up model for real-time or near-real-time simulation",
-        "Define uncertain inputs (rainfall forecast, initial conditions)",
-        "Generate ensemble runs with perturbed inputs",
-        "Run batch simulations for each ensemble member",
-        "Compile results into probabilistic forecasts (percentiles)",
-        "Create displays showing forecast range, not just single line",
-        "Update forecasts as new observations become available"
+        "Identify controllable elements (pumps, gates, diversions)",
+        "Define control logic using SWMM5's control rules",
+        "Specify control variables (depth, flow, time)",
+        "Test rules with simple scenarios first",
+        "Run continuous simulations to evaluate performance",
+        "Compare controlled vs. uncontrolled operation",
+        "Document control logic and operational constraints"
       ],
       tips: [
-        "Ensemble forecasts are more honest than deterministic predictions",
-        "Decision-makers need to understand probability, not just 'the answer'",
-        "Update models frequently during events for best accuracy"
+        "Simple rules often outperform complex ones in practice",
+        "Test control logic failure modes, not just optimal operation",
+        "Coordinate with operations staff on realistic constraints"
       ]
     },
     icm: {
-      title: "Probabilistic Forecasting in ICM",
-      description: "Implement ensemble-based forecasting for operational decision support.",
+      title: "Advanced RTC Modeling in ICM",
+      description: "Leverage ICM's powerful RTC capabilities for smart infrastructure modeling.",
       steps: [
-        "Connect ICM to real-time data feeds (SCADA, rainfall)",
-        "Set up ensemble rainfall forecasts from NWS or private sources",
-        "Run multiple model instances with forecast variants",
-        "Use ICM Live or batch processing for efficient ensemble runs",
-        "Generate exceedance probability displays for key locations",
-        "Create automated alerts based on probability thresholds",
-        "Document forecast skill and update methods over time"
+        "Set up regulator objects (orifices, weirs, pumps)",
+        "Define RTC rules using the RTC editor",
+        "Use variables (levels, flows) as control triggers",
+        "Implement complex logic with IF-THEN-ELSE structures",
+        "Test with historical rainfall for realistic evaluation",
+        "Analyze control performance using results analysis",
+        "Export control time series for operator review"
       ],
       tips: [
-        "ICM Live is designed for real-time ensemble forecasting",
-        "Probability of exceedance is often more useful than 'expected' value",
-        "Calibrate your uncertainty—forecasts should be reliable and sharp"
+        "ICM's RTC can implement MPC and optimization-based control",
+        "Test control rules under failure scenarios",
+        "Validate RTC behavior with operations records if available"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Control Rules", swmm5: "IF-THEN control statements", icm: "Full scripting language" },
+      { feature: "Variables", swmm5: "Depth, flow, time", icm: "Any model variable" },
+      { feature: "Logic Complexity", swmm5: "Basic conditional logic", icm: "Advanced logic, loops, arrays" },
+      { feature: "Optimization", swmm5: "Not built-in", icm: "MPC optimization possible" },
+      { feature: "Debugging", swmm5: "Trial and error", icm: "RTC trace and debugging" },
+      { feature: "Export", swmm5: "Manual result extraction", icm: "Control time series export" }
+    ]
   },
   17: {
     swmm5: {
-      title: "Responsible Modeling Workflow in SWMM5",
-      description: "Integrate all principles into a comprehensive, defensible modeling practice.",
+      title: "Model Maintenance and Updates in SWMM5",
+      description: "Establish practices for keeping models current and useful over time.",
       steps: [
-        "Document project purpose and success criteria before modeling",
-        "Record all data sources, quality assessments, and assumptions",
-        "Choose appropriate complexity based on objectives and data",
-        "Calibrate with observed data; validate with independent data",
-        "Quantify and communicate uncertainty honestly",
-        "Archive models, inputs, and outputs for reproducibility",
-        "Present results in decision-relevant formats with limitations stated"
+        "Create a model update protocol document",
+        "Establish version numbering conventions",
+        "Document each update with date, author, and changes",
+        "Periodically re-validate against new observed data",
+        "Update parameters as new information becomes available",
+        "Archive old versions before making changes",
+        "Train successors on model structure and assumptions"
       ],
       tips: [
-        "Responsible modeling is a philosophy, not just a checklist",
-        "Your model report should enable someone else to reproduce your work",
-        "The goal is informed decisions, not impressive numbers"
+        "Models are living tools—plan for their evolution",
+        "Clear documentation enables future updates",
+        "The next modeler may be you, years from now"
       ]
     },
     icm: {
-      title: "Best Practices Integration in ICM",
-      description: "Apply responsible modeling principles throughout the ICM project lifecycle.",
+      title: "Model Lifecycle Management in ICM",
+      description: "Use ICM's data management features for long-term model sustainability.",
       steps: [
-        "Establish project documentation standards in ICM's Project panel",
-        "Use Model Groups and scenarios to organize alternatives",
-        "Document data sources and quality in object notes and custom fields",
-        "Maintain calibration/validation records in the Project",
-        "Generate uncertainty bounds on key predictions",
-        "Use version control and change tracking",
-        "Create clear, honest reports using Results Analysis exports"
+        "Use model groups to version major updates",
+        "Leverage workspaces for team collaboration",
+        "Set up automatic backup schedules",
+        "Use data flags to track data age and confidence",
+        "Implement database maintenance routines",
+        "Document model in embedded notes, not just external docs",
+        "Create training materials for model handover"
       ],
       tips: [
-        "ICM's built-in documentation features are powerful—use them",
-        "Future modelers (including future you) will thank you for good notes",
-        "Ethical modeling means honest communication of limitations"
+        "ICM's database structure supports long-term management",
+        "Model groups create clear version history",
+        "Embedded documentation survives better than external files"
       ]
-    }
+    },
+    comparison: [
+      { feature: "Version Control", swmm5: "File naming, manual", icm: "Model groups, scenarios" },
+      { feature: "Collaboration", swmm5: "File sharing", icm: "Multi-user workgroups" },
+      { feature: "Backup", swmm5: "Manual or IT systems", icm: "Built-in backup tools" },
+      { feature: "Data Management", swmm5: "External databases/GIS", icm: "Integrated database" },
+      { feature: "Documentation", swmm5: "External documents", icm: "Embedded notes and metadata" },
+      { feature: "Training", swmm5: "Free software, docs online", icm: "Vendor training available" }
+    ]
   }
 };
 
@@ -697,12 +841,16 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
         </DialogHeader>
         
         <Tabs defaultValue="swmm5" className="mt-4">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="swmm5" className="text-sm font-medium">
               🔵 EPA SWMM5
             </TabsTrigger>
             <TabsTrigger value="icm" className="text-sm font-medium">
               🟢 ICM InfoWorks
+            </TabsTrigger>
+            <TabsTrigger value="compare" className="text-sm font-medium">
+              <Scale className="w-4 h-4 mr-1" />
+              Compare
             </TabsTrigger>
           </TabsList>
           
@@ -777,6 +925,38 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
                   </ul>
                 </div>
               </div>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="compare" className="mt-4">
+            <Card className="p-6">
+              <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <Scale className="w-5 h-5 text-primary" />
+                Feature Comparison: SWMM5 vs ICM InfoWorks
+              </h3>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="font-bold">Feature</TableHead>
+                      <TableHead className="font-bold text-blue-600">🔵 SWMM5</TableHead>
+                      <TableHead className="font-bold text-green-600">🟢 ICM InfoWorks</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {examples.comparison.map((item, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="font-medium">{item.feature}</TableCell>
+                        <TableCell className="text-sm text-muted-foreground">{item.swmm5}</TableCell>
+                        <TableCell className="text-sm text-muted-foreground">{item.icm}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+              <p className="text-xs text-muted-foreground mt-4 text-center">
+                Both tools are excellent—choose based on project needs, budget, and team expertise.
+              </p>
             </Card>
           </TabsContent>
         </Tabs>
