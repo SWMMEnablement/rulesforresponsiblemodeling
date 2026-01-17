@@ -9,6 +9,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { Footer } from "@/components/Footer";
 import { Navigation } from "@/components/Navigation";
 import { ReadingPathways } from "@/components/ReadingPathways";
+import { PersonalIntroduction } from "@/components/PersonalIntroduction";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useNotes } from "@/hooks/useNotes";
 import { Card } from "@/components/ui/card";
@@ -23,6 +24,8 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <Hero />
+      
+      <PersonalIntroduction />
       
       {/* Search Section */}
       <section className="py-12 px-6 bg-gradient-to-br from-primary/5 to-secondary/5">
