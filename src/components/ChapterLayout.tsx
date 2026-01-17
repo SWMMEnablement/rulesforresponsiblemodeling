@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { ArrowLeft, ArrowRight, Home } from "lucide-react";
+import { ArrowLeft, ArrowRight, Home, ExternalLink, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
@@ -8,6 +8,7 @@ import { ChapterNotes } from "./ChapterNotes";
 import { SidebarProvider, SidebarTrigger } from "./ui/sidebar";
 import { TableOfContents } from "./TableOfContents";
 import { useReadingProgress } from "@/hooks/useReadingProgress";
+import { Card } from "./ui/card";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -118,6 +119,33 @@ export const ChapterLayout = ({ chapterNumber, title, children }: ChapterLayoutP
               </section>
             </div>
           </main>
+
+          {/* Source Reference */}
+          <div className="border-t border-border bg-gradient-to-br from-primary/5 to-secondary/5">
+            <div className="max-w-6xl mx-auto px-6 py-6">
+              <Card className="p-4 bg-background/80">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div className="flex items-center gap-3">
+                    <FileText className="w-5 h-5 text-primary" />
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Original Source</p>
+                      <p className="text-xs text-muted-foreground">Rules for Responsible Modeling by Dr. William James (CHI)</p>
+                    </div>
+                  </div>
+                  <a 
+                    href="https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <ExternalLink className="w-4 h-4" />
+                      Access CHI Publication
+                    </Button>
+                  </a>
+                </div>
+              </Card>
+            </div>
+          </div>
 
           {/* Navigation */}
           <div className="border-t border-border bg-muted/30 mt-auto">

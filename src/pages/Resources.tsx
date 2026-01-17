@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { ArrowLeft, ExternalLink, BookOpen, FileText, Video, Code, Users, GraduationCap } from "lucide-react";
+import { ArrowLeft, ExternalLink, BookOpen, FileText, Code, Users, GraduationCap, Database, GitBranch, Terminal } from "lucide-react";
 import { AbbreviationsSearch } from "@/components/AbbreviationsSearch";
 
 const Resources = () => {
@@ -76,12 +76,17 @@ const Resources = () => {
 
             <Card className="p-6 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-bold text-primary mb-3 flex items-center gap-2">
-                <Code className="w-5 h-5" />
+                <GitBranch className="w-5 h-5" />
                 Source Code Repository
               </h3>
               <p className="text-muted-foreground mb-4">
-                Open-source SWMM code on GitHub for developers and advanced users.
+                Open-source SWMM code on GitHub. Explore the computational engine, contribute improvements, or integrate into custom applications.
               </p>
+              <div className="space-y-2 mb-4">
+                <p className="text-sm text-muted-foreground">• Written in C for performance and portability</p>
+                <p className="text-sm text-muted-foreground">• Computational engine for hydrology and hydraulics</p>
+                <p className="text-sm text-muted-foreground">• Well-documented API for extensions</p>
+              </div>
               <a 
                 href="https://github.com/USEPA/Stormwater-Management-Model" 
                 target="_blank" 
@@ -98,7 +103,7 @@ const Resources = () => {
                 SWMM User Community
               </h3>
               <p className="text-muted-foreground mb-4">
-                Active community forum for questions, discussions, and shared experiences.
+                Active community forum with thousands of users sharing experiences, solutions, and best practices.
               </p>
               <a 
                 href="https://www.openswmm.org/" 
@@ -109,6 +114,70 @@ const Resources = () => {
                 Join Community <ExternalLink className="w-4 h-4" />
               </a>
             </Card>
+          </div>
+        </section>
+
+        {/* SWMM Source Code Details */}
+        <section className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-lg p-8">
+          <div className="flex items-center gap-3 mb-6">
+            <Terminal className="w-8 h-8 text-primary" />
+            <h2 className="text-2xl font-bold text-foreground">SWMM Source Code Architecture</h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="p-6">
+              <h3 className="text-lg font-bold text-primary mb-3">Core Components</h3>
+              <ul className="space-y-2 text-muted-foreground text-sm">
+                <li><strong>swmm5.c/h:</strong> Main entry point and API functions</li>
+                <li><strong>runoff.c:</strong> Surface runoff generation algorithms</li>
+                <li><strong>routing.c:</strong> Flow routing through conduit network</li>
+                <li><strong>dynwave.c:</strong> Dynamic wave equation solver</li>
+                <li><strong>massbal.c:</strong> Mass balance and continuity checks</li>
+                <li><strong>project.c:</strong> Input file parsing and data structures</li>
+              </ul>
+            </Card>
+            <Card className="p-6">
+              <h3 className="text-lg font-bold text-primary mb-3">Key Algorithms</h3>
+              <ul className="space-y-2 text-muted-foreground text-sm">
+                <li><strong>Green-Ampt:</strong> Infiltration modeling (infil.c)</li>
+                <li><strong>NRCS Curve Number:</strong> Runoff estimation (runoff.c)</li>
+                <li><strong>Saint-Venant:</strong> Unsteady flow equations (dynwave.c)</li>
+                <li><strong>Muskingum-Cunge:</strong> Kinematic wave routing (kinwave.c)</li>
+                <li><strong>Horton:</strong> Alternative infiltration (infil.c)</li>
+                <li><strong>Water Quality:</strong> Pollutant buildup/washoff (quality.c)</li>
+              </ul>
+            </Card>
+          </div>
+          <div className="mt-6 grid md:grid-cols-3 gap-4">
+            <a 
+              href="https://github.com/USEPA/Stormwater-Management-Model/tree/develop/src" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" className="w-full gap-2">
+                <Code className="w-4 h-4" />
+                Browse Source
+              </Button>
+            </a>
+            <a 
+              href="https://github.com/USEPA/Stormwater-Management-Model/wiki" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" className="w-full gap-2">
+                <BookOpen className="w-4 h-4" />
+                Developer Wiki
+              </Button>
+            </a>
+            <a 
+              href="https://github.com/USEPA/Stormwater-Management-Model/issues" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" className="w-full gap-2">
+                <GitBranch className="w-4 h-4" />
+                Report Issues
+              </Button>
+            </a>
           </div>
         </section>
 
@@ -157,7 +226,7 @@ const Resources = () => {
 
             <Card className="p-6 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-bold text-primary mb-3 flex items-center gap-2">
-                <Video className="w-5 h-5" />
+                <GraduationCap className="w-5 h-5" />
                 PCSWMM Training
               </h3>
               <p className="text-muted-foreground mb-4">
@@ -277,35 +346,6 @@ const Resources = () => {
                 <li>• EPA Best Management Practices Guidelines</li>
                 <li>• Local Municipal Design Standards</li>
                 <li>• International Stormwater BMP Database</li>
-              </ul>
-            </Card>
-          </div>
-        </section>
-
-        {/* Video Tutorials & Online Learning */}
-        <section>
-          <div className="flex items-center gap-3 mb-6">
-            <Video className="w-8 h-8 text-primary" />
-            <h2 className="text-3xl font-bold text-foreground">Video Tutorials & Online Learning</h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="p-6 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-bold text-primary mb-3">YouTube Channels</h3>
-              <ul className="space-y-2 text-muted-foreground text-sm">
-                <li>• CHI Water Official Channel - PCSWMM tutorials</li>
-                <li>• EPA Water Research - SWMM webinars</li>
-                <li>• University lecture series on hydrology</li>
-                <li>• Professional training organizations</li>
-              </ul>
-            </Card>
-
-            <Card className="p-6 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-bold text-primary mb-3">Online Courses</h3>
-              <ul className="space-y-2 text-muted-foreground text-sm">
-                <li>• Coursera - Hydrology & Water Resources</li>
-                <li>• edX - Environmental Engineering courses</li>
-                <li>• LinkedIn Learning - GIS for Water Management</li>
-                <li>• University extension programs</li>
               </ul>
             </Card>
           </div>

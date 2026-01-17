@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, BookOpen, Library, GraduationCap, Menu, Moon, Sun, Keyboard } from "lucide-react";
+import { Home, BookOpen, Library, GraduationCap, Menu, Moon, Sun, Keyboard, Quote } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
@@ -21,6 +21,7 @@ export const Navigation = () => {
   const navLinks = [
     { to: "/", icon: Home, label: "Home" },
     { to: "/study-guide", icon: GraduationCap, label: "Study Guide" },
+    { to: "/key-quotes", icon: Quote, label: "Key Quotes" },
     { to: "/glossary", icon: Library, label: "Glossary" },
     { to: "/resources", icon: BookOpen, label: "Resources" },
   ];
