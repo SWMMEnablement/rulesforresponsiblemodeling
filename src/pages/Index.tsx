@@ -5,7 +5,7 @@ import { Chapters } from "@/components/Chapters";
 import { ConceptDiagram } from "@/components/ConceptDiagram";
 import { KeyConcepts } from "@/components/KeyConcepts";
 import { Timeline } from "@/components/Timeline";
-import { SearchBar } from "@/components/SearchBar";
+import { GlobalSearch } from "@/components/GlobalSearch";
 import { Footer } from "@/components/Footer";
 import { Navigation } from "@/components/Navigation";
 import { ReadingPathways } from "@/components/ReadingPathways";
@@ -43,7 +43,7 @@ const Index = () => {
               </Link>
             )}
           </div>
-          <SearchBar />
+          <GlobalSearch />
         </div>
       </section>
       
