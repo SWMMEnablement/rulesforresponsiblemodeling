@@ -12,12 +12,13 @@ import { ReadingPathways } from "@/components/ReadingPathways";
 import { PersonalIntroduction } from "@/components/PersonalIntroduction";
 import { FrameworkDiagnostic } from "@/components/FrameworkDiagnostic";
 import { ChecklistGenerator } from "@/components/ChecklistGenerator";
+import { CaseVignettes } from "@/components/CaseVignettes";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useNotes } from "@/hooks/useNotes";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Bookmark, StickyNote, Compass } from "lucide-react";
+import { Bookmark, StickyNote, Compass, MessageSquareQuote } from "lucide-react";
 
 const Index = () => {
   const { bookmarks } = useBookmarks();
@@ -102,9 +103,23 @@ const Index = () => {
       <KeyQuotes />
       
       {/* Framework Diagnostic Tool */}
-      <section className="py-16 px-6 bg-gradient-to-br from-primary/5 to-accent/5">
+      <section id="diagnostic-tool" className="py-16 px-6 bg-gradient-to-br from-primary/5 to-accent/5">
         <div className="max-w-4xl mx-auto">
           <FrameworkDiagnostic />
+        </div>
+      </section>
+      
+      {/* Case Vignettes - Rules in Action */}
+      <section className="py-16 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center gap-3 mb-6">
+            <MessageSquareQuote className="w-8 h-8 text-primary" />
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Rules in Action</h2>
+              <p className="text-sm text-muted-foreground">Real stories from the modeling community</p>
+            </div>
+          </div>
+          <CaseVignettes compact />
         </div>
       </section>
       
