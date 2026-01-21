@@ -145,6 +145,71 @@ export const ModernAnnotation = ({ annotations }: ModernAnnotationProps) => {
 
 // Pre-defined annotations for chapters
 export const chapterAnnotations: Record<number, Annotation[]> = {
+  1: [
+    {
+      id: "model-purpose-2025",
+      originalConcept: "Model Purpose and Decision Support",
+      modernPerspective: "In 2025, this principle is more critical than ever. With AI/ML models becoming accessible, the temptation is to apply complex methods without clear decision objectives. Start every project with: 'What decision will this model inform?'",
+      softwareGuidance: {
+        swmm: "SWMM's flexibility allows many modeling approaches. Document your purpose in the model notes (Options > Title/Notes) and let it drive subcatchment resolution and routing choices.",
+        icm: "ICM's project templates can lock in complexity. Before accepting defaults, verify they match your actual objectives—CSO vs. flooding vs. water quality have different requirements."
+      },
+      practicalTip: "Create a one-paragraph 'Decision Statement' at project start. If you can't articulate what decisions the model will inform, you're not ready to build it."
+    },
+    {
+      id: "rules-overview-modern",
+      originalConcept: "Rules for Responsible Modeling",
+      modernPerspective: "Dr. James's rules remain the gold standard in 2025. Modern cloud computing and automation make following these rules easier—not optional. Automated validation, version control, and documentation tools remove excuses for poor practice.",
+      softwareGuidance: {
+        general: "Use Git for model version control. Create README files explaining model purpose, limitations, and validation status. Treat model files like code."
+      },
+      practicalTip: "Post Dr. James's rules near your workstation. Before delivering any model, check each rule against your work."
+    }
+  ],
+  2: [
+    {
+      id: "discretization-2025",
+      originalConcept: "Discretization Trade-offs",
+      modernPerspective: "With 1m LiDAR and powerful computers, over-discretization is the modern trap. High resolution doesn't equal high accuracy when calibration data is limited. Dr. James's guidance on matching discretization to data remains essential.",
+      softwareGuidance: {
+        swmm: "SWMM5's performance scales with subcatchment count. Start with larger subcatchments (2-5 ha for urban) and refine only where data supports it.",
+        icm: "ICM's automatic mesh generation can create excessive detail. Set minimum element sizes based on calibration data density, not just topography."
+      },
+      practicalTip: "Before increasing spatial resolution, ask: 'Do I have calibration data at this scale?' If not, additional detail adds uncertainty, not accuracy."
+    },
+    {
+      id: "timestep-modern",
+      originalConcept: "Temporal Discretization",
+      modernPerspective: "Modern continuous rainfall data (1-5 minute) enables finer timesteps, but CFL constraints and computational efficiency still matter for long-term simulations. Variable timesteps are now standard practice.",
+      softwareGuidance: {
+        swmm: "Use SWMM's variable timestep routing. Set wet-weather steps to 15-30 seconds, dry-weather to 5-15 minutes for efficiency.",
+        icm: "ICM handles variable timesteps automatically. Monitor the 'minimum timestep used' in run logs to verify stability."
+      },
+      practicalTip: "For 30+ year simulations, balance accuracy against run time. A 20% faster model enables more sensitivity runs."
+    }
+  ],
+  3: [
+    {
+      id: "data-reliability-2025",
+      originalConcept: "Data Reliability Classification",
+      modernPerspective: "With cloud-based monitoring and real-time SCADA, data quantity has exploded but quality assessment is more important than ever. Automate data quality checks as part of your workflow.",
+      softwareGuidance: {
+        swmm: "Use Python preprocessing scripts to flag data anomalies before import. Check for flat-line periods, negative values, and unrealistic jumps.",
+        icm: "ICM's data import wizard includes some QA checks. Supplement with visual review of hydrographs before calibration."
+      },
+      practicalTip: "Create a data quality scorecard: rate each source 1-5 for completeness, accuracy, temporal resolution, and spatial relevance."
+    },
+    {
+      id: "gis-data-modern",
+      originalConcept: "GIS Data Integration",
+      modernPerspective: "LiDAR and high-resolution DEMs are now standard, but their apparent precision can be misleading. Ground-truth critical elevations—inverts, overflows, structures—with survey data.",
+      softwareGuidance: {
+        swmm: "When using GIS-derived subcatchments, verify outlets manually. Auto-delineation often misses surface connectivity.",
+        icm: "ICM's ground model import can use raw LiDAR, but review depression handling—real depressions vs. artifacts."
+      },
+      practicalTip: "For critical structures (detention ponds, outfalls), spend the money on survey. LiDAR is great for terrain but not for below-grade infrastructure."
+    }
+  ],
   4: [
     {
       id: "optimal-complexity-2025",
@@ -166,6 +231,85 @@ export const chapterAnnotations: Record<number, Annotation[]> = {
         icm: "ICM's automatic subcatchment generation can create unnecessary complexity. Review and simplify before calibration."
       },
       practicalTip: "For each parameter, ask: 'What data would I need to calibrate this?' If you don't have that data, consider fixing it to a literature value."
+    }
+  ],
+  5: [
+    {
+      id: "continuous-2025",
+      originalConcept: "Continuous Simulation Benefits",
+      modernPerspective: "Cloud computing makes 100-year continuous simulations routine. There's no excuse for event-based shortcuts when continuous simulation is feasible and provides frequency-concentration data that event models cannot.",
+      softwareGuidance: {
+        swmm: "SWMM5 handles 30+ year continuous runs efficiently. Use climate file (.cli) format for long-term rainfall. Consider hourly timesteps for computational efficiency.",
+        icm: "ICM's long-term simulation modes are optimized for multi-decade runs. Use the 'Fast' engine mode for initial screening."
+      },
+      practicalTip: "For sustainability assessments, always prefer continuous over event-based. The additional insight into water balance and antecedent conditions is invaluable."
+    },
+    {
+      id: "calibration-continuous-modern",
+      originalConcept: "Calibration for Continuous Models",
+      modernPerspective: "Dr. James's insight remains valid: short, accurate calibration periods suffice. Modern practice adds: calibrate to extremes (low flows and peaks) not just overall fit, and validate across seasons.",
+      softwareGuidance: {
+        swmm: "Split your calibration period by season. Verify the model performs well for both summer low flows and winter baseflow.",
+        icm: "Use ICM's calibration wizard but manually check low-flow and high-flow performance separately."
+      },
+      practicalTip: "A model that fits annual totals but misses seasonal patterns may fail for ecological or water supply applications."
+    }
+  ],
+  6: [
+    {
+      id: "rainfall-uncertainty-2025",
+      originalConcept: "Rainfall Input Uncertainty",
+      modernPerspective: "Radar-rainfall products (MRMS, gauge-adjusted radar) are now standard, but temporal disaggregation is still needed for sub-hourly modeling. Ensemble rainfall products enable probabilistic approaches.",
+      softwareGuidance: {
+        swmm: "SWMM accepts rain gauge or interface files. For ensemble runs, script multiple .dat files with pyswmm and process as Monte Carlo.",
+        icm: "ICM's rainfall generator can create stochastic series. Combine with sensitivity analysis for comprehensive uncertainty assessment."
+      },
+      practicalTip: "Don't use a sophisticated routing model with a single design storm. The routing precision is wasted if rainfall uncertainty dominates."
+    },
+    {
+      id: "disaggregation-modern",
+      originalConcept: "Temporal Disaggregation",
+      modernPerspective: "Modern rainfall databases often include sub-hourly data, reducing disaggregation needs. However, for long historical records or climate scenarios, disaggregation remains essential.",
+      softwareGuidance: {
+        general: "Tools like HYETOS, disaggregation R packages, or custom Python scripts can generate sub-hourly rainfall preserving daily statistics."
+      },
+      practicalTip: "Always validate disaggregated rainfall against available sub-hourly records before using for design."
+    }
+  ],
+  7: [
+    {
+      id: "storm-motion-2025",
+      originalConcept: "Storm Cell Kinematics",
+      modernPerspective: "Radar tracking and NWP models now provide real-time storm motion estimates. For design, this means exploring critical storm paths—not assuming stationary rainfall.",
+      softwareGuidance: {
+        swmm: "Script multiple rain gauge files with different spatial patterns representing storm motion. Compare peak responses.",
+        icm: "ICM's spatial rainfall can accept moving storm patterns. Create scenarios with upstream-to-downstream and reverse motion."
+      },
+      practicalTip: "For elongated catchments, always test critical storm velocity—where storm speed matches time of concentration."
+    }
+  ],
+  8: [
+    {
+      id: "dss-2025",
+      originalConcept: "Decision Support Systems",
+      modernPerspective: "Modern DSS extend beyond PCSWMM to include cloud platforms, API integrations, and real-time dashboards. The principle remains: tools should support, not replace, professional judgment.",
+      softwareGuidance: {
+        swmm: "PCSWMM, InfoSWMM, and open-source tools like pyswmm provide DSS capabilities. Choose based on team skills and project needs.",
+        icm: "ICM's scenario manager and reporting tools provide DSS functionality. Integrate with GIS for stakeholder communication."
+      },
+      practicalTip: "Train staff on DSS tools so they understand what's happening 'under the hood'—automation without understanding leads to errors."
+    }
+  ],
+  9: [
+    {
+      id: "objective-functions-2025",
+      originalConcept: "Objective Function Selection",
+      modernPerspective: "KGE (Kling-Gupta Efficiency) has emerged as a preferred metric because it decomposes into correlation, bias, and variability components. But application-specific metrics still matter most.",
+      softwareGuidance: {
+        swmm: "Python libraries (hydroeval, spotpy) calculate multiple metrics automatically. Use them for comprehensive assessment.",
+        icm: "ICM reports NSE and RMSE. Export time series to Python/R for KGE and other advanced metrics."
+      },
+      practicalTip: "Always report multiple metrics. If they disagree, that disagreement is information about model behavior."
     }
   ],
   10: [
@@ -213,6 +357,64 @@ export const chapterAnnotations: Record<number, Annotation[]> = {
       practicalTip: "Plot observed vs. simulated on 1:1 line with validation events clearly distinguished from calibration events."
     }
   ],
+  12: [
+    {
+      id: "state-space-2025",
+      originalConcept: "State Variable Representation",
+      modernPerspective: "With real-time control systems becoming common in water infrastructure, state space methods are increasingly practical. Model Predictive Control (MPC) uses these concepts for optimal gate/pump operations.",
+      softwareGuidance: {
+        icm: "ICM Live integrates state-space concepts for real-time control optimization. The RTC rules can be thought of as state-dependent actions.",
+        general: "Python control libraries (python-control) can interface with water models for advanced control design."
+      },
+      practicalTip: "Even if you don't use formal state-space methods, thinking in terms of 'what variables define system state' improves control system design."
+    }
+  ],
+  13: [
+    {
+      id: "performance-2025",
+      originalConcept: "Performance Evaluation Survey",
+      modernPerspective: "The proliferation of metrics can overwhelm. Focus on a small set aligned with your application, but always include at least one error metric, one efficiency metric, and one bias metric.",
+      softwareGuidance: {
+        general: "Python's hydroeval package calculates 18+ metrics automatically. Use it as a starting point, then select the most relevant."
+      },
+      practicalTip: "Create a standard performance report template for your organization. Consistency across projects enables meaningful comparisons."
+    }
+  ],
+  14: [
+    {
+      id: "optimization-2025",
+      originalConcept: "Genetic Algorithm Optimization",
+      modernPerspective: "Modern alternatives include Differential Evolution, CMA-ES, and Bayesian optimization. GAs remain robust for complex problems, but newer methods may converge faster.",
+      softwareGuidance: {
+        swmm: "spotpy provides multiple optimization algorithms for SWMM. Try ROPE (RObust Parameter Estimation) for multi-objective problems.",
+        icm: "ICM's optimization uses efficient algorithms. For complex problems, export to Python and use deap or pymoo libraries."
+      },
+      practicalTip: "Run optimization multiple times with different random seeds. If results vary significantly, you may have equifinality issues."
+    }
+  ],
+  15: [
+    {
+      id: "fuzzy-2025",
+      originalConcept: "Fuzzy Logic Applications",
+      modernPerspective: "Fuzzy logic remains valuable for control systems and expert knowledge integration. Neural-fuzzy hybrids (ANFIS) combine fuzzy reasoning with learning capabilities.",
+      softwareGuidance: {
+        general: "Python's scikit-fuzzy provides fuzzy logic tools. MATLAB's Fuzzy Logic Toolbox offers more comprehensive features."
+      },
+      practicalTip: "Use fuzzy logic when you have expert operators who can articulate rules linguistically but struggle to quantify exact thresholds."
+    }
+  ],
+  16: [
+    {
+      id: "realtime-uncertainty-2025",
+      originalConcept: "Real-Time Uncertainty Display",
+      modernPerspective: "Ensemble forecasting is now operational practice for major flood systems. The challenge has shifted from 'can we generate ensembles' to 'how do we communicate them effectively to decision-makers'.",
+      softwareGuidance: {
+        icm: "ICM Live provides ensemble generation and display capabilities. Configure confidence bands based on local operator preferences.",
+        general: "Dashboard tools (Grafana, custom web apps) can display probabilistic forecasts intuitively."
+      },
+      practicalTip: "Train operators to interpret probabilistic forecasts. A 70% chance of flooding is useful information, but only if the operator understands what to do with it."
+    }
+  ],
   17: [
     {
       id: "ethics-2025",
@@ -232,28 +434,6 @@ export const chapterAnnotations: Record<number, Annotation[]> = {
         general: "Use phrases like 'the model suggests' and 'based on available data' rather than 'the model shows' or 'the flooding will be.'"
       },
       practicalTip: "Create a verbal disclaimer you use consistently: 'This model is a tool for decision support, not a perfect prediction of the future.'"
-    }
-  ],
-  3: [
-    {
-      id: "data-reliability-2025",
-      originalConcept: "Data Reliability Classification",
-      modernPerspective: "With cloud-based monitoring and real-time SCADA, data quantity has exploded but quality assessment is more important than ever. Automate data quality checks as part of your workflow.",
-      softwareGuidance: {
-        swmm: "Use Python preprocessing scripts to flag data anomalies before import. Check for flat-line periods, negative values, and unrealistic jumps.",
-        icm: "ICM's data import wizard includes some QA checks. Supplement with visual review of hydrographs before calibration."
-      },
-      practicalTip: "Create a data quality scorecard: rate each source 1-5 for completeness, accuracy, temporal resolution, and spatial relevance."
-    },
-    {
-      id: "gis-data-modern",
-      originalConcept: "GIS Data Integration",
-      modernPerspective: "LiDAR and high-resolution DEMs are now standard, but their apparent precision can be misleading. Ground-truth critical elevations—inverts, overflows, structures—with survey data.",
-      softwareGuidance: {
-        swmm: "When using GIS-derived subcatchments, verify outlets manually. Auto-delineation often misses surface connectivity.",
-        icm: "ICM's ground model import can use raw LiDAR, but review depression handling—real depressions vs. artifacts."
-      },
-      practicalTip: "For critical structures (detention ponds, outfalls), spend the money on survey. LiDAR is great for terrain but not for below-grade infrastructure."
     }
   ]
 };
