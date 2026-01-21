@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
 import { BookmarkButton } from "./BookmarkButton";
 import { ChapterNotes } from "./ChapterNotes";
+import { RelatedBlogPosts } from "./RelatedBlogPosts";
 import { SidebarProvider, SidebarTrigger } from "./ui/sidebar";
 import { TableOfContents } from "./TableOfContents";
 import { useReadingProgress } from "@/hooks/useReadingProgress";
@@ -112,6 +113,11 @@ export const ChapterLayout = ({ chapterNumber, title, children }: ChapterLayoutP
           <main className="max-w-6xl mx-auto px-6 py-12 w-full">
             <div className="space-y-12">
               {children}
+              
+              {/* Related Blog Posts Section */}
+              <section>
+                <RelatedBlogPosts chapterNumber={chapterNumber} />
+              </section>
               
               {/* Personal Notes Section */}
               <section>
