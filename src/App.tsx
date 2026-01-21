@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CommandPalette } from "@/components/CommandPalette";
+import { AIChatWidget } from "@/components/AIChatWidget";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Chapter1 from "./pages/Chapter1";
@@ -41,6 +42,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <CommandPalette />
+          <AIChatWidget />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/chapter/1" element={<Chapter1 />} />
