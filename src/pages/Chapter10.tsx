@@ -7,6 +7,8 @@ import { Footer } from "@/components/Footer";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 import { MonteCarloCalculator } from "@/components/MonteCarloCalculator";
 import { SoftwareExamples } from "@/components/SoftwareExamples";
+import { ApplicationChallenge, chapterChallenges } from "@/components/ApplicationChallenge";
+import { ModernAnnotation, chapterAnnotations } from "@/components/ModernAnnotation";
 
 const Chapter10 = () => {
   return (
@@ -287,6 +289,20 @@ graph TD
             </li>
           </ul>
         </section>
+
+        {/* Modern Annotations */}
+        {chapterAnnotations[10] && (
+          <section>
+            <ModernAnnotation annotations={chapterAnnotations[10]} />
+          </section>
+        )}
+
+        {/* Application Challenge */}
+        {chapterChallenges[10] && (
+          <section>
+            <ApplicationChallenge challenge={chapterChallenges[10]} />
+          </section>
+        )}
 
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
