@@ -10,6 +10,8 @@ import { Footer } from "@/components/Footer";
 import { Navigation } from "@/components/Navigation";
 import { ReadingPathways } from "@/components/ReadingPathways";
 import { PersonalIntroduction } from "@/components/PersonalIntroduction";
+import { FrameworkDiagnostic } from "@/components/FrameworkDiagnostic";
+import { ChecklistGenerator } from "@/components/ChecklistGenerator";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useNotes } from "@/hooks/useNotes";
 import { Card } from "@/components/ui/card";
@@ -98,8 +100,24 @@ const Index = () => {
       </section>
 
       <KeyQuotes />
+      
+      {/* Framework Diagnostic Tool */}
+      <section className="py-16 px-6 bg-gradient-to-br from-primary/5 to-accent/5">
+        <div className="max-w-4xl mx-auto">
+          <FrameworkDiagnostic />
+        </div>
+      </section>
+      
       <Timeline />
       <ModelingProcess />
+      
+      {/* Checklist Generator */}
+      <section className="py-16 px-6">
+        <div className="max-w-4xl mx-auto">
+          <ChecklistGenerator />
+        </div>
+      </section>
+      
       <ConceptDiagram />
       <KeyConcepts />
       <Chapters />

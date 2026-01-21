@@ -6,6 +6,8 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 import { SoftwareExamples } from "@/components/SoftwareExamples";
+import { ApplicationChallenge, chapterChallenges } from "@/components/ApplicationChallenge";
+import { ModernAnnotation, chapterAnnotations } from "@/components/ModernAnnotation";
 
 const Chapter4 = () => {
   return (
@@ -167,6 +169,20 @@ graph TD
             can often be fixed, reducing model complexity without sacrificing performance.
           </p>
         </section>
+
+        {/* Modern Annotations */}
+        {chapterAnnotations[4] && (
+          <section>
+            <ModernAnnotation annotations={chapterAnnotations[4]} />
+          </section>
+        )}
+
+        {/* Application Challenge */}
+        {chapterChallenges[4] && (
+          <section>
+            <ApplicationChallenge challenge={chapterChallenges[4]} />
+          </section>
+        )}
 
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
