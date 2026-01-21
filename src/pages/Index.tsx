@@ -112,12 +112,19 @@ const Index = () => {
       {/* Case Vignettes - Rules in Action */}
       <section className="py-16 px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-3 mb-6">
-            <MessageSquareQuote className="w-8 h-8 text-primary" />
-            <div>
-              <h2 className="text-2xl font-bold text-foreground">Rules in Action</h2>
-              <p className="text-sm text-muted-foreground">Real stories from the modeling community</p>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <MessageSquareQuote className="w-8 h-8 text-primary" />
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">Rules in Action</h2>
+                <p className="text-sm text-muted-foreground">Real stories from the modeling community</p>
+              </div>
             </div>
+            <Link to="/case-vignettes">
+              <Button variant="outline" size="sm">
+                View All Stories
+              </Button>
+            </Link>
           </div>
           <CaseVignettes compact />
         </div>
