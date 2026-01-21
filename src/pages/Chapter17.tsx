@@ -6,6 +6,8 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 import { SoftwareExamples } from "@/components/SoftwareExamples";
+import { ApplicationChallenge, chapterChallenges } from "@/components/ApplicationChallenge";
+import { ModernAnnotation, chapterAnnotations } from "@/components/ModernAnnotation";
 
 const Chapter17 = () => {
   return (
@@ -223,6 +225,20 @@ graph TD
             is to wield these tools with humility, transparency, and commitment to serving the broader good.
           </p>
         </section>
+
+        {/* Modern Annotations */}
+        {chapterAnnotations[17] && (
+          <section>
+            <ModernAnnotation annotations={chapterAnnotations[17]} />
+          </section>
+        )}
+
+        {/* Application Challenge */}
+        {chapterChallenges[17] && (
+          <section>
+            <ApplicationChallenge challenge={chapterChallenges[17]} />
+          </section>
+        )}
 
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-6">Final Assessment</h2>

@@ -6,6 +6,8 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 import { SoftwareExamples } from "@/components/SoftwareExamples";
+import { ApplicationChallenge, chapterChallenges } from "@/components/ApplicationChallenge";
+import { ModernAnnotation, chapterAnnotations } from "@/components/ModernAnnotation";
 
 const Chapter3 = () => {
   return (
@@ -149,6 +151,20 @@ graph LR
             strategies and uncertainty bounds on predictions.
           </p>
         </section>
+
+        {/* Modern Annotations */}
+        {chapterAnnotations[3] && (
+          <section>
+            <ModernAnnotation annotations={chapterAnnotations[3]} />
+          </section>
+        )}
+
+        {/* Application Challenge */}
+        {chapterChallenges[3] && (
+          <section>
+            <ApplicationChallenge challenge={chapterChallenges[3]} />
+          </section>
+        )}
 
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>

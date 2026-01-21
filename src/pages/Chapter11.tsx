@@ -7,6 +7,8 @@ import { Footer } from "@/components/Footer";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
 import { SensitivityCalculator } from "@/components/SensitivityCalculator";
 import { SoftwareExamples } from "@/components/SoftwareExamples";
+import { ApplicationChallenge, chapterChallenges } from "@/components/ApplicationChallenge";
+import { ModernAnnotation, chapterAnnotations } from "@/components/ModernAnnotation";
 
 const Chapter11 = () => {
   return (
@@ -116,6 +118,20 @@ graph TD
           </p>
           <SensitivityCalculator />
         </section>
+
+        {/* Modern Annotations */}
+        {chapterAnnotations[11] && (
+          <section>
+            <ModernAnnotation annotations={chapterAnnotations[11]} />
+          </section>
+        )}
+
+        {/* Application Challenge */}
+        {chapterChallenges[11] && (
+          <section>
+            <ApplicationChallenge challenge={chapterChallenges[11]} />
+          </section>
+        )}
 
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
