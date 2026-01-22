@@ -302,6 +302,20 @@ graph TD
           </div>
         </section>
 
+        {/* Modern Annotations */}
+        {chapterAnnotations[2] && (
+          <section>
+            <ModernAnnotation annotations={chapterAnnotations[2]} />
+          </section>
+        )}
+
+        {/* Application Challenge */}
+        {chapterChallenges[2] && (
+          <section>
+            <ApplicationChallenge challenge={chapterChallenges[2]} />
+          </section>
+        )}
+
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
           <Quiz

@@ -210,6 +210,20 @@ graph TD
           />
         </section>
 
+        {/* Modern Annotations */}
+        {chapterAnnotations[16] && (
+          <section>
+            <ModernAnnotation annotations={chapterAnnotations[16]} />
+          </section>
+        )}
+
+        {/* Application Challenge */}
+        {chapterChallenges[16] && (
+          <section>
+            <ApplicationChallenge challenge={chapterChallenges[16]} />
+          </section>
+        )}
+
         <section className="bg-gradient-to-br from-accent/20 to-background rounded-lg p-8">
           <h2 className="text-2xl font-bold text-foreground mb-4">References & Further Reading</h2>
           <div className="space-y-3 text-muted-foreground">

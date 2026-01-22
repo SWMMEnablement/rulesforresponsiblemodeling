@@ -100,6 +100,20 @@ graph TD
           </Card>
         </section>
 
+        {/* Modern Annotations */}
+        {chapterAnnotations[13] && (
+          <section>
+            <ModernAnnotation annotations={chapterAnnotations[13]} />
+          </section>
+        )}
+
+        {/* Application Challenge */}
+        {chapterChallenges[13] && (
+          <section>
+            <ApplicationChallenge challenge={chapterChallenges[13]} />
+          </section>
+        )}
+
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
           <Quiz
