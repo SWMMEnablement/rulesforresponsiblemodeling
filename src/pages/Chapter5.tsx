@@ -278,6 +278,20 @@ graph LR
           />
         </section>
 
+        {/* Modern Annotations */}
+        {chapterAnnotations[5] && (
+          <section>
+            <ModernAnnotation annotations={chapterAnnotations[5]} />
+          </section>
+        )}
+
+        {/* Application Challenge */}
+        {chapterChallenges[5] && (
+          <section>
+            <ApplicationChallenge challenge={chapterChallenges[5]} />
+          </section>
+        )}
+
         <section className="bg-gradient-to-br from-accent/20 to-background rounded-lg p-8">
           <h2 className="text-2xl font-bold text-foreground mb-4">References & Further Reading</h2>
           <div className="space-y-3 text-muted-foreground">

@@ -580,6 +580,20 @@ graph LR
           </ul>
         </section>
 
+        {/* Modern Annotations */}
+        {chapterAnnotations[1] && (
+          <section>
+            <ModernAnnotation annotations={chapterAnnotations[1]} />
+          </section>
+        )}
+
+        {/* Application Challenge */}
+        {chapterChallenges[1] && (
+          <section>
+            <ApplicationChallenge challenge={chapterChallenges[1]} />
+          </section>
+        )}
+
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-6">Test Your Knowledge</h2>
           <Quiz
