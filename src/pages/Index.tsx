@@ -13,6 +13,7 @@ import { ReadingPathways } from "@/components/ReadingPathways";
 import { PersonalIntroduction } from "@/components/PersonalIntroduction";
 import { FrameworkDiagnostic } from "@/components/FrameworkDiagnostic";
 import { ChecklistGenerator } from "@/components/ChecklistGenerator";
+import { ProjectTemplates } from "@/components/ProjectTemplates";
 import { CaseVignettes } from "@/components/CaseVignettes";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useNotes } from "@/hooks/useNotes";
@@ -140,6 +141,8 @@ const Index = () => {
           <ChecklistGenerator />
         </div>
       </section>
+      
+      <ProjectTemplates />
       
       <FrameworkMap />
       <ConceptDiagram />
