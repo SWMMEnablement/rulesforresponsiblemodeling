@@ -4,6 +4,7 @@ import { ModelingProcess } from "@/components/ModelingProcess";
 import { Chapters } from "@/components/Chapters";
 import { ConceptDiagram } from "@/components/ConceptDiagram";
 import { KeyConcepts } from "@/components/KeyConcepts";
+import { FrameworkMap } from "@/components/FrameworkMap";
 import { Timeline } from "@/components/Timeline";
 import { GlobalSearch } from "@/components/GlobalSearch";
 import { Footer } from "@/components/Footer";
@@ -140,6 +141,7 @@ const Index = () => {
         </div>
       </section>
       
+      <FrameworkMap />
       <ConceptDiagram />
       <KeyConcepts />
       <Chapters />
