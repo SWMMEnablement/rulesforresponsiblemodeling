@@ -26,6 +26,7 @@ import Chapter15 from "./pages/Chapter15";
 import Chapter16 from "./pages/Chapter16";
 import Chapter17 from "./pages/Chapter17";
 import AllNotes from "./pages/AllNotes";
+import CodeLibrary from "./pages/CodeLibrary";
 import AboutAuthor from "./pages/AboutAuthor";
 import Resources from "./pages/Resources";
 import Glossary from "./pages/Glossary";
@@ -70,6 +71,7 @@ const App = () => (
             <Route path="/study-guide" element={<StudyGuide />} />
             <Route path="/key-quotes" element={<KeyQuotes />} />
             <Route path="/case-vignettes" element={<CaseVignettes />} />
+            <Route path="/code-library" element={<CodeLibrary />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
