@@ -15,6 +15,7 @@ import { FrameworkDiagnostic } from "@/components/FrameworkDiagnostic";
 import { ChecklistGenerator } from "@/components/ChecklistGenerator";
 import { ProjectTemplates } from "@/components/ProjectTemplates";
 import { CaseVignettes } from "@/components/CaseVignettes";
+import { RuleOfTheWeek } from "@/components/RuleOfTheWeek";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useNotes } from "@/hooks/useNotes";
 import { Card } from "@/components/ui/card";
@@ -101,6 +102,8 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      <RuleOfTheWeek />
 
       <KeyQuotes />
       
