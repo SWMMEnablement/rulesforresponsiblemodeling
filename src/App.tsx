@@ -33,6 +33,7 @@ import Glossary from "./pages/Glossary";
 import StudyGuide from "./pages/StudyGuide";
 import KeyQuotes from "./pages/KeyQuotes";
 import CaseVignettes from "./pages/CaseVignettes";
+import PhDThesis from "./pages/PhDThesis";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +73,7 @@ const App = () => (
             <Route path="/key-quotes" element={<KeyQuotes />} />
             <Route path="/case-vignettes" element={<CaseVignettes />} />
             <Route path="/code-library" element={<CodeLibrary />} />
+            <Route path="/phd-thesis" element={<PhDThesis />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
