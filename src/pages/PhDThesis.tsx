@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, FileText, Globe, Calendar, Layers, Database, Code, AlertTriangle, CheckSquare, Package } from "lucide-react";
+import { ExternalLink, FileText, Globe, Calendar, Layers, Database, Code, AlertTriangle, CheckSquare, Package, Download } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 const PhDThesis = () => {
@@ -29,6 +29,11 @@ const PhDThesis = () => {
             <a href="https://lovable.dev/projects/fdf6e6ea-1b7e-4b30-a505-ba44d472c792" target="_blank" rel="noopener noreferrer">
               <Button variant="outline" className="gap-2">
                 <ExternalLink className="w-4 h-4" /> Lovable Project
+              </Button>
+            </a>
+            <a href="/md-insight-explorer-handover.md" download="MD-INSIGHT-EXPLORER-HANDOVER.md">
+              <Button variant="outline" className="gap-2">
+                <Download className="w-4 h-4" /> Download Markdown
               </Button>
             </a>
           </div>
