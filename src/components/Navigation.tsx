@@ -25,7 +25,7 @@ export const Navigation = () => {
     { to: "/code-library", icon: Code, label: "Code Library" },
     { to: "/glossary", icon: Library, label: "Glossary" },
     { to: "/resources", icon: BookOpen, label: "Resources" },
-    { to: "/phd-thesis", icon: FlaskConical, label: "PhD Thesis" },
+    { to: "/phd-thesis", icon: FlaskConical, label: "Goyen PhD Thesis" },
   ];
 
   const toggleTheme = () => {
