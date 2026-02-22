@@ -16,6 +16,13 @@ import { ChecklistGenerator } from "@/components/ChecklistGenerator";
 import { ProjectTemplates } from "@/components/ProjectTemplates";
 import { CaseVignettes } from "@/components/CaseVignettes";
 import { RuleOfTheWeek } from "@/components/RuleOfTheWeek";
+import { ComplexitySimulator } from "@/components/ComplexitySimulator";
+import { ResponsibilityScoreQuiz } from "@/components/ResponsibilityScoreQuiz";
+import { ModelComparison } from "@/components/ModelComparison";
+import { ModelAutopsies } from "@/components/ModelAutopsies";
+import { SoftwareTranslationPanels } from "@/components/SoftwareTranslationPanels";
+import { OfficePosterSeries } from "@/components/OfficePosterSeries";
+import { CertificationBadge } from "@/components/CertificationBadge";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useNotes } from "@/hooks/useNotes";
 import { Card } from "@/components/ui/card";
@@ -113,6 +120,34 @@ const Index = () => {
           <FrameworkDiagnostic />
         </div>
       </section>
+
+      {/* Complexity vs. Reliability Simulator */}
+      <section className="py-16 px-6">
+        <div className="max-w-4xl mx-auto">
+          <ComplexitySimulator />
+        </div>
+      </section>
+
+      {/* Responsibility Score Quiz */}
+      <section className="py-16 px-6 bg-gradient-to-br from-primary/5 to-secondary/5">
+        <div className="max-w-4xl mx-auto">
+          <ResponsibilityScoreQuiz />
+        </div>
+      </section>
+
+      {/* James vs. Your Model Comparison */}
+      <section className="py-16 px-6">
+        <div className="max-w-4xl mx-auto">
+          <ModelComparison />
+        </div>
+      </section>
+
+      {/* Model Autopsies */}
+      <section className="py-16 px-6 bg-gradient-to-br from-destructive/5 to-muted/30">
+        <div className="max-w-4xl mx-auto">
+          <ModelAutopsies />
+        </div>
+      </section>
       
       {/* Case Vignettes - Rules in Action */}
       <section className="py-16 px-6">
@@ -137,6 +172,13 @@ const Index = () => {
       
       <Timeline />
       <ModelingProcess />
+
+      {/* SWMM5 / ICM Translation Panels */}
+      <section className="py-16 px-6 bg-gradient-to-br from-muted/30 to-background">
+        <div className="max-w-4xl mx-auto">
+          <SoftwareTranslationPanels />
+        </div>
+      </section>
       
       {/* Checklist Generator */}
       <section className="py-16 px-6">
@@ -146,6 +188,20 @@ const Index = () => {
       </section>
       
       <ProjectTemplates />
+
+      {/* Certification Badge */}
+      <section className="py-16 px-6 bg-gradient-to-br from-primary/5 to-accent/5">
+        <div className="max-w-4xl mx-auto">
+          <CertificationBadge />
+        </div>
+      </section>
+
+      {/* Office Poster Series */}
+      <section className="py-16 px-6">
+        <div className="max-w-4xl mx-auto">
+          <OfficePosterSeries />
+        </div>
+      </section>
       
       <FrameworkMap />
       <ConceptDiagram />
