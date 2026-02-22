@@ -19,7 +19,8 @@ import {
   Library, 
   MessageSquareQuote,
   Search,
-  StickyNote
+  StickyNote,
+  Gauge
 } from "lucide-react";
 import { glossaryTerms } from "@/data/glossaryData";
 import { keyQuotesFlashcardData } from "@/data/keyQuotesFlashcardData";
@@ -52,6 +53,19 @@ const pages = [
   { path: "/resources", label: "Resources", icon: FileText },
   { path: "/about-author", label: "About Author", icon: Info },
   { path: "/notes", label: "My Notes", icon: StickyNote },
+  { path: "/code-library", label: "Code Library", icon: FileText },
+  { path: "/case-vignettes", label: "Case Vignettes", icon: BookOpen },
+  { path: "/phd-thesis", label: "Goyen PhD Thesis", icon: GraduationCap },
+];
+
+const features = [
+  { id: "complexity-simulator", label: "Complexity vs. Reliability Simulator", description: "Interactive chart showing optimal model complexity" },
+  { id: "responsibility-quiz", label: "Responsibility Score Quiz", description: "20-question self-assessment for your modeling project" },
+  { id: "model-comparison", label: "James vs. Your Model Comparison", description: "Compare your model against James's standards" },
+  { id: "model-autopsies", label: "Model Autopsies", description: "Case studies of modeling failures and lessons learned" },
+  { id: "software-translation", label: "SWMM5/ICM Translation Panels", description: "Map James's principles to specific software actions" },
+  { id: "certification-badge", label: "Certified Responsible Modeler", description: "Earn your certification badge" },
+  { id: "office-posters", label: "Office Poster Series", description: "Downloadable posters for engineering offices" },
 ];
 
 export const CommandPalette = () => {
@@ -90,6 +104,29 @@ export const CommandPalette = () => {
             >
               <page.icon className="mr-2 h-4 w-4" />
               <span>{page.label}</span>
+            </CommandItem>
+          ))}
+        </CommandGroup>
+        
+        <CommandSeparator />
+        
+        <CommandGroup heading="Interactive Tools">
+          {features.map((feature) => (
+            <CommandItem
+              key={feature.id}
+              value={`tool ${feature.label} ${feature.description}`}
+              onSelect={() => {
+                setOpen(false);
+                const el = document.getElementById(feature.id);
+                if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                else handleSelect("/");
+              }}
+            >
+              <Gauge className="mr-2 h-4 w-4 shrink-0" />
+              <div className="flex flex-col">
+                <span className="font-medium">{feature.label}</span>
+                <span className="text-xs text-muted-foreground line-clamp-1">{feature.description}</span>
+              </div>
             </CommandItem>
           ))}
         </CommandGroup>
