@@ -1,0 +1,129 @@
+import { useState } from "react";
+import { Card } from "./ui/card";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Skull, ChevronDown, ChevronUp, Search } from "lucide-react";
+import { Input } from "./ui/input";
+
+interface Autopsy {
+  id: number;
+  project: string;
+  failure: string;
+  reality: string;
+  rootCause: string;
+  rulesViolated: number[];
+  whatShouldHaveDone: string;
+  chapters: number[];
+  outcome: "failure" | "lesson";
+}
+
+const autopsies: Autopsy[] = [
+  { id: 1, project: "Combined sewer overflow study", failure: "Model predicted 2 overflows/year", reality: "14 overflows/year", rootCause: "Manning's n calibrated to dry-weather flow only", rulesViolated: [4, 9, 14, 16], whatShouldHaveDone: "Split calibration into dry and wet weather events", chapters: [9, 14], outcome: "failure" },
+  { id: 2, project: "Flood risk mapping — urban creek", failure: "100-year flood extent missed 12 homes", reality: "Flood damaged homes not in the mapped zone", rootCause: "Used 30-year-old topographic data (Rule 3 violation)", rulesViolated: [3, 10, 16], whatShouldHaveDone: "Verified topographic data vintage; used LiDAR data", chapters: [3, 16], outcome: "failure" },
+  { id: 3, project: "Stormwater detention pond sizing", failure: "Pond undersized by 40%", reality: "Pond overflowed in 5-year event", rootCause: "Used design storm instead of continuous simulation; missed antecedent moisture", rulesViolated: [5, 6, 10], whatShouldHaveDone: "Used continuous simulation with actual rainfall record", chapters: [5, 6], outcome: "failure" },
+  { id: 4, project: "Sewer capacity assessment — 500 subcatchments", failure: "Model results contradicted field observations", reality: "Multiple pipes showed reverse flow in model only", rootCause: "Over-parameterized model with only 2 rain gages; couldn't constrain 500 subcatchments", rulesViolated: [2, 4, 14], whatShouldHaveDone: "Reduced to 40-80 subcatchments appropriate for available data", chapters: [2, 4], outcome: "lesson" },
+  { id: 5, project: "Real-time flood forecasting system", failure: "False alarm rate of 60%", reality: "System lost credibility; operators ignored warnings", rootCause: "No uncertainty bounds presented; single deterministic forecast", rulesViolated: [10, 16], whatShouldHaveDone: "Presented ensemble forecasts with confidence intervals", chapters: [10, 16], outcome: "failure" },
+  { id: 6, project: "Green infrastructure retrofit analysis", failure: "Model showed 50% reduction in peak flows", reality: "Measured reduction was 15-20%", rootCause: "Bioretention parameters used from manufacturer specs, not field-validated", rulesViolated: [3, 11, 13], whatShouldHaveDone: "Performed sensitivity analysis on GI parameters; validated against monitored sites", chapters: [11, 13], outcome: "lesson" },
+  { id: 7, project: "Watershed master plan — 10,000 ha", failure: "Model took 6 months; results questioned by peer review", reality: "Simpler model by competing firm produced same design recommendations", rootCause: "Complexity far exceeded data support; 2,000 subcatchments for 3 flow monitors", rulesViolated: [1, 4, 17], whatShouldHaveDone: "Started with purpose-driven complexity; tested whether detail changed decisions", chapters: [1, 4], outcome: "lesson" },
+  { id: 8, project: "Industrial site runoff compliance model", failure: "Predicted no exceedances of effluent limits", reality: "3 permit violations in first year of operation", rootCause: "Single calibration event in dry season; no wet season validation", rulesViolated: [9, 13, 14], whatShouldHaveDone: "Calibrated across wet and dry seasons; validated on independent events", chapters: [9, 14], outcome: "failure" },
+  { id: 9, project: "Dam safety inflow design flood", failure: "PMF estimate 30% lower than revised analysis", reality: "Dam safety factor reduced below standard", rootCause: "Rainfall disaggregation method underestimated temporal peaking", rulesViolated: [6, 7], whatShouldHaveDone: "Used multiple disaggregation methods; tested sensitivity to storm temporal pattern", chapters: [6, 7], outcome: "failure" },
+  { id: 10, project: "Municipal infrastructure renewal prioritization", failure: "Model ranked 50 pipes for replacement", reality: "Field inspections showed only 8 truly needed replacement", rootCause: "Model sensitivity to pipe roughness not tested; default values used throughout", rulesViolated: [11, 12, 13], whatShouldHaveDone: "Performed sensitivity analysis to identify which pipe parameters actually mattered", chapters: [11, 12], outcome: "lesson" },
+];
+
+export const ModelAutopsies = () => {
+  const [expanded, setExpanded] = useState<number | null>(null);
+  const [search, setSearch] = useState("");
+  const [filterRule, setFilterRule] = useState<number | null>(null);
+
+  const filtered = autopsies.filter((a) => {
+    const matchesSearch = search === "" || 
+      a.project.toLowerCase().includes(search.toLowerCase()) ||
+      a.rootCause.toLowerCase().includes(search.toLowerCase());
+    const matchesRule = filterRule === null || a.rulesViolated.includes(filterRule);
+    return matchesSearch && matchesRule;
+  });
+
+  const allRules = [...new Set(autopsies.flatMap((a) => a.rulesViolated))].sort((a, b) => a - b);
+
+  return (
+    <Card className="p-6 sm:p-8">
+      <div className="flex items-center gap-3 mb-2">
+        <Skull className="w-7 h-7 text-destructive" />
+        <h2 className="text-2xl font-bold text-foreground">Model Autopsies</h2>
+      </div>
+      <p className="text-muted-foreground mb-4 text-sm">
+        Learn from failures. Each autopsy details a real-world modeling failure, the rules violated, and what should have been done differently.
+      </p>
+
+      <div className="flex flex-wrap gap-2 mb-4">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search autopsies..." className="pl-9" />
+        </div>
+        <div className="flex flex-wrap gap-1">
+          <Button variant={filterRule === null ? "default" : "outline"} size="sm" onClick={() => setFilterRule(null)}>All</Button>
+          {allRules.map((r) => (
+            <Button key={r} variant={filterRule === r ? "default" : "outline"} size="sm" onClick={() => setFilterRule(filterRule === r ? null : r)}>
+              Ch.{r}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        {filtered.map((a) => (
+          <div key={a.id} className="border border-border rounded-lg overflow-hidden">
+            <button
+              onClick={() => setExpanded(expanded === a.id ? null : a.id)}
+              className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/50 transition-colors"
+            >
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                <Badge variant={a.outcome === "failure" ? "destructive" : "secondary"} className="shrink-0 text-xs">
+                  #{a.id}
+                </Badge>
+                <span className="font-medium text-foreground text-sm truncate">{a.project}</span>
+              </div>
+              <div className="flex items-center gap-2 shrink-0 ml-2">
+                <div className="hidden sm:flex gap-1">
+                  {a.rulesViolated.map((r) => (
+                    <Badge key={r} variant="outline" className="text-xs">Ch.{r}</Badge>
+                  ))}
+                </div>
+                {expanded === a.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </div>
+            </button>
+
+            {expanded === a.id && (
+              <div className="border-t border-border p-4 bg-muted/30 space-y-3 text-sm animate-fade-in">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs font-medium text-muted-foreground mb-1">MODEL PREDICTED</p>
+                    <p className="text-foreground">{a.failure}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-muted-foreground mb-1">REALITY</p>
+                    <p className="text-destructive font-medium">{a.reality}</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-muted-foreground mb-1">ROOT CAUSE</p>
+                  <p className="text-foreground">{a.rootCause}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-muted-foreground mb-1">WHAT SHOULD HAVE BEEN DONE</p>
+                  <p className="text-foreground">{a.whatShouldHaveDone}</p>
+                </div>
+                <div className="flex items-center gap-2 pt-1">
+                  <span className="text-xs text-muted-foreground">Chapters:</span>
+                  {a.chapters.map((ch) => (
+                    <a key={ch} href={`/chapter/${ch}`} className="text-primary text-xs underline">Ch. {ch}</a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </Card>
+  );
+};

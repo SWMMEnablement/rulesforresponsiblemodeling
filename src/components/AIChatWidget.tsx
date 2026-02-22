@@ -124,8 +124,9 @@ export const AIChatWidget = () => {
 
   const suggestedQuestions = [
     "What is optimal complexity?",
-    "How do I calibrate SWMM?",
+    "How many subcatchments should I use?",
     "Explain uncertainty analysis",
+    "How do I avoid overfitting?",
   ];
 
   if (!isOpen) {
@@ -154,9 +155,9 @@ export const AIChatWidget = () => {
             <Bot className="h-4 w-4 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-sm">Modeling Assistant</h3>
+            <h3 className="font-semibold text-sm">Ask James</h3>
             {!isMinimized && (
-              <p className="text-xs text-muted-foreground">Ask about the rules</p>
+              <p className="text-xs text-muted-foreground">AI modeling assistant</p>
             )}
           </div>
         </div>
