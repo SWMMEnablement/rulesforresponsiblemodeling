@@ -37,6 +37,7 @@ import PhDThesis from "./pages/PhDThesis";
 import ResponsibilityQuiz from "./pages/ResponsibilityQuiz";
 import ModelAutopsiesPage from "./pages/ModelAutopsies";
 import GradeReport from "./pages/GradeReport";
+import Animations from "./pages/Animations";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -79,6 +80,7 @@ const App = () => (
             <Route path="/responsibility-quiz" element={<ResponsibilityQuiz />} />
             <Route path="/model-autopsies" element={<ModelAutopsiesPage />} />
             <Route path="/grade-report" element={<GradeReport />} />
+            <Route path="/animations" element={<Animations />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
