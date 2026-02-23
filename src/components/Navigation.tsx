@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, BookOpen, Library, GraduationCap, Menu, Moon, Sun, Keyboard, Quote, Code, FlaskConical, ClipboardCheck, SearchX } from "lucide-react";
+import { Home, BookOpen, Library, GraduationCap, Menu, Moon, Sun, Keyboard, Quote, Code, FlaskConical, ClipboardCheck, SearchX, ExternalLink } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
@@ -28,6 +28,7 @@ export const Navigation = () => {
     { to: "/glossary", icon: Library, label: "Glossary" },
     { to: "/resources", icon: BookOpen, label: "Resources" },
     { to: "/phd-thesis", icon: FlaskConical, label: "Goyen PhD Thesis" },
+    { to: "https://replit.com/@robertdickinson/SWMM-Docs-Explorer", icon: ExternalLink, label: "SWMM Explorer", external: true },
   ];
 
   const toggleTheme = () => {
@@ -78,27 +79,45 @@ export const Navigation = () => {
                 </SheetTrigger>
                 <SheetContent side="right" className="w-64">
                   <div className="flex flex-col gap-4 mt-8">
-                    {navLinks.map((link) => (
-                      <Link key={link.to} to={link.to} onClick={() => setOpen(false)}>
-                        <Button variant="ghost" className="w-full justify-start gap-2">
-                          <link.icon className="w-4 h-4" />
-                          {link.label}
-                        </Button>
-                      </Link>
-                    ))}
+                    {navLinks.map((link) =>
+                      link.external ? (
+                        <a key={link.to} href={link.to} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
+                          <Button variant="ghost" className="w-full justify-start gap-2">
+                            <link.icon className="w-4 h-4" />
+                            {link.label}
+                          </Button>
+                        </a>
+                      ) : (
+                        <Link key={link.to} to={link.to} onClick={() => setOpen(false)}>
+                          <Button variant="ghost" className="w-full justify-start gap-2">
+                            <link.icon className="w-4 h-4" />
+                            {link.label}
+                          </Button>
+                        </Link>
+                      )
+                    )}
                   </div>
                 </SheetContent>
               </Sheet>
             ) : (
               <>
-                {navLinks.map((link) => (
-                  <Link key={link.to} to={link.to}>
-                    <Button variant="ghost" size="sm" className="gap-2">
-                      <link.icon className="w-4 h-4" />
-                      <span>{link.label}</span>
-                    </Button>
-                  </Link>
-                ))}
+                {navLinks.map((link) =>
+                  link.external ? (
+                    <a key={link.to} href={link.to} target="_blank" rel="noopener noreferrer">
+                      <Button variant="ghost" size="sm" className="gap-2">
+                        <link.icon className="w-4 h-4" />
+                        <span>{link.label}</span>
+                      </Button>
+                    </a>
+                  ) : (
+                    <Link key={link.to} to={link.to}>
+                      <Button variant="ghost" size="sm" className="gap-2">
+                        <link.icon className="w-4 h-4" />
+                        <span>{link.label}</span>
+                      </Button>
+                    </Link>
+                  )
+                )}
               </>
             )}
           </div>
