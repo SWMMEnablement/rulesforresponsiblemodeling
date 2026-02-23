@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-import { Skull, ChevronDown, ChevronUp, Search } from "lucide-react";
+import { Skull, ChevronDown, ChevronUp, Search, HelpCircle } from "lucide-react";
 import { Input } from "./ui/input";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 interface Autopsy {
   id: number;
@@ -46,10 +47,19 @@ export const ModelAutopsies = () => {
   const allRules = [...new Set(autopsies.flatMap((a) => a.rulesViolated))].sort((a, b) => a - b);
 
   return (
+    <TooltipProvider delayDuration={200}>
     <Card className="p-6 sm:p-8">
       <div className="flex items-center gap-3 mb-2">
         <Skull className="w-7 h-7 text-destructive" />
         <h2 className="text-2xl font-bold text-foreground">Model Autopsies</h2>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <HelpCircle className="w-5 h-5 text-muted-foreground cursor-help" />
+          </TooltipTrigger>
+          <TooltipContent side="right" className="max-w-xs">
+            <p>Real-world case studies of modeling failures. Each autopsy identifies what went wrong, which rules were violated, and what should have been done differently.</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
       <p className="text-muted-foreground mb-4 text-sm">
         Learn from failures. Each autopsy details a real-world modeling failure, the rules violated, and what should have been done differently.
@@ -78,9 +88,18 @@ export const ModelAutopsies = () => {
               className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/50 transition-colors"
             >
               <div className="flex items-center gap-3 flex-1 min-w-0">
-                <Badge variant={a.outcome === "failure" ? "destructive" : "secondary"} className="shrink-0 text-xs">
-                  #{a.id}
-                </Badge>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <Badge variant={a.outcome === "failure" ? "destructive" : "secondary"} className="shrink-0 text-xs cursor-help">
+                        #{a.id}
+                      </Badge>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{a.outcome === "failure" ? "Project failure — real-world consequences occurred" : "Lesson learned — issue caught before major consequences"}</p>
+                  </TooltipContent>
+                </Tooltip>
                 <span className="font-medium text-foreground text-sm truncate">{a.project}</span>
               </div>
               <div className="flex items-center gap-2 shrink-0 ml-2">
@@ -125,5 +144,6 @@ export const ModelAutopsies = () => {
         ))}
       </div>
     </Card>
+    </TooltipProvider>
   );
 };

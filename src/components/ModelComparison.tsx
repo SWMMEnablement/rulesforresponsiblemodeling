@@ -5,7 +5,8 @@ import { Badge } from "./ui/badge";
 import { Slider } from "./ui/slider";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
-import { GitCompareArrows, AlertTriangle, CheckCircle2, BookOpen } from "lucide-react";
+import { GitCompareArrows, AlertTriangle, CheckCircle2, BookOpen, HelpCircle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 interface Assessment {
   label: string;
@@ -90,10 +91,19 @@ export const ModelComparison = () => {
     : "Your model aligns well with James's framework. Keep up the responsible modeling!";
 
   return (
+    <TooltipProvider delayDuration={200}>
     <Card className="p-6 sm:p-8">
       <div className="flex items-center gap-3 mb-2">
         <GitCompareArrows className="w-7 h-7 text-primary" />
         <h2 className="text-2xl font-bold text-foreground">James vs. Your Model</h2>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <HelpCircle className="w-5 h-5 text-muted-foreground cursor-help" />
+          </TooltipTrigger>
+          <TooltipContent side="right" className="max-w-xs">
+            <p>Compare your model setup against Dr. James's recommended standards. Enter your model's details and see where it meets or falls short of best practices.</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
       <p className="text-muted-foreground mb-6 text-sm">
         Input your model details and see how it compares to Dr. James's standards.
@@ -102,39 +112,75 @@ export const ModelComparison = () => {
       <div className="grid sm:grid-cols-2 gap-6 mb-6">
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="font-medium text-foreground">Subcatchments</span>
+            <span className="font-medium text-foreground flex items-center gap-1">
+              Subcatchments
+              <Tooltip>
+                <TooltipTrigger asChild><HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help" /></TooltipTrigger>
+                <TooltipContent className="max-w-xs"><p>Total number of subcatchments in your model. More isn't always better — it should match available rain gage coverage.</p></TooltipContent>
+              </Tooltip>
+            </span>
             <Badge variant="outline">{subcatchments}</Badge>
           </div>
           <Slider value={[subcatchments]} onValueChange={([v]) => { setSubcatchments(v); setShowResults(false); }} min={5} max={500} step={5} />
         </div>
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="font-medium text-foreground">Rain Gages</span>
+            <span className="font-medium text-foreground flex items-center gap-1">
+              Rain Gages
+              <Tooltip>
+                <TooltipTrigger asChild><HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help" /></TooltipTrigger>
+                <TooltipContent className="max-w-xs"><p>Number of rain gages providing input data. James recommends roughly 1 gage per 25–30 subcatchments as a minimum.</p></TooltipContent>
+              </Tooltip>
+            </span>
             <Badge variant="outline">{rainGages}</Badge>
           </div>
           <Slider value={[rainGages]} onValueChange={([v]) => { setRainGages(v); setShowResults(false); }} min={1} max={20} step={1} />
         </div>
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="font-medium text-foreground">Calibration Events</span>
+            <span className="font-medium text-foreground flex items-center gap-1">
+              Calibration Events
+              <Tooltip>
+                <TooltipTrigger asChild><HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help" /></TooltipTrigger>
+                <TooltipContent className="max-w-xs"><p>Number of observed storm events used to calibrate the model. James recommends a minimum of 3–5 independent events.</p></TooltipContent>
+              </Tooltip>
+            </span>
             <Badge variant="outline">{calEvents}</Badge>
           </div>
           <Slider value={[calEvents]} onValueChange={([v]) => { setCalEvents(v); setShowResults(false); }} min={0} max={10} step={1} />
         </div>
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="font-medium text-foreground">Validation Events (separate)</span>
+            <span className="font-medium text-foreground flex items-center gap-1">
+              Validation Events
+              <Tooltip>
+                <TooltipTrigger asChild><HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help" /></TooltipTrigger>
+                <TooltipContent className="max-w-xs"><p>Events used to test the model AFTER calibration — must be separate from calibration events. At least 1–2 are required.</p></TooltipContent>
+              </Tooltip>
+            </span>
             <Badge variant="outline">{valEvents}</Badge>
           </div>
           <Slider value={[valEvents]} onValueChange={([v]) => { setValEvents(v); setShowResults(false); }} min={0} max={10} step={1} />
         </div>
         <div className="flex items-center gap-3">
           <Switch id="uncertainty" checked={hasUncertainty} onCheckedChange={(v) => { setHasUncertainty(v); setShowResults(false); }} />
-          <Label htmlFor="uncertainty" className="text-sm">Uncertainty analysis performed</Label>
+          <Label htmlFor="uncertainty" className="text-sm flex items-center gap-1">
+            Uncertainty analysis performed
+            <Tooltip>
+              <TooltipTrigger asChild><HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help" /></TooltipTrigger>
+              <TooltipContent className="max-w-xs"><p>Have you quantified output uncertainty through methods like Monte Carlo simulation? This is essential per Chapter 10.</p></TooltipContent>
+            </Tooltip>
+          </Label>
         </div>
         <div className="flex items-center gap-3">
           <Switch id="sensitivity" checked={hasSensitivity} onCheckedChange={(v) => { setHasSensitivity(v); setShowResults(false); }} />
-          <Label htmlFor="sensitivity" className="text-sm">Sensitivity analysis performed</Label>
+          <Label htmlFor="sensitivity" className="text-sm flex items-center gap-1">
+            Sensitivity analysis performed
+            <Tooltip>
+              <TooltipTrigger asChild><HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help" /></TooltipTrigger>
+              <TooltipContent className="max-w-xs"><p>Have you tested which parameters most influence your results? Identifies where to focus calibration effort (Chapter 11).</p></TooltipContent>
+            </Tooltip>
+          </Label>
         </div>
       </div>
 
@@ -153,7 +199,13 @@ export const ModelComparison = () => {
                   <th className="text-left py-2 font-medium text-muted-foreground">Metric</th>
                   <th className="text-left py-2 font-medium text-muted-foreground">Your Model</th>
                   <th className="text-left py-2 font-medium text-muted-foreground">James's Standard</th>
-                  <th className="text-center py-2 font-medium text-muted-foreground">Status</th>
+                  <th className="text-center py-2 font-medium text-muted-foreground">
+                    Status
+                    <Tooltip>
+                      <TooltipTrigger asChild><HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help inline ml-1 align-text-top" /></TooltipTrigger>
+                      <TooltipContent className="max-w-xs"><p>✅ Meets standard · ⚠️ Warning — could be improved · 🔴 Critical gap that should be addressed</p></TooltipContent>
+                    </Tooltip>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -206,5 +258,6 @@ export const ModelComparison = () => {
         </div>
       )}
     </Card>
+    </TooltipProvider>
   );
 };

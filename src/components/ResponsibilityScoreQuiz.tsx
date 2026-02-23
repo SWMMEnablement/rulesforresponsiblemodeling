@@ -4,7 +4,8 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Progress } from "./ui/progress";
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer } from "recharts";
-import { ClipboardCheck, ChevronRight, RotateCcw, Share2, BookOpen } from "lucide-react";
+import { ClipboardCheck, ChevronRight, RotateCcw, Share2, BookOpen, HelpCircle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 interface Question {
   text: string;
@@ -37,6 +38,15 @@ const questions: Question[] = [
 ];
 
 const categories = ["Data Quality", "Complexity", "Calibration", "Uncertainty", "Sensitivity", "Documentation"];
+
+const categoryDescriptions: Record<string, string> = {
+  "Data Quality": "Covers the quality, vintage, and resolution of your input data — rainfall, topography, and land use.",
+  "Complexity": "Assesses whether your model's level of detail is justified by the available data and the decisions it supports.",
+  "Calibration": "Evaluates how thoroughly you've calibrated and validated the model against observed data.",
+  "Uncertainty": "Checks whether you've quantified and communicated the range of possible outcomes.",
+  "Sensitivity": "Determines if you know which parameters actually matter and which don't affect results.",
+  "Documentation": "Assesses reproducibility — could someone else understand and recreate your work?",
+};
 
 const getGrade = (pct: number) => {
   if (pct >= 95) return "A+";
@@ -102,10 +112,19 @@ export const ResponsibilityScoreQuiz = () => {
 
   if (showResults) {
     return (
+      <TooltipProvider delayDuration={200}>
       <Card className="p-6 sm:p-8">
         <div className="flex items-center gap-3 mb-6">
           <ClipboardCheck className="w-7 h-7 text-primary" />
           <h2 className="text-2xl font-bold text-foreground">Your Responsibility Score</h2>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <HelpCircle className="w-5 h-5 text-muted-foreground cursor-help" />
+            </TooltipTrigger>
+            <TooltipContent side="right" className="max-w-xs">
+              <p>Your score reflects how well your project aligns with Dr. James's 17 rules for responsible modeling. 80%+ is considered strong practice.</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
@@ -140,10 +159,27 @@ export const ResponsibilityScoreQuiz = () => {
 
         {/* Category Breakdown */}
         <div className="mt-8 space-y-3">
-          <h3 className="font-semibold text-foreground">Category Breakdown</h3>
+          <h3 className="font-semibold text-foreground flex items-center gap-2">
+            Category Breakdown
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <HelpCircle className="w-4 h-4 text-muted-foreground cursor-help" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs">
+                <p>Each category groups related questions. Hover over category names below to learn what they measure.</p>
+              </TooltipContent>
+            </Tooltip>
+          </h3>
           {categoryScores.map((cat) => (
             <div key={cat.category} className="flex items-center gap-3">
-              <span className="text-sm w-28 shrink-0 text-muted-foreground">{cat.category}</span>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="text-sm w-28 shrink-0 text-muted-foreground underline decoration-dotted cursor-help">{cat.category}</span>
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <p>{categoryDescriptions[cat.category]}</p>
+                </TooltipContent>
+              </Tooltip>
               <Progress value={cat.score} className="h-3 flex-1" />
               <Badge variant={cat.score >= 80 ? "default" : cat.score >= 60 ? "secondary" : "destructive"} className="w-12 justify-center text-xs">{cat.score}%</Badge>
             </div>
@@ -172,6 +208,7 @@ export const ResponsibilityScoreQuiz = () => {
           </div>
         )}
       </Card>
+      </TooltipProvider>
     );
   }
 
@@ -179,10 +216,19 @@ export const ResponsibilityScoreQuiz = () => {
   const progress = ((currentQ) / questions.length) * 100;
 
   return (
+    <TooltipProvider delayDuration={200}>
     <Card className="p-6 sm:p-8">
       <div className="flex items-center gap-3 mb-2">
         <ClipboardCheck className="w-7 h-7 text-primary" />
         <h2 className="text-2xl font-bold text-foreground">Responsibility Score Quiz</h2>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <HelpCircle className="w-5 h-5 text-muted-foreground cursor-help" />
+          </TooltipTrigger>
+          <TooltipContent side="right" className="max-w-xs">
+            <p>A 20-question self-assessment based on Dr. James's framework. Each answer is scored 0–5 and mapped to one of six responsibility categories.</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
       <p className="text-muted-foreground mb-6 text-sm">
         Score your current modeling project against Dr. James's framework. 20 questions, ~5 minutes.
@@ -191,13 +237,32 @@ export const ResponsibilityScoreQuiz = () => {
       <div className="mb-6">
         <div className="flex justify-between text-xs text-muted-foreground mb-1">
           <span>Question {currentQ + 1} of {questions.length}</span>
-          <Badge variant="outline" className="text-xs">{q.category}</Badge>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="cursor-help">
+                <Badge variant="outline" className="text-xs">{q.category}</Badge>
+              </span>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs">
+              <p>{categoryDescriptions[q.category]}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
         <Progress value={progress} className="h-2" />
       </div>
 
       <p className="text-lg font-medium text-foreground mb-6">{q.text}</p>
-      <p className="text-xs text-muted-foreground mb-4">Reference: Chapter {q.chapter}</p>
+      <p className="text-xs text-muted-foreground mb-4">
+        Reference: Chapter {q.chapter}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help inline ml-1 align-text-top" />
+          </TooltipTrigger>
+          <TooltipContent className="max-w-xs">
+            <p>This question is based on concepts from Chapter {q.chapter}. Visit the chapter for detailed guidance.</p>
+          </TooltipContent>
+        </Tooltip>
+      </p>
 
       <div className="space-y-3">
         {q.options.map((opt, i) => (
@@ -212,5 +277,6 @@ export const ResponsibilityScoreQuiz = () => {
         ))}
       </div>
     </Card>
+    </TooltipProvider>
   );
 };
