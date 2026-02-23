@@ -8,6 +8,13 @@ import { PrecisionIllusion } from "@/components/PrecisionIllusion";
 import { SensitivitySpider } from "@/components/SensitivitySpider";
 import { ConfidenceZones } from "@/components/ConfidenceZones";
 import { ComplexitySimulator } from "@/components/ComplexitySimulator";
+import { EquifinalityProblem } from "@/components/EquifinalityProblem";
+import { CalibrationDance } from "@/components/CalibrationDance";
+import { StakeholderTranslation } from "@/components/StakeholderTranslation";
+import { ReportCard } from "@/components/ReportCard";
+import { RainGaugeDensity } from "@/components/RainGaugeDensity";
+import { PhilosophyEvolution } from "@/components/PhilosophyEvolution";
+import { SoftwareTranslationPanels } from "@/components/SoftwareTranslationPanels";
 import { Sparkles } from "lucide-react";
 
 const Animations = () => {
@@ -39,6 +46,7 @@ const Animations = () => {
             <UncertaintyFunnel />
             <CalibrationVsValidation />
             <PrecisionIllusion />
+            <EquifinalityProblem />
           </div>
         </div>
       </section>
@@ -52,6 +60,7 @@ const Animations = () => {
           <div className="space-y-8">
             <GarbageInGospelOut />
             <DataDecayTimeline />
+            <RainGaugeDensity />
           </div>
         </div>
       </section>
@@ -65,6 +74,33 @@ const Animations = () => {
           <div className="space-y-8">
             <SensitivitySpider />
             <ConfidenceZones />
+            <CalibrationDance />
+          </div>
+        </div>
+      </section>
+
+      {/* Communication & Reporting */}
+      <section className="py-12 px-6 bg-gradient-to-br from-muted/30 to-background">
+        <div className="max-w-4xl mx-auto space-y-4">
+          <h2 className="text-2xl font-bold text-foreground mb-2">Communication & Reporting</h2>
+          <p className="text-muted-foreground text-sm mb-8">Translating model results into responsible, decision-relevant communication.</p>
+
+          <div className="space-y-8">
+            <StakeholderTranslation />
+            <ReportCard />
+            <SoftwareTranslationPanels />
+          </div>
+        </div>
+      </section>
+
+      {/* Historical Context */}
+      <section className="py-12 px-6">
+        <div className="max-w-4xl mx-auto space-y-4">
+          <h2 className="text-2xl font-bold text-foreground mb-2">Historical Context</h2>
+          <p className="text-muted-foreground text-sm mb-8">How modeling philosophy has evolved — and why James's rules endure.</p>
+
+          <div className="space-y-8">
+            <PhilosophyEvolution />
           </div>
         </div>
       </section>
