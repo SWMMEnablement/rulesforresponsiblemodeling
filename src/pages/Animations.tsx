@@ -15,6 +15,7 @@ import { ReportCard } from "@/components/ReportCard";
 import { RainGaugeDensity } from "@/components/RainGaugeDensity";
 import { PhilosophyEvolution } from "@/components/PhilosophyEvolution";
 import { SoftwareTranslationPanels } from "@/components/SoftwareTranslationPanels";
+import { AnimationsToc } from "@/components/AnimationsToc";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Sparkles } from "lucide-react";
 
@@ -22,6 +23,7 @@ const Animations = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
+      <AnimationsToc />
 
       {/* Hero */}
       <section className="py-16 px-6 bg-gradient-to-br from-primary/10 via-accent/5 to-background">
@@ -47,11 +49,11 @@ const Animations = () => {
           </ScrollReveal>
 
           <div className="space-y-8">
-            <ScrollReveal><ComplexitySimulator /></ScrollReveal>
-            <ScrollReveal><UncertaintyFunnel /></ScrollReveal>
-            <ScrollReveal><CalibrationVsValidation /></ScrollReveal>
-            <ScrollReveal><PrecisionIllusion /></ScrollReveal>
-            <ScrollReveal><EquifinalityProblem /></ScrollReveal>
+            <ScrollReveal><div id="complexity-simulator" className="scroll-mt-20"><ComplexitySimulator /></div></ScrollReveal>
+            <ScrollReveal><div id="uncertainty-funnel" className="scroll-mt-20"><UncertaintyFunnel /></div></ScrollReveal>
+            <ScrollReveal><div id="calibration-validation" className="scroll-mt-20"><CalibrationVsValidation /></div></ScrollReveal>
+            <ScrollReveal><div id="precision-illusion" className="scroll-mt-20"><PrecisionIllusion /></div></ScrollReveal>
+            <ScrollReveal><div id="equifinality" className="scroll-mt-20"><EquifinalityProblem /></div></ScrollReveal>
           </div>
         </div>
       </section>
@@ -65,9 +67,9 @@ const Animations = () => {
           </ScrollReveal>
 
           <div className="space-y-8">
-            <ScrollReveal><GarbageInGospelOut /></ScrollReveal>
-            <ScrollReveal><DataDecayTimeline /></ScrollReveal>
-            <ScrollReveal><RainGaugeDensity /></ScrollReveal>
+            <ScrollReveal><div id="garbage-gospel" className="scroll-mt-20"><GarbageInGospelOut /></div></ScrollReveal>
+            <ScrollReveal><div id="data-decay" className="scroll-mt-20"><DataDecayTimeline /></div></ScrollReveal>
+            <ScrollReveal><div id="rain-gauge" className="scroll-mt-20"><RainGaugeDensity /></div></ScrollReveal>
           </div>
         </div>
       </section>
@@ -81,9 +83,9 @@ const Animations = () => {
           </ScrollReveal>
 
           <div className="space-y-8">
-            <ScrollReveal><SensitivitySpider /></ScrollReveal>
-            <ScrollReveal><ConfidenceZones /></ScrollReveal>
-            <ScrollReveal><CalibrationDance /></ScrollReveal>
+            <ScrollReveal><div id="sensitivity-spider" className="scroll-mt-20"><SensitivitySpider /></div></ScrollReveal>
+            <ScrollReveal><div id="confidence-zones" className="scroll-mt-20"><ConfidenceZones /></div></ScrollReveal>
+            <ScrollReveal><div id="calibration-dance" className="scroll-mt-20"><CalibrationDance /></div></ScrollReveal>
           </div>
         </div>
       </section>
@@ -97,9 +99,9 @@ const Animations = () => {
           </ScrollReveal>
 
           <div className="space-y-8">
-            <ScrollReveal><StakeholderTranslation /></ScrollReveal>
-            <ScrollReveal><ReportCard /></ScrollReveal>
-            <ScrollReveal><SoftwareTranslationPanels /></ScrollReveal>
+            <ScrollReveal><div id="stakeholder-translation" className="scroll-mt-20"><StakeholderTranslation /></div></ScrollReveal>
+            <ScrollReveal><div id="report-card" className="scroll-mt-20"><ReportCard /></div></ScrollReveal>
+            <ScrollReveal><div id="software-translation" className="scroll-mt-20"><SoftwareTranslationPanels /></div></ScrollReveal>
           </div>
         </div>
       </section>
@@ -113,7 +115,7 @@ const Animations = () => {
           </ScrollReveal>
 
           <div className="space-y-8">
-            <ScrollReveal><PhilosophyEvolution /></ScrollReveal>
+            <ScrollReveal><div id="philosophy-evolution" className="scroll-mt-20"><PhilosophyEvolution /></div></ScrollReveal>
           </div>
         </div>
       </section>
