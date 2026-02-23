@@ -1,4 +1,4 @@
-import { Code2, Github, BookOpen, ExternalLink } from "lucide-react";
+import { Code2, BookOpen, ExternalLink } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
@@ -43,9 +43,9 @@ export const Footer = () => {
                   className="h-auto p-0 text-sm justify-start"
                   asChild
                 >
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer">
-                    <Github className="w-4 h-4 mr-2" />
-                    Export to GitHub
+                  <a href="https://replit.com/@robertdickinson/SWMM-Docs-Explorer" target="_blank" rel="noopener noreferrer">
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    SWMM Docs Explorer
                     <ExternalLink className="w-3 h-3 ml-1" />
                   </a>
                 </Button>
