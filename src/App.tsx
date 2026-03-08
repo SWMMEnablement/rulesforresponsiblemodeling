@@ -38,6 +38,7 @@ import ResponsibilityQuiz from "./pages/ResponsibilityQuiz";
 import ModelAutopsiesPage from "./pages/ModelAutopsies";
 import GradeReport from "./pages/GradeReport";
 import Animations from "./pages/Animations";
+import Progress from "./pages/Progress";
 const queryClient = new QueryClient();
 
 const App = () => (
