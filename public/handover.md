@@ -526,4 +526,13 @@ To migrate this project to another hosting provider:
 
 ---
 
+## 20. Changelog
+
+| Date | Change | Details |
+|---|---|---|
+| 2026-03-08 | Navigation title no-wrap fix | Added `whitespace-nowrap` and responsive `text-sm lg:text-lg` to the nav title in `Navigation.tsx` (line 48) to prevent "Rules for Responsible Modeling" from wrapping on smaller screens |
+| 2026-03-08 | Handover document created | Comprehensive 19-section handover document added to `public/handover.md` |
+
+---
+
 *End of handover document.*
