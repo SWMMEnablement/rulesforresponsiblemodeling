@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { ArrowLeft, ArrowRight, Home, ExternalLink, FileText } from "lucide-react";
+import { ArrowLeft, ArrowRight, Home, ExternalLink, FileText, Printer } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
@@ -10,6 +10,15 @@ import { SidebarProvider, SidebarTrigger } from "./ui/sidebar";
 import { TableOfContents } from "./TableOfContents";
 import { useReadingProgress } from "@/hooks/useReadingProgress";
 import { Card } from "./ui/card";
+import { ShareRule } from "./ShareRule";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./ui/breadcrumb";
 import {
   Breadcrumb,
   BreadcrumbList,
