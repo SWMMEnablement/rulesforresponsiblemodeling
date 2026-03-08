@@ -9,15 +9,15 @@ import { Button } from "@/components/ui/button";
 
 const categoryGrades = [
   { category: "Content Fidelity", grade: "A+", score: 99, notes: "Perfect preservation of James's ideas with modern accessibility" },
-  { category: "Educational Architecture", grade: "A+", score: 97, notes: "Four learning pathways is exactly right — respects different audiences" },
-  { category: "Professional Utility", grade: "A", score: 95, notes: "Checklist generator and templates are genuinely usable on real projects" },
-  { category: "Interactive Features", grade: "A-", score: 91, notes: "Framework map and diagnostic tool are strong but could go deeper" },
-  { category: "Engagement & Return Visits", grade: "B+", score: 88, notes: "Rule of the Week is good but needs more reasons to come back" },
-  { category: "Community Features", grade: "B", score: 83, notes: '"Share Your Experience" exists but feels thin' },
-  { category: "Visual Design", grade: "A", score: 94, notes: "Clean, professional, appropriate for the audience" },
-  { category: "Mobile Experience", grade: "A-", score: 90, notes: "Reads well, some interactive features better on desktop" },
-  { category: "Searchability", grade: "B+", score: 87, notes: "Needs full-text search across all chapters" },
-  { category: "Connection to Practice", grade: "B+", score: 86, notes: "Needs more bridges between James's rules and specific SWMM5/ICM actions" },
+  { category: "Educational Architecture", grade: "A+", score: 97, notes: "SM-2 spaced repetition, four learning pathways, diagnostic tools" },
+  { category: "Professional Utility", grade: "A", score: 95, notes: "Checklist generator, templates, SWMM/ICM translation, share-this-rule links" },
+  { category: "Interactive Features", grade: "A", score: 94, notes: "Complexity simulator, framework diagnostic, model comparison, progress dashboard" },
+  { category: "Feature Breadth", grade: "A", score: 93, notes: "AI chatbot, command palette, bookmarks, notes, posters, templates, code library" },
+  { category: "Engagement & Return Visits", grade: "A-", score: 91, notes: "Progress dashboard, Rule of the Week, SM-2 due cards, share links" },
+  { category: "Visual Design", grade: "A", score: 94, notes: "Clean, professional, custom OG image, appropriate for the audience" },
+  { category: "Searchability", grade: "A-", score: 92, notes: "Full-text Fuse.js search across all chapter content via Command Palette" },
+  { category: "Mobile Experience", grade: "A-", score: 90, notes: "Responsive, print-friendly chapter views, some interactive features better on desktop" },
+  { category: "Connection to Practice", grade: "B+", score: 88, notes: "SWMM5/ICM panels, checklists, share-this-rule — needs more worksheets" },
 ];
 
 const excellentFeatures = [
