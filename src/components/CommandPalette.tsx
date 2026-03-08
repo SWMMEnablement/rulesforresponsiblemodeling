@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import Fuse from "fuse.js";
 import {
   CommandDialog,
   CommandEmpty,
@@ -20,10 +21,12 @@ import {
   MessageSquareQuote,
   Search,
   StickyNote,
-  Gauge
+  Gauge,
+  Zap
 } from "lucide-react";
 import { glossaryTerms } from "@/data/glossaryData";
 import { keyQuotesFlashcardData } from "@/data/keyQuotesFlashcardData";
+import { chapterSearchData, ChapterSearchEntry } from "@/data/chapterSearchData";
 
 const chapters = [
   { number: 1, title: "Introduction to Modeling" },
@@ -56,6 +59,7 @@ const pages = [
   { path: "/code-library", label: "Code Library", icon: FileText },
   { path: "/case-vignettes", label: "Case Vignettes", icon: BookOpen },
   { path: "/phd-thesis", label: "Goyen PhD Thesis", icon: GraduationCap },
+  { path: "/progress", label: "My Progress", icon: Gauge },
 ];
 
 const features = [
@@ -68,8 +72,22 @@ const features = [
   { id: "office-posters", label: "Office Poster Series", description: "Downloadable posters for engineering offices", path: null },
 ];
 
+// Fuse.js search index for full-text chapter content
+const fuse = new Fuse(chapterSearchData, {
+  keys: [
+    { name: "content", weight: 0.5 },
+    { name: "section", weight: 0.3 },
+    { name: "title", weight: 0.2 },
+  ],
+  threshold: 0.4,
+  includeScore: true,
+  minMatchCharLength: 2,
+});
+
 export const CommandPalette = () => {
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [fuseResults, setFuseResults] = useState<ChapterSearchEntry[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -84,16 +102,57 @@ export const CommandPalette = () => {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
+  // Update Fuse.js results when search query changes
+  useEffect(() => {
+    if (searchQuery.length >= 2) {
+      const results = fuse.search(searchQuery).slice(0, 8);
+      setFuseResults(results.map(r => r.item));
+    } else {
+      setFuseResults([]);
+    }
+  }, [searchQuery]);
+
   const handleSelect = useCallback((path: string) => {
     setOpen(false);
+    setSearchQuery("");
     navigate(path);
   }, [navigate]);
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen}>
-      <CommandInput placeholder="Search chapters, glossary terms, quotes..." />
+    <CommandDialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setSearchQuery(""); }}>
+      <CommandInput 
+        placeholder="Search chapters, concepts, rules, glossary..." 
+        value={searchQuery}
+        onValueChange={setSearchQuery}
+      />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
+        
+        {/* Full-text search results */}
+        {fuseResults.length > 0 && (
+          <>
+            <CommandGroup heading="Content Matches">
+              {fuseResults.map((result) => (
+                <CommandItem
+                  key={result.id}
+                  value={`content ${result.id} ${result.section} ${result.content.substring(0, 40)}`}
+                  onSelect={() => handleSelect(`/chapter/${result.chapter}`)}
+                >
+                  <Zap className="mr-2 h-4 w-4 shrink-0 text-primary" />
+                  <div className="flex flex-col">
+                    <span className="font-medium text-sm">
+                      Ch. {result.chapter}: {result.section}
+                    </span>
+                    <span className="text-xs text-muted-foreground line-clamp-1">
+                      {result.content.substring(0, 80)}...
+                    </span>
+                  </div>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+            <CommandSeparator />
+          </>
+        )}
         
         <CommandGroup heading="Pages">
           {pages.map((page) => (
@@ -117,6 +176,7 @@ export const CommandPalette = () => {
               value={`tool ${feature.label} ${feature.description}`}
               onSelect={() => {
                 setOpen(false);
+                setSearchQuery("");
                 if (feature.path) {
                   handleSelect(feature.path);
                 } else {
@@ -194,7 +254,7 @@ export const CommandPalette = () => {
       <div className="border-t px-3 py-2 text-xs text-muted-foreground flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Search className="h-3 w-3" />
-          <span>Type to search</span>
+          <span>Full-text search across all chapters</span>
         </div>
         <div className="flex items-center gap-1">
           <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
