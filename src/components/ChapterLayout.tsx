@@ -73,7 +73,16 @@ export const ChapterLayout = ({ chapterNumber, title, children }: ChapterLayoutP
                   </Link>
                 </nav>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 no-print">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => window.print()}
+                  title="Print this chapter"
+                  className="w-9 h-9 p-0"
+                >
+                  <Printer className="w-4 h-4" />
+                </Button>
                 <BookmarkButton chapterNumber={chapterNumber} title={title} />
                 <div className="text-sm text-muted-foreground">
                   Chapter {chapterNumber} of 17
