@@ -125,7 +125,7 @@ const improvements = [
     impact: "Like having William James sitting next to you while you plan your project.",
   },
   {
-    number: 6,
+    number: 10,
     title: "Complexity vs. Reliability Interactive Simulator",
     status: "implemented" as const,
     description: "A live interactive chart showing the relationship between model complexity and reliability with adjustable parameters.",
@@ -133,7 +133,7 @@ const improvements = [
     link: "/#complexity-simulator",
   },
   {
-    number: 7,
+    number: 11,
     title: '"Peer Review Simulator"',
     status: "implemented" as const,
     description: 'The "James vs. Your Model" comparison tool lets users input their model details and receive chapter-referenced feedback.',
@@ -141,14 +141,14 @@ const improvements = [
     link: "/#model-comparison",
   },
   {
-    number: 8,
+    number: 12,
     title: "Chapter Cross-Reference Matrix",
     status: "planned" as const,
     description: "An interactive matrix showing which chapters are relevant to which modeling activities (Scoping, Data, Build, Calibrate, Validate, Report).",
     impact: "Replaces sequential reading with task-based reading.",
   },
   {
-    number: 9,
+    number: 13,
     title: "Quote of the Day with Chapter Link",
     status: "implemented" as const,
     description: "Rule of the Week rotates notable quotes from James with chapter links and sharing capability.",
@@ -156,7 +156,7 @@ const improvements = [
     link: "/",
   },
   {
-    number: 10,
+    number: 14,
     title: "Certification and LinkedIn Badge",
     status: "implemented" as const,
     description: "Downloadable 'Certified Responsible Modeler' badge after completing a learning pathway and passing a quiz.",
