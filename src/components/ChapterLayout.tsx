@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { ArrowLeft, ArrowRight, Home, ExternalLink, FileText } from "lucide-react";
+import { ArrowLeft, ArrowRight, Home, ExternalLink, FileText, Printer } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
@@ -10,6 +10,7 @@ import { SidebarProvider, SidebarTrigger } from "./ui/sidebar";
 import { TableOfContents } from "./TableOfContents";
 import { useReadingProgress } from "@/hooks/useReadingProgress";
 import { Card } from "./ui/card";
+import { ShareRule } from "./ShareRule";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -64,7 +65,16 @@ export const ChapterLayout = ({ chapterNumber, title, children }: ChapterLayoutP
                   </Link>
                 </nav>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 no-print">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => window.print()}
+                  title="Print this chapter"
+                  className="w-9 h-9 p-0"
+                >
+                  <Printer className="w-4 h-4" />
+                </Button>
                 <BookmarkButton chapterNumber={chapterNumber} title={title} />
                 <div className="text-sm text-muted-foreground">
                   Chapter {chapterNumber} of 17

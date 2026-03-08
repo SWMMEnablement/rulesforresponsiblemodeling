@@ -530,8 +530,78 @@ To migrate this project to another hosting provider:
 
 | Date | Change | Details |
 |---|---|---|
-| 2026-03-08 | Navigation title no-wrap fix | Added `whitespace-nowrap` and responsive `text-sm lg:text-lg` to the nav title in `Navigation.tsx` (line 48) to prevent "Rules for Responsible Modeling" from wrapping on smaller screens |
-| 2026-03-08 | Handover document created | Comprehensive 19-section handover document added to `public/handover.md` |
+| 2026-03-08 | Navigation title no-wrap fix | Added `whitespace-nowrap` and responsive `text-sm lg:text-lg` to nav title |
+| 2026-03-08 | Full-text search (Fuse.js) | Added `src/data/chapterSearchData.ts` with 60+ searchable entries across all 17 chapters. Integrated Fuse.js into `CommandPalette.tsx` — searches concepts, rules, principles, and definitions with fuzzy matching |
+| 2026-03-08 | Custom OG image | Generated branded `public/og-image.png` (1920×1080) with complexity curve. Updated `index.html` meta tags for OpenGraph and Twitter Cards |
+| 2026-03-08 | Progress Dashboard | New `/progress` page (`src/pages/Progress.tsx`) showing chapters engaged, bookmarks, SM-2 flashcard stats (new/learning/mastered/due), learning pathway completion, quiz scores, and chapter map |
+| 2026-03-08 | Print-friendly chapters | Added print CSS in `index.css` (`@media print`) hiding nav/sidebar/buttons, formatting for paper with page headers. Added print button to `ChapterLayout.tsx` |
+| 2026-03-08 | Share-This-Rule component | New `src/components/ShareRule.tsx` — share any rule via LinkedIn, Twitter, email, or clipboard with pre-formatted citation text |
+| 2026-03-08 | Grade Report update | Updated category scores reflecting new features (Searchability B+ → A-, Engagement B+ → A-). Added 4 new implemented features to improvements tracker |
+| 2026-03-08 | Navigation updates | Added "My Progress" link to nav bar and Command Palette |
+| 2026-03-08 | Handover document created | Comprehensive 19-section handover document |
+
+---
+
+## 21. New Files Added
+
+| File | Purpose |
+|---|---|
+| `src/data/chapterSearchData.ts` | Static search index with 60+ entries covering all 17 chapters — concepts, rules, principles, definitions |
+| `src/pages/Progress.tsx` | Progress Dashboard page — chapter engagement, SM-2 stats, pathway tracking |
+| `src/components/ShareRule.tsx` | Shareable rule links (LinkedIn, Twitter, email, clipboard) |
+| `public/og-image.png` | Custom social sharing image (1920×1080) with complexity-reliability curve |
+
+---
+
+## 22. New Dependencies
+
+| Package | Purpose |
+|---|---|
+| `fuse.js` | Client-side fuzzy full-text search for Command Palette |
+| `react-markdown` | Markdown rendering for future content rendering |
+
+---
+
+## 23. Updated Route Structure
+
+```
+/progress             → Progress Dashboard (NEW)
+```
+
+All other routes remain unchanged from Section 4.
+
+---
+
+## 24. Feature Roadmap (from Grade Report)
+
+### ✅ Implemented (12 of 14)
+1. SWMM5/ICM Translation Panels
+2. Model Autopsy Collection
+3. Responsibility Score Quiz
+4. Full-Text Search (Fuse.js)
+5. Progress Dashboard
+6. Print-Friendly Chapters
+7. Share-This-Rule Links
+8. Custom OG Image
+9. Complexity Simulator
+10. Peer Review Simulator
+11. Quote of the Day
+12. Certification Badge
+
+### 🟡 Planned
+- "James Would Say..." Decision Assistant
+- Chapter Cross-Reference Matrix
+
+### 🔴 Future Suggestions
+- Cloud Progress Sync (Supabase auth)
+- "Apply to My Model" Worksheets
+- Chapter-to-Chapter Cross-References
+- Community Discussion / Comments
+- Responsible Modeling Audit Tool
+- Video Companion Integration
+- Peer Review Workflow
+- Organization Dashboard
+- SWMM5 .INP / ICM file parsing
 
 ---
 
