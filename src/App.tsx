@@ -39,6 +39,7 @@ import ModelAutopsiesPage from "./pages/ModelAutopsies";
 import GradeReport from "./pages/GradeReport";
 import Animations from "./pages/Animations";
 import Progress from "./pages/Progress";
+import CrossReference from "./pages/CrossReference";
 const queryClient = new QueryClient();
 
 const App = () => (
