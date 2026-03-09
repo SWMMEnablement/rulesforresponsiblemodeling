@@ -30,6 +30,7 @@ export const Navigation = () => {
     { to: "/resources", icon: BookOpen, label: "Resources" },
     { to: "/phd-thesis", icon: FlaskConical, label: "Goyen PhD Thesis" },
     { to: "/grade-report", icon: Award, label: "Grade Report" },
+    { to: "/cross-reference", icon: Grid3X3, label: "Cross-Ref" },
     { to: "/progress", icon: BarChart3, label: "My Progress" },
     { to: "https://replit.com/@robertdickinson/SWMM-Docs-Explorer", icon: ExternalLink, label: "SWMM Explorer", external: true },
   ];

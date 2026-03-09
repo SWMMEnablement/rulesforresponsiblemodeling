@@ -84,6 +84,7 @@ const App = () => (
             <Route path="/grade-report" element={<GradeReport />} />
             <Route path="/animations" element={<Animations />} />
             <Route path="/progress" element={<Progress />} />
+            <Route path="/cross-reference" element={<CrossReference />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
