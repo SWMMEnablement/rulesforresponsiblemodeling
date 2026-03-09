@@ -540,6 +540,29 @@ const Resources = () => {
           <SoftwareExamplesSearch />
         </section>
 
+        {/* Project Handover Document */}
+        <section className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex items-center gap-3 mb-6">
+            <FileText className="w-8 h-8 text-primary" />
+            <h2 className="text-3xl font-bold text-foreground">Project Handover</h2>
+          </div>
+          <Card className="p-6 hover:shadow-lg transition-shadow">
+            <h3 className="text-xl font-bold text-primary mb-3 flex items-center gap-2">
+              <FileText className="w-5 h-5" />
+              Technical Handover Document
+            </h3>
+            <p className="text-muted-foreground mb-4">
+              Comprehensive technical documentation covering the app's architecture, 80+ components, data layer, design system, and deployment details. Useful for developers, reviewers, or anyone taking over the project.
+            </p>
+            <a href="/handover.md" download="handover.md">
+              <Button variant="outline" className="gap-2">
+                <FileText className="w-4 h-4" />
+                Download handover.md
+              </Button>
+            </a>
+          </Card>
+        </section>
+
       {/* Footer */}
       <footer className="bg-muted/30 py-8 px-6 mt-16">
         <div className="max-w-7xl mx-auto text-center">
