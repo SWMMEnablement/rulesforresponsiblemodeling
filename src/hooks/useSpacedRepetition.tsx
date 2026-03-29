@@ -23,7 +23,7 @@ const STORAGE_KEY = "flashcard-progress";
 
 export const useSpacedRepetition = (flashcards: FlashcardData[]) => {
   const [progress, setProgress] = useState<Map<string, CardProgress>>(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = safeStorage.getItem(STORAGE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
       return new Map(
