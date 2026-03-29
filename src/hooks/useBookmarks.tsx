@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import { safeStorage } from "@/lib/storage";
 const BOOKMARKS_KEY = "chapter-bookmarks";
 
 export interface Bookmark {
