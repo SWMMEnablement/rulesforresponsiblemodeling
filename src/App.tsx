@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CommandPalette } from "@/components/CommandPalette";
 import { AIChatWidget } from "@/components/AIChatWidget";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Chapter1 from "./pages/Chapter1";
