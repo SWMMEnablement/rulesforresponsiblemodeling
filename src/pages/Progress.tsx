@@ -1,3 +1,4 @@
+import { safeStorage } from "@/lib/storage";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Card } from "@/components/ui/card";
@@ -42,7 +43,7 @@ const ProgressDashboard = () => {
     const chaptersRead: number[] = [];
     for (let i = 1; i <= 17; i++) {
       const notesKey = `chapter-notes-${i}`;
-      const hasNotes = localStorage.getItem(notesKey);
+      const hasNotes = safeStorage.getItem(notesKey);
       const isBookmarked = bookmarks.some(b => b.chapterNumber === i);
       if (hasNotes || isBookmarked) {
         chaptersRead.push(i);
@@ -56,7 +57,7 @@ const ProgressDashboard = () => {
   // Get quiz scores from localStorage
   const getQuizScore = () => {
     try {
-      const stored = localStorage.getItem("responsibility-quiz-score");
+      const stored = safeStorage.getItem("responsibility-quiz-score");
       return stored ? JSON.parse(stored) : null;
     } catch { return null; }
   };
