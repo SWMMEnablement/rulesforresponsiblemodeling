@@ -12,7 +12,7 @@ export const useBookmarks = () => {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem(BOOKMARKS_KEY);
+    const stored = safeStorage.getItem(BOOKMARKS_KEY);
     if (stored) {
       try {
         setBookmarks(JSON.parse(stored));
