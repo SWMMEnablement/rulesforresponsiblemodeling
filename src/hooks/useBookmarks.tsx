@@ -24,7 +24,7 @@ export const useBookmarks = () => {
 
   const saveBookmarks = (newBookmarks: Bookmark[]) => {
     setBookmarks(newBookmarks);
-    localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(newBookmarks));
+    safeStorage.setItem(BOOKMARKS_KEY, JSON.stringify(newBookmarks));
   };
 
   const toggleBookmark = (chapterNumber: number, title: string) => {

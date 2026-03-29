@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { safeStorage } from "@/lib/storage";
 
 const NOTES_KEY = "chapter-notes";
 
