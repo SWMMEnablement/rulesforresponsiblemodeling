@@ -42,7 +42,7 @@ export const useSpacedRepetition = (flashcards: FlashcardData[]) => {
 
   useEffect(() => {
     const progressObj = Object.fromEntries(progress);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(progressObj));
+    safeStorage.setItem(STORAGE_KEY, JSON.stringify(progressObj));
   }, [progress]);
 
   const getCardProgress = (id: string): CardProgress => {
