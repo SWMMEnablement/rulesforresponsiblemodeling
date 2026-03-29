@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { safeStorage } from "@/lib/storage";
 
 export interface FlashcardData {
   id: string;
@@ -22,7 +23,7 @@ const STORAGE_KEY = "flashcard-progress";
 
 export const useSpacedRepetition = (flashcards: FlashcardData[]) => {
   const [progress, setProgress] = useState<Map<string, CardProgress>>(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = safeStorage.getItem(STORAGE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
       return new Map(
@@ -41,7 +42,7 @@ export const useSpacedRepetition = (flashcards: FlashcardData[]) => {
 
   useEffect(() => {
     const progressObj = Object.fromEntries(progress);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(progressObj));
+    safeStorage.setItem(STORAGE_KEY, JSON.stringify(progressObj));
   }, [progress]);
 
   const getCardProgress = (id: string): CardProgress => {
@@ -133,7 +134,7 @@ export const useSpacedRepetition = (flashcards: FlashcardData[]) => {
 
   const resetProgress = () => {
     setProgress(new Map());
-    localStorage.removeItem(STORAGE_KEY);
+    safeStorage.removeItem(STORAGE_KEY);
   };
 
   return {

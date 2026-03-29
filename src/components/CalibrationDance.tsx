@@ -28,7 +28,7 @@ const impToX = (imp: number) => ((imp - 45) / 45) * 280;
 export const CalibrationDance = () => {
   const [step, setStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const path = generateDancePath();
 
   useEffect(() => {

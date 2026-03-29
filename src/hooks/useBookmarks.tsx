@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import { safeStorage } from "@/lib/storage";
 const BOOKMARKS_KEY = "chapter-bookmarks";
 
 export interface Bookmark {
@@ -12,7 +12,7 @@ export const useBookmarks = () => {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem(BOOKMARKS_KEY);
+    const stored = safeStorage.getItem(BOOKMARKS_KEY);
     if (stored) {
       try {
         setBookmarks(JSON.parse(stored));
@@ -24,7 +24,7 @@ export const useBookmarks = () => {
 
   const saveBookmarks = (newBookmarks: Bookmark[]) => {
     setBookmarks(newBookmarks);
-    localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(newBookmarks));
+    safeStorage.setItem(BOOKMARKS_KEY, JSON.stringify(newBookmarks));
   };
 
   const toggleBookmark = (chapterNumber: number, title: string) => {

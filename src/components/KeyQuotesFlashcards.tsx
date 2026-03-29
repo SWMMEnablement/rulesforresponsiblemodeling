@@ -1,3 +1,4 @@
+import { safeStorage } from "@/lib/storage";
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,7 +27,7 @@ const STORAGE_KEY = "quote-flashcard-progress";
 // Custom hook for quote flashcards with separate storage
 const useQuoteSpacedRepetition = (flashcards: FlashcardData[]) => {
   const [progress, setProgress] = useState<Map<string, any>>(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = safeStorage.getItem(STORAGE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
       return new Map(
@@ -45,7 +46,7 @@ const useQuoteSpacedRepetition = (flashcards: FlashcardData[]) => {
 
   useEffect(() => {
     const progressObj = Object.fromEntries(progress);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(progressObj));
+    safeStorage.setItem(STORAGE_KEY, JSON.stringify(progressObj));
   }, [progress]);
 
   const getCardProgress = (id: string) => {
@@ -112,7 +113,7 @@ const useQuoteSpacedRepetition = (flashcards: FlashcardData[]) => {
 
   const resetProgress = () => {
     setProgress(new Map());
-    localStorage.removeItem(STORAGE_KEY);
+    safeStorage.removeItem(STORAGE_KEY);
   };
 
   return { updateCard, getDueCards, getNewCards, getStats, resetProgress, getCardProgress };
