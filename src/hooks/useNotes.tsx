@@ -13,7 +13,7 @@ export const useNotes = () => {
   const [notes, setNotes] = useState<ChapterNote[]>([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem(NOTES_KEY);
+    const stored = safeStorage.getItem(NOTES_KEY);
     if (stored) {
       try {
         setNotes(JSON.parse(stored));
