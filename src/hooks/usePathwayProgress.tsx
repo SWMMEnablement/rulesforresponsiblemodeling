@@ -1,3 +1,4 @@
+import { safeStorage } from "@/lib/storage";
 import { useState, useEffect, useCallback } from "react";
 
 interface ChapterProgress {
@@ -20,7 +21,7 @@ export const usePathwayProgress = () => {
 
   // Load progress from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = safeStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
         setProgress(JSON.parse(stored));
@@ -33,7 +34,7 @@ export const usePathwayProgress = () => {
   // Save progress to localStorage
   const saveProgress = useCallback((newProgress: PathwayProgress[]) => {
     setProgress(newProgress);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newProgress));
+    safeStorage.setItem(STORAGE_KEY, JSON.stringify(newProgress));
   }, []);
 
   // Mark a chapter as complete for a pathway
@@ -68,7 +69,7 @@ export const usePathwayProgress = () => {
         pathwayProgress.lastAccessedAt = Date.now();
       }
 
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      safeStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -91,7 +92,7 @@ export const usePathwayProgress = () => {
         return p;
       });
 
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      safeStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -140,7 +141,7 @@ export const usePathwayProgress = () => {
   const resetPathwayProgress = useCallback((pathwayId: string) => {
     setProgress(prev => {
       const updated = prev.filter(p => p.pathwayId !== pathwayId);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      safeStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
