@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { safeStorage } from "@/lib/storage";
 
 export interface FlashcardData {
   id: string;
