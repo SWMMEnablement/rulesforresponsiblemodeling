@@ -134,7 +134,7 @@ export const useSpacedRepetition = (flashcards: FlashcardData[]) => {
 
   const resetProgress = () => {
     setProgress(new Map());
-    localStorage.removeItem(STORAGE_KEY);
+    safeStorage.removeItem(STORAGE_KEY);
   };
 
   return {

@@ -25,7 +25,7 @@ export const useNotes = () => {
 
   const saveNotes = (newNotes: ChapterNote[]) => {
     setNotes(newNotes);
-    localStorage.setItem(NOTES_KEY, JSON.stringify(newNotes));
+    safeStorage.setItem(NOTES_KEY, JSON.stringify(newNotes));
   };
 
   const saveNote = (chapterNumber: number, content: string) => {
