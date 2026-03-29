@@ -15,7 +15,7 @@ const stages = [
 export const UncertaintyFunnel = () => {
   const [inputUncertainty, setInputUncertainty] = useState(15);
   const [animPhase, setAnimPhase] = useState(0);
-  const animRef = useRef<NodeJS.Timeout | null>(null);
+  const animRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const modelUncertainty = useMemo(() => inputUncertainty * 1.6, [inputUncertainty]);
   const outputUncertainty = useMemo(() => {
