@@ -23,7 +23,7 @@ export const ModelComparison = () => {
   const [valEvents, setValEvents] = useState(0);
   const [hasUncertainty, setHasUncertainty] = useState(false);
   const [hasSensitivity, setHasSensitivity] = useState(false);
-  const [showResults, setShowResults] = useState(false);
+  const [showResults, setShowResults] = useState(true);
 
   const getAssessments = (): Assessment[] => {
     const minGages = Math.max(2, Math.ceil(subcatchments / 30));
@@ -121,7 +121,7 @@ export const ModelComparison = () => {
             </span>
             <Badge variant="outline">{subcatchments}</Badge>
           </div>
-          <Slider value={[subcatchments]} onValueChange={([v]) => { setSubcatchments(v); setShowResults(false); }} min={5} max={500} step={5} />
+          <Slider value={[subcatchments]} onValueChange={([v]) => { setSubcatchments(v); }} min={5} max={500} step={5} />
         </div>
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
@@ -134,7 +134,7 @@ export const ModelComparison = () => {
             </span>
             <Badge variant="outline">{rainGages}</Badge>
           </div>
-          <Slider value={[rainGages]} onValueChange={([v]) => { setRainGages(v); setShowResults(false); }} min={1} max={20} step={1} />
+          <Slider value={[rainGages]} onValueChange={([v]) => { setRainGages(v); }} min={1} max={20} step={1} />
         </div>
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
@@ -147,7 +147,7 @@ export const ModelComparison = () => {
             </span>
             <Badge variant="outline">{calEvents}</Badge>
           </div>
-          <Slider value={[calEvents]} onValueChange={([v]) => { setCalEvents(v); setShowResults(false); }} min={0} max={10} step={1} />
+          <Slider value={[calEvents]} onValueChange={([v]) => { setCalEvents(v); }} min={0} max={10} step={1} />
         </div>
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
@@ -160,10 +160,10 @@ export const ModelComparison = () => {
             </span>
             <Badge variant="outline">{valEvents}</Badge>
           </div>
-          <Slider value={[valEvents]} onValueChange={([v]) => { setValEvents(v); setShowResults(false); }} min={0} max={10} step={1} />
+          <Slider value={[valEvents]} onValueChange={([v]) => { setValEvents(v); }} min={0} max={10} step={1} />
         </div>
         <div className="flex items-center gap-3">
-          <Switch id="uncertainty" checked={hasUncertainty} onCheckedChange={(v) => { setHasUncertainty(v); setShowResults(false); }} />
+          <Switch id="uncertainty" checked={hasUncertainty} onCheckedChange={(v) => { setHasUncertainty(v); }} />
           <Label htmlFor="uncertainty" className="text-sm flex items-center gap-1">
             Uncertainty analysis performed
             <Tooltip>
@@ -173,7 +173,7 @@ export const ModelComparison = () => {
           </Label>
         </div>
         <div className="flex items-center gap-3">
-          <Switch id="sensitivity" checked={hasSensitivity} onCheckedChange={(v) => { setHasSensitivity(v); setShowResults(false); }} />
+          <Switch id="sensitivity" checked={hasSensitivity} onCheckedChange={(v) => { setHasSensitivity(v); }} />
           <Label htmlFor="sensitivity" className="text-sm flex items-center gap-1">
             Sensitivity analysis performed
             <Tooltip>
@@ -184,11 +184,7 @@ export const ModelComparison = () => {
         </div>
       </div>
 
-      {!showResults && (
-        <Button onClick={() => setShowResults(true)} className="w-full">
-          Compare Against James's Standards
-        </Button>
-      )}
+      {/* Results always shown - live update */}
 
       {showResults && (
         <div className="space-y-4 animate-fade-in">
@@ -252,9 +248,6 @@ export const ModelComparison = () => {
             </div>
           </div>
 
-          <Button onClick={() => setShowResults(false)} variant="outline" size="sm">
-            Adjust Inputs
-          </Button>
         </div>
       )}
     </Card>

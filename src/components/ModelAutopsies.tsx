@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 import { Skull, ChevronDown, ChevronUp, Search, HelpCircle, Filter } from "lucide-react";
 import { Input } from "./ui/input";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
@@ -28,6 +29,15 @@ const categoryConfig: Record<AutopsyCategory, { label: string; color: string }> 
   "uncertainty": { label: "Uncertainty", color: "bg-red-500/10 text-red-700 dark:text-red-300 border-red-500/30" },
   "flood-risk": { label: "Flood Risk", color: "bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 border-cyan-500/30" },
   "validation": { label: "Validation", color: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30" },
+};
+
+const chapterTitles: Record<number, string> = {
+  1: "Introduction", 2: "Data & Uncertainty", 3: "Data Preparation",
+  4: "Optimal Complexity", 5: "Continuous Modeling", 6: "Rainfall Analysis",
+  7: "Storm Movement", 8: "SWMM Modeling", 9: "Objective Functions",
+  10: "Uncertainty Analysis", 11: "Sensitivity Analysis", 12: "Calibration",
+  13: "Verification & Validation", 14: "Parameter Optimization",
+  15: "Fuzzy Logic", 16: "Forecast Updating", 17: "Ethics",
 };
 
 const autopsies: Autopsy[] = [
@@ -168,7 +178,16 @@ export const ModelAutopsies = () => {
                 </div>
                 <div className="hidden md:flex gap-1">
                   {a.rulesViolated.map((r) => (
-                    <Badge key={r} variant="outline" className="text-xs">Ch.{r}</Badge>
+                    <Tooltip key={r}>
+                      <TooltipTrigger asChild>
+                        <span>
+                          <Badge variant="outline" className="text-xs cursor-help">Ch.{r}</Badge>
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{chapterTitles[r] || `Chapter ${r}`}</p>
+                      </TooltipContent>
+                    </Tooltip>
                   ))}
                 </div>
                 {expanded === a.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
