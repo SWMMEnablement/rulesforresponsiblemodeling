@@ -2,16 +2,17 @@ import { useState, useMemo } from "react";
 import { Card } from "./ui/card";
 import { Slider } from "./ui/slider";
 import { Badge } from "./ui/badge";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, ReferenceLine, Area, AreaChart } from "recharts";
-import { Activity, AlertTriangle, CheckCircle2, Info, HelpCircle } from "lucide-react";
+import { XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, ReferenceLine, Area, AreaChart } from "recharts";
+import { Activity, AlertTriangle, CheckCircle2, Info, HelpCircle, BookOpen, Lightbulb } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import { Link } from "react-router-dom";
 
 export const ComplexitySimulator = () => {
   const [subcatchments, setSubcatchments] = useState(50);
   const [calParams, setCalParams] = useState(10);
   const [dataQuality, setDataQuality] = useState(70);
 
-  const { chartData, optimalPoint, currentReliability, zone } = useMemo(() => {
+  const { chartData, optimalPoint, currentReliability, zone, warnings } = useMemo(() => {
     const dataFactor = dataQuality / 100;
     const paramPenalty = calParams / 50;
     const optimalX = Math.round(15 + dataFactor * 80 - paramPenalty * 20);
@@ -45,18 +46,62 @@ export const ComplexitySimulator = () => {
       ? "optimal"
       : "overfitting";
 
+    // Generate contextual warnings
+    const contextWarnings: { text: string; chapter: number; severity: "warning" | "danger" | "info" }[] = [];
+    
+    if (subcatchments > dataQuality * 5) {
+      contextWarnings.push({
+        text: `Complexity exceeds data resolution. With ${dataQuality}% data quality, ${subcatchments} subcatchments cannot be independently constrained.`,
+        chapter: 4,
+        severity: "danger",
+      });
+    }
+    
+    if (calParams > 20 && subcatchments > 100) {
+      contextWarnings.push({
+        text: `${calParams} calibration parameters across ${subcatchments} subcatchments creates severe equifinality risk — multiple parameter sets will fit equally well for wrong reasons.`,
+        chapter: 14,
+        severity: "danger",
+      });
+    }
+    
+    if (calParams > 15 && dataQuality < 50) {
+      contextWarnings.push({
+        text: "Too many free parameters for low-quality data. Reduce parameters or improve data coverage first.",
+        chapter: 11,
+        severity: "warning",
+      });
+    }
+    
+    if (dataQuality < 30) {
+      contextWarnings.push({
+        text: "Data quality is critically low. Even simple models may be unreliable. Consider investing in data collection before modeling.",
+        chapter: 3,
+        severity: "warning",
+      });
+    }
+
+    if (zoneType === "optimal" && contextWarnings.length === 0) {
+      contextWarnings.push({
+        text: "Good balance! Your complexity is well-matched to available data. This is where models are most reliable.",
+        chapter: 4,
+        severity: "info",
+      });
+    }
+
     return {
       chartData: data,
       optimalPoint: Math.round(optimalX / 5) * 5,
       currentReliability: closest.reliability,
       zone: zoneType,
+      warnings: contextWarnings,
     };
   }, [subcatchments, calParams, dataQuality]);
 
   const zoneConfig = {
-    underfitting: { color: "text-amber-500", bg: "bg-amber-500/10", icon: Info, label: "Underfitting Zone", desc: "Model is too simple — missing important physical processes." },
-    optimal: { color: "text-emerald-500", bg: "bg-emerald-500/10", icon: CheckCircle2, label: "Optimal Zone", desc: "Complexity is well-matched to available data." },
-    overfitting: { color: "text-destructive", bg: "bg-destructive/10", icon: AlertTriangle, label: "Overfitting Zone", desc: "Adding complexity is reducing reliability — parameters can't be independently constrained." },
+    underfitting: { color: "text-amber-500", bg: "bg-amber-500/10 border-amber-500/20", icon: Info, label: "Underfitting Zone", desc: "Model is too simple — missing important physical processes." },
+    optimal: { color: "text-emerald-500", bg: "bg-emerald-500/10 border-emerald-500/20", icon: CheckCircle2, label: "Optimal Zone", desc: "Complexity is well-matched to available data." },
+    overfitting: { color: "text-destructive", bg: "bg-destructive/10 border-destructive/20", icon: AlertTriangle, label: "Overfitting Zone", desc: "Adding complexity is reducing reliability — parameters can't be independently constrained." },
   };
 
   const zoneInfo = zoneConfig[zone];
@@ -91,7 +136,7 @@ export const ComplexitySimulator = () => {
                 <TooltipContent className="max-w-xs"><p>The number of spatial units your catchment is divided into. More subcatchments = finer spatial detail but more parameters to constrain.</p></TooltipContent>
               </Tooltip>
             </span>
-            <Badge variant="outline">{subcatchments}</Badge>
+            <Badge variant={subcatchments > dataQuality * 5 ? "destructive" : "outline"}>{subcatchments}</Badge>
           </div>
           <Slider value={[subcatchments]} onValueChange={([v]) => setSubcatchments(v)} min={5} max={500} step={5} />
           <p className="text-xs text-muted-foreground">Spatial discretization level</p>
@@ -105,7 +150,7 @@ export const ComplexitySimulator = () => {
                 <TooltipContent className="max-w-xs"><p>Free parameters adjusted during calibration. Too many leads to equifinality — multiple parameter sets fitting the data equally well but for wrong reasons.</p></TooltipContent>
               </Tooltip>
             </span>
-            <Badge variant="outline">{calParams}</Badge>
+            <Badge variant={calParams > 20 ? "destructive" : "outline"}>{calParams}</Badge>
           </div>
           <Slider value={[calParams]} onValueChange={([v]) => setCalParams(v)} min={3} max={50} step={1} />
           <p className="text-xs text-muted-foreground">Free parameters to optimize</p>
@@ -119,7 +164,7 @@ export const ComplexitySimulator = () => {
                 <TooltipContent className="max-w-xs"><p>Higher quality data (better spatial/temporal resolution, fewer gaps) supports more complex models. Poor data makes simple models more reliable.</p></TooltipContent>
               </Tooltip>
             </span>
-            <Badge variant="outline">{dataQuality}%</Badge>
+            <Badge variant={dataQuality < 30 ? "destructive" : "outline"}>{dataQuality}%</Badge>
           </div>
           <Slider value={[dataQuality]} onValueChange={([v]) => setDataQuality(v)} min={10} max={100} step={5} />
           <p className="text-xs text-muted-foreground">Resolution & coverage of input data</p>
@@ -148,15 +193,11 @@ export const ComplexitySimulator = () => {
       </div>
 
       {/* Status */}
-      <div className={`flex items-start gap-3 p-4 rounded-lg ${zoneInfo.bg}`}>
+      <div className={`flex items-start gap-3 p-4 rounded-lg border ${zoneInfo.bg}`}>
         <ZoneIcon className={`w-5 h-5 mt-0.5 shrink-0 ${zoneInfo.color}`} />
-        <div>
+        <div className="flex-1">
           <p className={`font-semibold text-sm ${zoneInfo.color}`}>
             {zoneInfo.label} — Reliability: {currentReliability}%
-            <Tooltip>
-              <TooltipTrigger asChild><HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help inline ml-1.5 align-text-top" /></TooltipTrigger>
-              <TooltipContent className="max-w-xs"><p>Reliability reflects how well the model is expected to perform on unseen data — not just how well it fits calibration data.</p></TooltipContent>
-            </Tooltip>
           </p>
           <p className="text-sm text-muted-foreground mt-1">{zoneInfo.desc}</p>
           {zone === "overfitting" && (
@@ -166,6 +207,37 @@ export const ComplexitySimulator = () => {
           )}
         </div>
       </div>
+
+      {/* Contextual Warnings */}
+      {warnings.length > 0 && (
+        <div className="mt-4 space-y-2">
+          {warnings.map((w, i) => (
+            <div
+              key={i}
+              className={`flex items-start gap-3 p-3 rounded-lg border text-sm ${
+                w.severity === "danger"
+                  ? "bg-destructive/5 border-destructive/20"
+                  : w.severity === "warning"
+                  ? "bg-amber-500/5 border-amber-500/20"
+                  : "bg-emerald-500/5 border-emerald-500/20"
+              }`}
+            >
+              {w.severity === "info" ? (
+                <Lightbulb className="w-4 h-4 mt-0.5 shrink-0 text-emerald-500" />
+              ) : (
+                <AlertTriangle className={`w-4 h-4 mt-0.5 shrink-0 ${w.severity === "danger" ? "text-destructive" : "text-amber-500"}`} />
+              )}
+              <div className="flex-1">
+                <p className="text-foreground">{w.text}</p>
+                <Link to={`/chapter/${w.chapter}`} className="inline-flex items-center gap-1 mt-1 text-xs text-primary hover:underline">
+                  <BookOpen className="w-3 h-3" />
+                  See Chapter {w.chapter}
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </Card>
     </TooltipProvider>
   );

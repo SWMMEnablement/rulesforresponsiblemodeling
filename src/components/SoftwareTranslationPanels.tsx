@@ -74,16 +74,16 @@ export const SoftwareTranslationPanels = () => {
       </p>
 
       <div className="space-y-3">
-        {translations.map((t) => (
-          <TranslationPanel key={t.chapter} data={t} />
+        {translations.map((t, i) => (
+          <TranslationPanel key={t.chapter} data={t} defaultOpen={i < 2} />
         ))}
       </div>
     </Card>
   );
 };
 
-const TranslationPanel = ({ data }: { data: ChapterTranslation }) => {
-  const [open, setOpen] = useState(false);
+const TranslationPanel = ({ data, defaultOpen = false }: { data: ChapterTranslation; defaultOpen?: boolean }) => {
+  const [open, setOpen] = useState(defaultOpen);
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger className="w-full flex items-center justify-between p-4 rounded-lg border border-border hover:border-primary/50 transition-all text-left">
