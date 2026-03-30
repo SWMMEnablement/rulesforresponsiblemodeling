@@ -82,8 +82,8 @@ export const SoftwareTranslationPanels = () => {
   );
 };
 
-const TranslationPanel = ({ data }: { data: ChapterTranslation }) => {
-  const [open, setOpen] = useState(false);
+const TranslationPanel = ({ data, defaultOpen = false }: { data: ChapterTranslation; defaultOpen?: boolean }) => {
+  const [open, setOpen] = useState(defaultOpen);
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger className="w-full flex items-center justify-between p-4 rounded-lg border border-border hover:border-primary/50 transition-all text-left">
