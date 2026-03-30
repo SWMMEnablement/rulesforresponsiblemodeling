@@ -12,6 +12,7 @@ import { Navigation } from "@/components/Navigation";
 import { ReadingPathways } from "@/components/ReadingPathways";
 import { PersonalIntroduction } from "@/components/PersonalIntroduction";
 import { FrameworkDiagnostic } from "@/components/FrameworkDiagnostic";
+import { FindYourPathQuiz } from "@/components/FindYourPathQuiz";
 import { ChecklistGenerator } from "@/components/ChecklistGenerator";
 import { ProjectTemplates } from "@/components/ProjectTemplates";
 import { CaseVignettes } from "@/components/CaseVignettes";
