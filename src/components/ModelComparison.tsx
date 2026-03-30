@@ -184,11 +184,7 @@ export const ModelComparison = () => {
         </div>
       </div>
 
-      {!showResults && (
-        <Button onClick={() => setShowResults(true)} className="w-full">
-          Compare Against James's Standards
-        </Button>
-      )}
+      {/* Results always shown - live update */}
 
       {showResults && (
         <div className="space-y-4 animate-fade-in">
