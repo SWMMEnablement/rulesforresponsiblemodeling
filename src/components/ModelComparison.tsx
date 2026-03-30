@@ -134,7 +134,7 @@ export const ModelComparison = () => {
             </span>
             <Badge variant="outline">{rainGages}</Badge>
           </div>
-          <Slider value={[rainGages]} onValueChange={([v]) => { setRainGages(v); setShowResults(false); }} min={1} max={20} step={1} />
+          <Slider value={[rainGages]} onValueChange={([v]) => { setRainGages(v); }} min={1} max={20} step={1} />
         </div>
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
