@@ -90,6 +90,13 @@ const Index = () => {
         </section>
       )}
       
+      {/* Find Your Path Quiz */}
+      <section className="py-16 px-6 bg-gradient-to-br from-accent/30 to-background">
+        <div className="max-w-2xl mx-auto">
+          <FindYourPathQuiz />
+        </div>
+      </section>
+
       {/* Reading Pathways Section */}
       <section className="py-16 px-6 bg-gradient-to-br from-muted/30 to-background">
         <div className="max-w-7xl mx-auto">
@@ -98,7 +105,7 @@ const Index = () => {
             <h2 className="text-3xl font-bold text-foreground">Learning Pathways</h2>
           </div>
           <p className="text-muted-foreground mb-8 max-w-2xl">
-            Choose a guided reading path based on your experience level and learning goals.
+            Choose a guided reading path based on your experience level and learning goals. Or take the quiz above to find your best match.
           </p>
           <ReadingPathways compact />
           <div className="mt-6 text-center">
