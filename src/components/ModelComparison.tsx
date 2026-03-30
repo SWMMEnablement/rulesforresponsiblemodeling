@@ -163,7 +163,7 @@ export const ModelComparison = () => {
           <Slider value={[valEvents]} onValueChange={([v]) => { setValEvents(v); }} min={0} max={10} step={1} />
         </div>
         <div className="flex items-center gap-3">
-          <Switch id="uncertainty" checked={hasUncertainty} onCheckedChange={(v) => { setHasUncertainty(v); setShowResults(false); }} />
+          <Switch id="uncertainty" checked={hasUncertainty} onCheckedChange={(v) => { setHasUncertainty(v); }} />
           <Label htmlFor="uncertainty" className="text-sm flex items-center gap-1">
             Uncertainty analysis performed
             <Tooltip>
