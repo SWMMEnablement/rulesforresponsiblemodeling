@@ -31,6 +31,15 @@ const categoryConfig: Record<AutopsyCategory, { label: string; color: string }> 
   "validation": { label: "Validation", color: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30" },
 };
 
+const chapterTitles: Record<number, string> = {
+  1: "Introduction", 2: "Data & Uncertainty", 3: "Data Preparation",
+  4: "Optimal Complexity", 5: "Continuous Modeling", 6: "Rainfall Analysis",
+  7: "Storm Movement", 8: "SWMM Modeling", 9: "Objective Functions",
+  10: "Uncertainty Analysis", 11: "Sensitivity Analysis", 12: "Calibration",
+  13: "Verification & Validation", 14: "Parameter Optimization",
+  15: "Fuzzy Logic", 16: "Forecast Updating", 17: "Ethics",
+};
+
 const autopsies: Autopsy[] = [
   { id: 1, project: "Combined sewer overflow study", failure: "Model predicted 2 overflows/year", reality: "14 overflows/year", rootCause: "Manning's n calibrated to dry-weather flow only", rulesViolated: [4, 9, 14, 16], whatShouldHaveDone: "Split calibration into dry and wet weather events", chapters: [9, 14], outcome: "failure", categories: ["calibration", "validation"] },
   { id: 2, project: "Flood risk mapping — urban creek", failure: "100-year flood extent missed 12 homes", reality: "Flood damaged homes not in the mapped zone", rootCause: "Used 30-year-old topographic data (Rule 3 violation)", rulesViolated: [3, 10, 16], whatShouldHaveDone: "Verified topographic data vintage; used LiDAR data", chapters: [3, 16], outcome: "failure", categories: ["data-quality", "flood-risk"] },
