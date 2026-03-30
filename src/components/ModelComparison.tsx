@@ -147,7 +147,7 @@ export const ModelComparison = () => {
             </span>
             <Badge variant="outline">{calEvents}</Badge>
           </div>
-          <Slider value={[calEvents]} onValueChange={([v]) => { setCalEvents(v); setShowResults(false); }} min={0} max={10} step={1} />
+          <Slider value={[calEvents]} onValueChange={([v]) => { setCalEvents(v); }} min={0} max={10} step={1} />
         </div>
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
