@@ -248,9 +248,6 @@ export const ModelComparison = () => {
             </div>
           </div>
 
-          <Button onClick={() => setShowResults(false)} variant="outline" size="sm">
-            Adjust Inputs
-          </Button>
         </div>
       )}
     </Card>
