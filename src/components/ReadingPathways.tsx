@@ -10,6 +10,7 @@ import {
   Shield,
   Compass,
   ChevronRight,
+  ChevronLeft,
   Clock,
   BookOpen,
   CheckCircle,
@@ -19,6 +20,8 @@ import {
   Wrench
 } from "lucide-react";
 import { usePathwayProgress } from "@/hooks/usePathwayProgress";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useState } from "react";
 
 interface DiagnosticPrompt {
   afterChapter: number;
