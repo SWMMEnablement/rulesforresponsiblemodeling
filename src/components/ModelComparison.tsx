@@ -121,7 +121,7 @@ export const ModelComparison = () => {
             </span>
             <Badge variant="outline">{subcatchments}</Badge>
           </div>
-          <Slider value={[subcatchments]} onValueChange={([v]) => { setSubcatchments(v); setShowResults(false); }} min={5} max={500} step={5} />
+          <Slider value={[subcatchments]} onValueChange={([v]) => { setSubcatchments(v); }} min={5} max={500} step={5} />
         </div>
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
