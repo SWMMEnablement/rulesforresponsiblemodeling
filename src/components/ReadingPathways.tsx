@@ -145,6 +145,8 @@ interface ReadingPathwaysProps {
 }
 
 export const ReadingPathways = ({ compact = false }: ReadingPathwaysProps) => {
+  const isMobile = useIsMobile();
+  const [carouselIndex, setCarouselIndex] = useState(0);
   const { 
     getCompletionPercentage, 
     getCompletedCount, 
