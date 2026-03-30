@@ -160,7 +160,7 @@ export const ModelComparison = () => {
             </span>
             <Badge variant="outline">{valEvents}</Badge>
           </div>
-          <Slider value={[valEvents]} onValueChange={([v]) => { setValEvents(v); setShowResults(false); }} min={0} max={10} step={1} />
+          <Slider value={[valEvents]} onValueChange={([v]) => { setValEvents(v); }} min={0} max={10} step={1} />
         </div>
         <div className="flex items-center gap-3">
           <Switch id="uncertainty" checked={hasUncertainty} onCheckedChange={(v) => { setHasUncertainty(v); setShowResults(false); }} />
