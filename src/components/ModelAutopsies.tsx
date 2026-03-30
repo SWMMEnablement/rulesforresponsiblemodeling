@@ -169,7 +169,16 @@ export const ModelAutopsies = () => {
                 </div>
                 <div className="hidden md:flex gap-1">
                   {a.rulesViolated.map((r) => (
-                    <Badge key={r} variant="outline" className="text-xs">Ch.{r}</Badge>
+                    <Tooltip key={r}>
+                      <TooltipTrigger asChild>
+                        <span>
+                          <Badge variant="outline" className="text-xs cursor-help">Ch.{r}</Badge>
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{chapterTitles[r] || `Chapter ${r}`}</p>
+                      </TooltipContent>
+                    </Tooltip>
                   ))}
                 </div>
                 {expanded === a.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
