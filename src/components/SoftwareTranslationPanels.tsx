@@ -74,8 +74,8 @@ export const SoftwareTranslationPanels = () => {
       </p>
 
       <div className="space-y-3">
-        {translations.map((t) => (
-          <TranslationPanel key={t.chapter} data={t} />
+        {translations.map((t, i) => (
+          <TranslationPanel key={t.chapter} data={t} defaultOpen={i < 2} />
         ))}
       </div>
     </Card>
