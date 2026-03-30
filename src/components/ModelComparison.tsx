@@ -173,7 +173,7 @@ export const ModelComparison = () => {
           </Label>
         </div>
         <div className="flex items-center gap-3">
-          <Switch id="sensitivity" checked={hasSensitivity} onCheckedChange={(v) => { setHasSensitivity(v); setShowResults(false); }} />
+          <Switch id="sensitivity" checked={hasSensitivity} onCheckedChange={(v) => { setHasSensitivity(v); }} />
           <Label htmlFor="sensitivity" className="text-sm flex items-center gap-1">
             Sensitivity analysis performed
             <Tooltip>
