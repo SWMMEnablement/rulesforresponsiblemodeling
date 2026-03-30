@@ -156,55 +156,96 @@ export const ReadingPathways = ({ compact = false }: ReadingPathwaysProps) => {
   } = usePathwayProgress();
 
   if (compact) {
+    const PathwayCard = ({ pathway }: { pathway: typeof pathways[0] }) => {
+      const completedCount = getCompletedCount(pathway.id);
+      const percentage = getCompletionPercentage(pathway.id);
+      return (
+        <Card className="p-4 hover:shadow-lg transition-all group cursor-pointer h-full">
+          <div className="flex items-center gap-3 mb-3">
+            <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${pathway.color} flex items-center justify-center text-white`}>
+              {pathway.icon}
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground text-sm">{pathway.title}</h3>
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Clock className="w-3 h-3" />
+                {pathway.estimatedTime}
+              </div>
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{pathway.description}</p>
+          {completedCount > 0 && (
+            <div className="mb-2">
+              <div className="flex items-center justify-between text-xs mb-1">
+                <span className="text-muted-foreground">Progress</span>
+                <span className="font-medium text-primary">{completedCount}/{pathway.chapters.length}</span>
+              </div>
+              <Progress value={percentage} className="h-1.5" />
+            </div>
+          )}
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <BookOpen className="w-3 h-3" />
+            {pathway.chapters.length} chapters
+          </div>
+        </Card>
+      );
+    };
+
+    // Mobile: swipeable carousel
+    if (isMobile) {
+      return (
+        <div className="relative">
+          <div className="overflow-hidden">
+            <div
+              className="flex transition-transform duration-300 ease-out"
+              style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
+            >
+              {pathways.map((pathway) => (
+                <div key={pathway.id} className="w-full flex-shrink-0 px-1">
+                  <PathwayCard pathway={pathway} />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center justify-between mt-4">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={carouselIndex === 0}
+              onClick={() => setCarouselIndex(Math.max(0, carouselIndex - 1))}
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </Button>
+            <div className="flex gap-1.5">
+              {pathways.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCarouselIndex(i)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    i === carouselIndex ? "bg-primary w-4" : "bg-muted-foreground/30"
+                  }`}
+                />
+              ))}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={carouselIndex === pathways.length - 1}
+              onClick={() => setCarouselIndex(Math.min(pathways.length - 1, carouselIndex + 1))}
+            >
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
+    // Desktop: grid
     return (
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {pathways.map((pathway) => {
-          const completedCount = getCompletedCount(pathway.id);
-          const percentage = getCompletionPercentage(pathway.id);
-          
-          return (
-            <Card
-              key={pathway.id}
-              className="p-4 hover:shadow-lg transition-all group cursor-pointer"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div
-                  className={`w-10 h-10 rounded-lg bg-gradient-to-br ${pathway.color} flex items-center justify-center text-white`}
-                >
-                  {pathway.icon}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground text-sm">
-                    {pathway.title}
-                  </h3>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <Clock className="w-3 h-3" />
-                    {pathway.estimatedTime}
-                  </div>
-                </div>
-              </div>
-              <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
-                {pathway.description}
-              </p>
-              
-              {/* Progress indicator */}
-              {completedCount > 0 && (
-                <div className="mb-2">
-                  <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-muted-foreground">Progress</span>
-                    <span className="font-medium text-primary">{completedCount}/{pathway.chapters.length}</span>
-                  </div>
-                  <Progress value={percentage} className="h-1.5" />
-                </div>
-              )}
-              
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <BookOpen className="w-3 h-3" />
-                {pathway.chapters.length} chapters
-              </div>
-            </Card>
-          );
-        })}
+        {pathways.map((pathway) => (
+          <PathwayCard key={pathway.id} pathway={pathway} />
+        ))}
       </div>
     );
   }
