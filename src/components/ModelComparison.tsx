@@ -23,7 +23,7 @@ export const ModelComparison = () => {
   const [valEvents, setValEvents] = useState(0);
   const [hasUncertainty, setHasUncertainty] = useState(false);
   const [hasSensitivity, setHasSensitivity] = useState(false);
-  const [showResults, setShowResults] = useState(false);
+  const [showResults, setShowResults] = useState(true);
 
   const getAssessments = (): Assessment[] => {
     const minGages = Math.max(2, Math.ceil(subcatchments / 30));
