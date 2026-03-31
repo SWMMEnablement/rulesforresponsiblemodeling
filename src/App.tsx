@@ -84,6 +84,8 @@ const App = () => (
             <Route path="/phd-thesis" element={<PhDThesis />} />
             <Route path="/responsibility-quiz" element={<ResponsibilityQuiz />} />
             <Route path="/model-autopsies" element={<ModelAutopsiesPage />} />
+            <Route path="/micro-apps" element={<MicroAppsIndex />} />
+            <Route path="/micro-apps/:slug" element={<MicroAppPage />} />
             <Route path="/grade-report" element={<GradeReport />} />
             <Route path="/animations" element={<Animations />} />
             <Route path="/progress" element={<Progress />} />
