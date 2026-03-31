@@ -82,7 +82,7 @@ const MicroAppsIndex = () => (
 
         <div className="mt-8 text-center">
           <p className="text-sm text-muted-foreground mb-2">More micro-apps coming soon — one for every chapter!</p>
-          <Badge variant="secondary">4 of 17 available</Badge>
+          <Badge variant="secondary">8 of 17 available</Badge>
         </div>
       </div>
     </section>
