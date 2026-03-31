@@ -245,7 +245,16 @@ export const ChecklistGenerator = () => {
   );
 
   return (
-    <Card className="bg-gradient-to-br from-card to-muted/30">
+    <Card className="bg-gradient-to-br from-card to-muted/30 relative overflow-hidden">
+      {showCelebration && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/80 backdrop-blur-sm animate-fade-in">
+          <div className="text-center space-y-3">
+            <div className="text-6xl animate-bounce">🎉</div>
+            <h3 className="text-2xl font-bold text-foreground">All Items Complete!</h3>
+            <p className="text-muted-foreground">You've checked every item. Outstanding work!</p>
+          </div>
+        </div>
+      )}
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <ClipboardList className="w-6 h-6 text-primary" />
