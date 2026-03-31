@@ -111,7 +111,13 @@ const phaseChecklists: PhaseChecklist[] = [
 export const ChecklistGenerator = () => {
   const [selectedPhases, setSelectedPhases] = useState<ProjectPhase[]>([]);
   const [expandedPhase, setExpandedPhase] = useState<ProjectPhase | null>(null);
-  const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
+  const [checkedItems, setCheckedItems] = useState<Set<string>>(() => {
+    try {
+      const saved = localStorage.getItem("checklist-progress");
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch { return new Set(); }
+  });
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const togglePhase = (phase: ProjectPhase) => {
     setSelectedPhases(prev => 
