@@ -144,16 +144,6 @@ const getCurrentWeekRule = (): WeeklyRule => {
   return weeklyRules[Math.abs(weekIndex) % weeklyRules.length];
 };
 
-const getWeekDateRange = (): string => {
-  const now = new Date();
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - now.getDay() + 1);
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
-  
-  const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
-  return `${monday.toLocaleDateString('en-US', options)} - ${sunday.toLocaleDateString('en-US', options)}`;
-};
 
 export const RuleOfTheWeek = () => {
   const [currentRule, setCurrentRule] = useState<WeeklyRule>(getCurrentWeekRule());
