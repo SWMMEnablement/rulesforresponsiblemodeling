@@ -37,6 +37,7 @@ import CaseVignettes from "./pages/CaseVignettes";
 import PhDThesis from "./pages/PhDThesis";
 import ResponsibilityQuiz from "./pages/ResponsibilityQuiz";
 import ModelAutopsiesPage from "./pages/ModelAutopsies";
+import { MicroAppsIndex, MicroAppPage } from "./pages/MicroApps";
 import GradeReport from "./pages/GradeReport";
 import Animations from "./pages/Animations";
 import Progress from "./pages/Progress";
