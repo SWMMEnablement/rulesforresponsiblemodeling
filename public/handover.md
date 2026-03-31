@@ -574,7 +574,7 @@ All other routes remain unchanged from Section 4.
 
 ## 24. Feature Roadmap (from Grade Report)
 
-### ✅ Implemented (12 of 14)
+### ✅ Implemented (12 of 14 original + Phase 1-2 roadmap items)
 1. SWMM5/ICM Translation Panels
 2. Model Autopsy Collection
 3. Responsibility Score Quiz
@@ -602,6 +602,37 @@ All other routes remain unchanged from Section 4.
 - Peer Review Workflow
 - Organization Dashboard
 - SWMM5 .INP / ICM file parsing
+
+---
+
+## 25. Roadmap Phase 1–2 Changelog (2026-03)
+
+### Phase 1: Stop the Bleeding
+
+| Change | Description | Files |
+|---|---|---|
+| **Collapsible sections (Progressive Disclosure)** | All heavy content sections (SWMM panels, case vignettes, key concepts, etc.) default to collapsed state. Users expand on demand, reducing cognitive overload. | Multiple chapter pages, component files |
+| **Dynamic date fix** | Replaced hardcoded "Mar 30 – Apr 5" Rule of the Week date with a dynamically computed current-week range using `date-fns`. | `src/components/RuleOfTheWeek.tsx` |
+| **Activated Complexity Simulator** | Hardcoded real logic into the Complexity Simulator — sliders now drive a live reliability curve with real-time feedback, parameter counts, and computation time estimates. | `src/components/ComplexitySimulator.tsx` |
+
+### Phase 2: Active Learning
+
+| Change | Description | Files |
+|---|---|---|
+| **Stateful Checklist** | `ChecklistGenerator` now persists checked items to `localStorage("checklist-progress")`. Progress survives page refresh. Celebration animation (🎉 bounce + backdrop blur) triggers when all visible items are completed. | `src/components/ChecklistGenerator.tsx` |
+| **Framework Diagnostic Router** | 3-question diagnostic quiz ("What's your role?", "What's your challenge?", "How much time?") routes users to specific chapters, reducing Hick's Law decision paralysis. | `src/components/FrameworkDiagnostic.tsx` |
+| **SWMM Panels default open** | Software translation panels default to expanded state so users see content immediately. | `src/components/SoftwareTranslationPanels.tsx` |
+| **4 Interactive Micro-Apps** | Standalone chapter tools at `/micro-apps`: Crystal Ball Test (Ch.1), Overfitting Simulator (Ch.4), Error Metric Lab (Ch.9), Monte Carlo Spinner (Ch.10). Each has sliders, live visualizations, and `.txt` export. | `src/components/micro-apps/CrystalBallTest.tsx`, `OverfittingSimulator.tsx`, `ErrorMetricLab.tsx`, `MonteCarloSpinner.tsx`, `src/pages/MicroApps.tsx` |
+| **Tom Walski eyewitness section** | Added Section 16.4 "The Workshop That Started It All" — a dark-themed guest testimonial card in Chapter 16. | `src/pages/Chapter16.tsx` |
+
+### Robustness & Code Quality
+
+| Change | Description |
+|---|---|
+| **ErrorBoundary** | Top-level error boundary wraps the app to catch rendering crashes gracefully. |
+| **Safe localStorage wrapper** | `src/lib/storage.ts` — `safeStorage` handles private browsing and quota errors. |
+| **Navigation overflow fix** | Horizontal nav uses `overflow-x-auto` to prevent clipping on narrow viewports. |
+| **TypeScript strict compliance** | All components pass `npx tsc --noEmit` with zero errors. |
 
 ---
 
