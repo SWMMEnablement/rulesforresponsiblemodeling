@@ -37,6 +37,7 @@ import CaseVignettes from "./pages/CaseVignettes";
 import PhDThesis from "./pages/PhDThesis";
 import ResponsibilityQuiz from "./pages/ResponsibilityQuiz";
 import ModelAutopsiesPage from "./pages/ModelAutopsies";
+import { MicroAppsIndex, MicroAppPage } from "./pages/MicroApps";
 import GradeReport from "./pages/GradeReport";
 import Animations from "./pages/Animations";
 import Progress from "./pages/Progress";
@@ -83,6 +84,8 @@ const App = () => (
             <Route path="/phd-thesis" element={<PhDThesis />} />
             <Route path="/responsibility-quiz" element={<ResponsibilityQuiz />} />
             <Route path="/model-autopsies" element={<ModelAutopsiesPage />} />
+            <Route path="/micro-apps" element={<MicroAppsIndex />} />
+            <Route path="/micro-apps/:slug" element={<MicroAppPage />} />
             <Route path="/grade-report" element={<GradeReport />} />
             <Route path="/animations" element={<Animations />} />
             <Route path="/progress" element={<Progress />} />
