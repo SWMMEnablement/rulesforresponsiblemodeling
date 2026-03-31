@@ -111,7 +111,13 @@ const phaseChecklists: PhaseChecklist[] = [
 export const ChecklistGenerator = () => {
   const [selectedPhases, setSelectedPhases] = useState<ProjectPhase[]>([]);
   const [expandedPhase, setExpandedPhase] = useState<ProjectPhase | null>(null);
-  const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
+  const [checkedItems, setCheckedItems] = useState<Set<string>>(() => {
+    try {
+      const saved = localStorage.getItem("checklist-progress");
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch { return new Set(); }
+  });
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const togglePhase = (phase: ProjectPhase) => {
     setSelectedPhases(prev => 
@@ -133,6 +139,15 @@ export const ChecklistGenerator = () => {
       } else {
         newSet.add(itemId);
       }
+      localStorage.setItem("checklist-progress", JSON.stringify([...newSet]));
+      
+      // Check if all items in current view are completed
+      const allItems = selectedChecklists.flatMap(p => p.items);
+      if (allItems.length > 0 && allItems.every(i => newSet.has(i.id))) {
+        setShowCelebration(true);
+        setTimeout(() => setShowCelebration(false), 3000);
+      }
+      
       return newSet;
     });
   };
@@ -230,7 +245,16 @@ export const ChecklistGenerator = () => {
   );
 
   return (
-    <Card className="bg-gradient-to-br from-card to-muted/30">
+    <Card className="bg-gradient-to-br from-card to-muted/30 relative overflow-hidden">
+      {showCelebration && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/80 backdrop-blur-sm animate-fade-in">
+          <div className="text-center space-y-3">
+            <div className="text-6xl animate-bounce">🎉</div>
+            <h3 className="text-2xl font-bold text-foreground">All Items Complete!</h3>
+            <p className="text-muted-foreground">You've checked every item. Outstanding work!</p>
+          </div>
+        </div>
+      )}
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <ClipboardList className="w-6 h-6 text-primary" />

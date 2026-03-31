@@ -144,16 +144,6 @@ const getCurrentWeekRule = (): WeeklyRule => {
   return weeklyRules[Math.abs(weekIndex) % weeklyRules.length];
 };
 
-const getWeekDateRange = (): string => {
-  const now = new Date();
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - now.getDay() + 1);
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
-  
-  const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
-  return `${monday.toLocaleDateString('en-US', options)} - ${sunday.toLocaleDateString('en-US', options)}`;
-};
 
 export const RuleOfTheWeek = () => {
   const [currentRule, setCurrentRule] = useState<WeeklyRule>(getCurrentWeekRule());
@@ -197,10 +187,7 @@ export const RuleOfTheWeek = () => {
             </div>
             <div>
               <h2 className="text-2xl font-bold text-foreground">Rule of the Week</h2>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Calendar className="w-4 h-4" />
-                <span>{getWeekDateRange()}</span>
-              </div>
+              <p className="text-sm text-muted-foreground">A new rule featured every week</p>
             </div>
           </div>
           <Button variant="ghost" size="icon" onClick={handleShare}>
