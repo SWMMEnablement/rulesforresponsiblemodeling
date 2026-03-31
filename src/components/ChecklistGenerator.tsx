@@ -139,6 +139,15 @@ export const ChecklistGenerator = () => {
       } else {
         newSet.add(itemId);
       }
+      localStorage.setItem("checklist-progress", JSON.stringify([...newSet]));
+      
+      // Check if all items in current view are completed
+      const allItems = selectedChecklists.flatMap(p => p.items);
+      if (allItems.length > 0 && allItems.every(i => newSet.has(i.id))) {
+        setShowCelebration(true);
+        setTimeout(() => setShowCelebration(false), 3000);
+      }
+      
       return newSet;
     });
   };
