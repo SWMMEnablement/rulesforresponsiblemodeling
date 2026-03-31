@@ -224,6 +224,42 @@ graph TD
           </section>
         )}
 
+        {/* Eyewitness Account */}
+        <section>
+          <div className="rounded-xl overflow-hidden bg-[hsl(215_28%_14%)] dark:bg-[hsl(215_28%_10%)] border border-cyan-500/20">
+            <div className="px-8 pt-6 pb-2">
+              <h3 className="text-lg font-bold text-amber-400">16.4 An Eyewitness Account — The Workshop That Started It All</h3>
+            </div>
+            <div className="px-8 pb-8 border-l-[3px] border-cyan-400 ml-6 space-y-4">
+              <p className="text-[hsl(210_30%_80%)] italic leading-relaxed text-sm">
+                By the late 1980s, the water distribution modeling world had made impressive strides in hydraulic simulation — steady-state solvers, extended-period simulation, calibration methods — but water quality modeling in pipe networks was still in its infancy. A handful of researchers were working on the problem, but there was no consensus tool, no standard approach, and no coordination between the groups.
+              </p>
+              <p className="text-[hsl(210_30%_80%)] italic leading-relaxed text-sm">
+                That changed on February 4–5, 1991, when the AWWA Research Foundation and the U.S. EPA co-sponsored a workshop titled "Water Quality Modeling in Distribution Systems" at EPA's Andrew W. Breidenbach Environmental Research Center in Cincinnati. Forty-three of the top water distribution modelers in the world were in that room — Uri Shamir, Walter Grayman, Don Wood, Robert Clark, and many others. The purpose was to assess the state of the art, identify gaps, and chart a path forward for water quality modeling in drinking water networks.
+              </p>
+              <p className="text-[hsl(210_30%_80%)] italic leading-relaxed text-sm">
+                I was one of the 43 participants. What I remember most vividly is someone who was not on the official program. Lew Rossman, an EPA researcher known at the time primarily for his work on rainfall-runoff modeling (what would eventually become SWMM5), sat quietly through both days of presentations and discussions. He took notes. He asked a few questions. He did not present a paper or give a talk.
+              </p>
+              <p className="text-[hsl(210_30%_80%)] italic leading-relaxed text-sm">
+                Then, shortly after the workshop ended, Lew walked up to Bob Clark — who headed EPA's drinking water research program — and essentially said: "I can build that model." Bob gave him the green light, and within roughly two years Lew had produced EPANET — a hydraulic and water quality model for distribution systems that was more capable, better documented, and more accessible than anything the 43 experts in that room had envisioned.
+              </p>
+              <p className="text-[hsl(210_30%_80%)] italic leading-relaxed text-sm">
+                What made EPANET remarkable was not just the technical achievement but the decisions around it: public domain release, clear documentation with worked examples, and a modular codebase others could read and extend. Those decisions created the entire commercial and academic ecosystem we know today — WaterGEMS, InfoWater, WaterCAD, and dozens of other tools all trace their lineage back to that moment.
+              </p>
+              <p className="text-[hsl(210_30%_80%)] italic leading-relaxed text-sm">
+                Years later, Lew turned his attention back to the stormwater side and undertook a complete rewrite of SWMM — producing SWMM5 (released in 2004), which replaced the aging Fortran codebase with clean, modular C. The fact that one person created the definitive models for both drinking water distribution and urban stormwater drainage is, as far as I know, without parallel in the water engineering world.
+              </p>
+              <p className="text-[hsl(210_30%_80%)] italic leading-relaxed text-sm">
+                More than thirty years later, the tools Lew built in that Cincinnati office remain the engines beneath virtually every water distribution and urban drainage model in use worldwide. It all started with a quiet man sitting in the back of a workshop, listening carefully, and then volunteering to build what everyone else was only talking about.
+              </p>
+              <div className="pt-4 text-right">
+                <p className="text-[hsl(210_30%_90%)] font-bold">— Tom Walski, Ph.D., P.E.</p>
+                <p className="text-[hsl(210_30%_60%)] text-sm">Industry Advisor, Bentley Systems</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="bg-gradient-to-br from-accent/20 to-background rounded-lg p-8">
           <h2 className="text-2xl font-bold text-foreground mb-4">References & Further Reading</h2>
           <div className="space-y-3 text-muted-foreground">
