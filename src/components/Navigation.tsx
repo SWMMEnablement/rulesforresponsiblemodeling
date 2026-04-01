@@ -25,6 +25,7 @@ export const Navigation = () => {
     { to: "/code-library", icon: Code, label: "Code Library" },
     { to: "/responsibility-quiz", icon: ClipboardCheck, label: "Quiz" },
     { to: "/model-autopsies", icon: SearchX, label: "Autopsies" },
+    { to: "/micro-apps", icon: Zap, label: "Micro-Apps" },
     { to: "/animations", icon: Sparkles, label: "Animations" },
     { to: "/glossary", icon: Library, label: "Glossary" },
     { to: "/resources", icon: BookOpen, label: "Resources" },
