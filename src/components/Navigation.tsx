@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, BookOpen, Library, GraduationCap, Menu, Moon, Sun, Keyboard, Quote, Code, FlaskConical, ClipboardCheck, SearchX, ExternalLink, Award, Sparkles, BarChart3, Grid3X3 } from "lucide-react";
+import { Home, BookOpen, Library, GraduationCap, Menu, Moon, Sun, Keyboard, Quote, Code, FlaskConical, ClipboardCheck, SearchX, ExternalLink, Award, Sparkles, BarChart3, Grid3X3, Zap } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
