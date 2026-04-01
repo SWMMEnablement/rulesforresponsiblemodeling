@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, BookOpen, Library, GraduationCap, Menu, Moon, Sun, Keyboard, Quote, Code, FlaskConical, ClipboardCheck, SearchX, ExternalLink, Award, Sparkles, BarChart3, Grid3X3 } from "lucide-react";
+import { Home, BookOpen, Library, GraduationCap, Menu, Moon, Sun, Keyboard, Quote, Code, FlaskConical, ClipboardCheck, SearchX, ExternalLink, Award, Sparkles, BarChart3, Grid3X3, Zap } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
@@ -25,6 +25,7 @@ export const Navigation = () => {
     { to: "/code-library", icon: Code, label: "Code Library" },
     { to: "/responsibility-quiz", icon: ClipboardCheck, label: "Quiz" },
     { to: "/model-autopsies", icon: SearchX, label: "Autopsies" },
+    { to: "/micro-apps", icon: Zap, label: "Micro-Apps" },
     { to: "/animations", icon: Sparkles, label: "Animations" },
     { to: "/glossary", icon: Library, label: "Glossary" },
     { to: "/resources", icon: BookOpen, label: "Resources" },
