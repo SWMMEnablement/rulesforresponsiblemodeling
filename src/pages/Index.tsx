@@ -42,7 +42,7 @@ const Index = () => {
       <PersonalIntroduction />
       
       {/* Search Section */}
-      <section className="py-12 px-6 bg-gradient-to-br from-primary/5 to-secondary/5">
+      <section id="global-search" className="py-12 px-6 bg-gradient-to-br from-primary/5 to-secondary/5">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
             <h2 className="text-2xl font-bold text-foreground">
