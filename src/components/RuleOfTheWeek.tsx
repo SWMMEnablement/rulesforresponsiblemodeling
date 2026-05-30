@@ -212,28 +212,25 @@ export const RuleOfTheWeek = () => {
 
           {/* Vignette Section */}
           <div className="p-6 space-y-6">
-            {/* Story */}
-            <div className="relative">
-              <Quote className="absolute -top-2 -left-2 w-8 h-8 text-primary/20" />
-              <div className="pl-6">
-                <p className="text-foreground leading-relaxed italic">
-                  "{isExpanded ? currentRule.vignette.story : currentRule.vignette.story.slice(0, 200)}
-                  {!isExpanded && currentRule.vignette.story.length > 200 && "..."}
-                  {currentRule.vignette.story.length > 200 && (
-                    <button
-                      onClick={() => setIsExpanded(!isExpanded)}
-                      className="text-primary hover:underline ml-1 font-medium not-italic"
-                    >
-                      {isExpanded ? "Show less" : "Read more"}
-                    </button>
-                  )}"
-                </p>
-                {currentRule.vignette.contributor && (
-                  <p className="text-sm text-muted-foreground mt-2">
-                    — {currentRule.vignette.contributor}
-                  </p>
+            {/* Story — upright type with colored bar for readability */}
+            <div className="border-l-4 border-primary pl-5 py-1">
+              <p className="text-foreground leading-relaxed">
+                {isExpanded ? currentRule.vignette.story : currentRule.vignette.story.slice(0, 200)}
+                {!isExpanded && currentRule.vignette.story.length > 200 && "…"}
+                {currentRule.vignette.story.length > 200 && (
+                  <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="text-primary hover:underline ml-1 font-medium"
+                  >
+                    {isExpanded ? "Show less" : "Read more"}
+                  </button>
                 )}
-              </div>
+              </p>
+              {currentRule.vignette.contributor && (
+                <p className="text-sm text-muted-foreground mt-2">
+                  — {currentRule.vignette.contributor}
+                </p>
+              )}
             </div>
 
             {/* Lesson */}
