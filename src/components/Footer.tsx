@@ -5,7 +5,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 
 const APP_VERSION = "2026.1";
 const LAST_UPDATED = "May 30, 2026";
-const ISSUES_URL = "https://github.com/robertdickinson/rules-for-responsible-modeling/issues/new";
+const ISSUES_EMAIL = "robert.dickinson@gmail.com";
+const ISSUES_URL = `mailto:${ISSUES_EMAIL}?subject=${encodeURIComponent("Rules for Responsible Modeling — Issue Report")}`;
 
 export const Footer = () => {
   const [showCodeDialog, setShowCodeDialog] = useState(false);
