@@ -711,3 +711,50 @@ function Stat({ label, value, sub, warn }: { label: string; value: string; sub?:
     </Card>
   );
 }
+
+function HoverReadout({ hoverIdx, timeSec }: { hoverIdx: number | null; timeSec: number | undefined }) {
+  return (
+    <div className="text-xs text-muted-foreground">
+      {hoverIdx == null || timeSec == null ? (
+        <span>Hover any chart to sync a crosshair across all panels.</span>
+      ) : (
+        <span>
+          Hovered timestep: <strong className="text-foreground tabular-nums">{fmtHours(timeSec)}</strong>{" "}
+          (index {hoverIdx})
+        </span>
+      )}
+    </div>
+  );
+}
+
+function RunPicker({
+  label, value, onChange, ensemble, color,
+}: {
+  label: string;
+  value: number;
+  onChange: (n: number) => void;
+  ensemble: EnsembleRow[];
+  color: string;
+}) {
+  const validRuns = ensemble.map((r, i) => ({ r, i })).filter(({ r }) => r.series);
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center gap-2">
+        <span className="inline-block w-3 h-3 rounded-sm" style={{ backgroundColor: color }} />
+        <Label className="text-xs">{label}</Label>
+      </div>
+      <Select value={String(value)} onValueChange={(v) => onChange(Number(v))}>
+        <SelectTrigger className="h-9 text-xs">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {validRuns.map(({ r, i }) => (
+            <SelectItem key={i} value={String(i)} className="text-xs">
+              #{i + 1} · n={r.manningN.toFixed(3)} · imp={r.pctImperv.toFixed(0)}% · rain×{r.rainfallMultiplier.toFixed(2)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+}
