@@ -385,9 +385,12 @@ export default function Playground() {
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))"
                               label={{ value: "time (h:mm)", position: "insideBottom", offset: -2, fill: "hsl(var(--muted-foreground))" }} />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
-                              labelFormatter={(v) => `t = ${fmtHours(Number(v))}`} />
-                            <Legend />
+                            <Tooltip content={<HydroTooltip unit={series.flowUnits} />} />
+                            <Legend
+                              formatter={(value: string) => (
+                                <span className="text-xs text-muted-foreground">{value} ({series.flowUnits})</span>
+                              )}
+                            />
                             {series.links.map((name, i) => (
                               <Line key={name} type="monotone" dataKey={`flow_${name}`} name={name}
                                 stroke={`hsl(${(i * 67) % 360} 70% 55%)`} dot={false} strokeWidth={2} isAnimationActive={false} />
