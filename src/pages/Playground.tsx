@@ -7,8 +7,11 @@ import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Play, Download, AlertTriangle, FlaskConical } from "lucide-react";
-import type { TooltipProps } from "recharts";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Loader2, Play, Download, AlertTriangle, FlaskConical, FileDown } from "lucide-react";
+import type { TooltipProps, CategoricalChartState } from "recharts/types/chart/types";
 import {
   ResponsiveContainer, ComposedChart, LineChart, Line, Area, XAxis, YAxis,
   Tooltip, Legend, CartesianGrid,
