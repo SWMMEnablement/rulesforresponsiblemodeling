@@ -201,23 +201,28 @@ export default function Playground() {
   const bandData = useMemo(() => {
     if (ensembleSeries.length < 2) return null;
     const ref = ensembleSeries[0];
-    // Build per-link flow bands (use first link only for primary chart)
     if (ref.links.length === 0) return null;
     const allFlowsFirstLink = ensembleSeries.map((s) => s.linkFlow[0]);
     const [pMin, p10, p50, p90, pMax] = percentileBands(allFlowsFirstLink, [0, 0.1, 0.5, 0.9, 1]);
     const allDepthsFirstNode = ensembleSeries.map((s) => s.nodeDepth[0]);
     const [dMin, d10, d50, d90, dMax] = percentileBands(allDepthsFirstNode, [0, 0.1, 0.5, 0.9, 1]);
+    const sA = compareMode ? ensembleSeries[runA] : undefined;
+    const sB = compareMode ? ensembleSeries[runB] : undefined;
     const rows = Array.from(ref.times).map((t, i) => ({
       t,
       flow_min: pMin[i], flow_p10: p10[i], flow_p50: p50[i], flow_p90: p90[i], flow_max: pMax[i],
       flow_band_lo: pMin[i], flow_band_hi: pMax[i] - pMin[i],
       flow_iqr_lo: p10[i], flow_iqr_hi: p90[i] - p10[i],
-      depth_min: dMin[i], depth_p50: d50[i], depth_max: dMax[i],
+      depth_min: dMin[i], depth_p10: d10[i], depth_p50: d50[i], depth_p90: d90[i], depth_max: dMax[i],
       depth_band_lo: dMin[i], depth_band_hi: dMax[i] - dMin[i],
       depth_iqr_lo: d10[i], depth_iqr_hi: d90[i] - d10[i],
+      flow_runA: sA?.linkFlow[0]?.[i] ?? null,
+      flow_runB: sB?.linkFlow[0]?.[i] ?? null,
+      depth_runA: sA?.nodeDepth[0]?.[i] ?? null,
+      depth_runB: sB?.nodeDepth[0]?.[i] ?? null,
     }));
     return { rows, linkName: ref.links[0], nodeName: ref.nodes[0], flowUnits: ref.flowUnits };
-  }, [ensembleSeries]);
+  }, [ensembleSeries, compareMode, runA, runB]);
 
   // Ensemble scalar distribution stats
   const stats = useMemo(() => {
