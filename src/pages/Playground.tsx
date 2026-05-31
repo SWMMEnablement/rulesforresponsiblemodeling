@@ -7,8 +7,12 @@ import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Play, Download, AlertTriangle, FlaskConical } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Loader2, Play, Download, AlertTriangle, FlaskConical, FileDown } from "lucide-react";
 import type { TooltipProps } from "recharts";
+type ChartHoverState = { activeLabel?: string | number; activeTooltipIndex?: number };
 import {
   ResponsiveContainer, ComposedChart, LineChart, Line, Area, XAxis, YAxis,
   Tooltip, Legend, CartesianGrid,
@@ -124,6 +128,10 @@ export default function Playground() {
   const [series, setSeries] = useState<SwmmOutSeries | null>(null);
   const [ensemble, setEnsemble] = useState<EnsembleRow[]>([]);
   const [ensembleRunning, setEnsembleRunning] = useState(false);
+  const [compareMode, setCompareMode] = useState(false);
+  const [runA, setRunA] = useState<number>(0);
+  const [runB, setRunB] = useState<number>(1);
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
 
   const runOnce = useCallback(async (p: PlaygroundParams) => {
     setRunning(true);
@@ -193,23 +201,28 @@ export default function Playground() {
   const bandData = useMemo(() => {
     if (ensembleSeries.length < 2) return null;
     const ref = ensembleSeries[0];
-    // Build per-link flow bands (use first link only for primary chart)
     if (ref.links.length === 0) return null;
     const allFlowsFirstLink = ensembleSeries.map((s) => s.linkFlow[0]);
     const [pMin, p10, p50, p90, pMax] = percentileBands(allFlowsFirstLink, [0, 0.1, 0.5, 0.9, 1]);
     const allDepthsFirstNode = ensembleSeries.map((s) => s.nodeDepth[0]);
     const [dMin, d10, d50, d90, dMax] = percentileBands(allDepthsFirstNode, [0, 0.1, 0.5, 0.9, 1]);
+    const sA = compareMode ? ensembleSeries[runA] : undefined;
+    const sB = compareMode ? ensembleSeries[runB] : undefined;
     const rows = Array.from(ref.times).map((t, i) => ({
       t,
       flow_min: pMin[i], flow_p10: p10[i], flow_p50: p50[i], flow_p90: p90[i], flow_max: pMax[i],
       flow_band_lo: pMin[i], flow_band_hi: pMax[i] - pMin[i],
       flow_iqr_lo: p10[i], flow_iqr_hi: p90[i] - p10[i],
-      depth_min: dMin[i], depth_p50: d50[i], depth_max: dMax[i],
+      depth_min: dMin[i], depth_p10: d10[i], depth_p50: d50[i], depth_p90: d90[i], depth_max: dMax[i],
       depth_band_lo: dMin[i], depth_band_hi: dMax[i] - dMin[i],
       depth_iqr_lo: d10[i], depth_iqr_hi: d90[i] - d10[i],
+      flow_runA: sA?.linkFlow[0]?.[i] ?? null,
+      flow_runB: sB?.linkFlow[0]?.[i] ?? null,
+      depth_runA: sA?.nodeDepth[0]?.[i] ?? null,
+      depth_runB: sB?.nodeDepth[0]?.[i] ?? null,
     }));
     return { rows, linkName: ref.links[0], nodeName: ref.nodes[0], flowUnits: ref.flowUnits };
-  }, [ensembleSeries]);
+  }, [ensembleSeries, compareMode, runA, runB]);
 
   // Ensemble scalar distribution stats
   const stats = useMemo(() => {
@@ -227,6 +240,71 @@ export default function Playground() {
       flood: { min: q(floods, 0), p50: q(floods, 0.5), max: q(floods, 1) },
     };
   }, [ensemble]);
+
+  // Sync crosshair: any chart hover updates hoverIdx
+  const handleChartMove = useCallback((state: ChartHoverState) => {
+    if (state && typeof state.activeTooltipIndex === "number") setHoverIdx(state.activeTooltipIndex);
+    else setHoverIdx(null);
+  }, []);
+  const handleChartLeave = useCallback(() => setHoverIdx(null), []);
+
+  // CSV helpers
+  const downloadCsv = (filename: string, rows: Array<Record<string, unknown>>) => {
+    if (!rows.length) return;
+    const headers = Array.from(
+      rows.reduce<Set<string>>((set, r) => { Object.keys(r).forEach((k) => set.add(k)); return set; }, new Set())
+    );
+    const esc = (v: unknown) => {
+      if (v == null) return "";
+      const s = typeof v === "number" ? (Number.isFinite(v) ? String(v) : "") : String(v);
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const csv = [headers.join(","), ...rows.map((r) => headers.map((h) => esc(r[h])).join(","))].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportHydrographCsv = () => {
+    if (!hydrographData.length) return;
+    downloadCsv("swmm-hydrograph.csv", hydrographData as Array<Record<string, unknown>>);
+  };
+  const exportEnsembleCsv = () => {
+    if (!bandData) return;
+    // Build wide CSV: bands + every run's flow & depth at first link/node
+    const rows = bandData.rows.map((r, i) => {
+      const extra: Record<string, unknown> = {};
+      ensembleSeries.forEach((s, runIdx) => {
+        extra[`run${runIdx + 1}_flow_${s.links[0] ?? "L"}`] = s.linkFlow[0]?.[i];
+        extra[`run${runIdx + 1}_depth_${s.nodes[0] ?? "N"}`] = s.nodeDepth[0]?.[i];
+      });
+      return { ...r, ...extra };
+    });
+    downloadCsv("swmm-ensemble.csv", rows as Array<Record<string, unknown>>);
+  };
+  const exportHoveredRowCsv = () => {
+    if (hoverIdx == null) return;
+    const out: Record<string, unknown>[] = [];
+    if (hydrographData[hoverIdx]) out.push({ source: "single-run", ...hydrographData[hoverIdx] });
+    if (bandData?.rows[hoverIdx]) {
+      const r = bandData.rows[hoverIdx];
+      const extra: Record<string, unknown> = {};
+      ensembleSeries.forEach((s, runIdx) => {
+        extra[`run${runIdx + 1}_flow`] = s.linkFlow[0]?.[hoverIdx];
+        extra[`run${runIdx + 1}_depth`] = s.nodeDepth[0]?.[hoverIdx];
+      });
+      out.push({ source: "ensemble", ...r, ...extra });
+    }
+    if (out.length) downloadCsv(`swmm-timestep-${hoverIdx}.csv`, out);
+  };
+
+  const hoverTimeSec: number | undefined = hoverIdx != null
+    ? (bandData?.rows[hoverIdx]?.t as number | undefined)
+      ?? (typeof hydrographData[hoverIdx]?.t === "number" ? (hydrographData[hoverIdx].t as number) : undefined)
+    : undefined;
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -374,18 +452,30 @@ export default function Playground() {
                 )}
                 {series && (
                   <>
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <HoverReadout hoverIdx={hoverIdx} timeSec={hoverTimeSec} />
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" onClick={exportHoveredRowCsv} disabled={hoverIdx == null}>
+                          <FileDown className="w-4 h-4 mr-2" /> Hovered row CSV
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={exportHydrographCsv}>
+                          <FileDown className="w-4 h-4 mr-2" /> Full hydrograph CSV
+                        </Button>
+                      </div>
+                    </div>
                     <Card className="p-4">
                       <div className="text-sm font-semibold mb-2">
                         Link flow ({series.flowUnits}) — {series.links.join(", ") || "no links"}
                       </div>
                       <div className="h-64">
                         <ResponsiveContainer width="100%" height="100%">
-                          <LineChart data={hydrographData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                          <LineChart data={hydrographData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+                            syncId="pg-time" onMouseMove={handleChartMove} onMouseLeave={handleChartLeave}>
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))"
                               label={{ value: "time (h:mm)", position: "insideBottom", offset: -2, fill: "hsl(var(--muted-foreground))" }} />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip content={<HydroTooltip unit={series.flowUnits} />} />
+                            <Tooltip content={<HydroTooltip unit={series.flowUnits} />} cursor={{ stroke: "hsl(var(--primary))", strokeWidth: 1, strokeDasharray: "3 3" }} />
                             <Legend
                               formatter={(value: string) => (
                                 <span className="text-xs text-muted-foreground">{value} ({series.flowUnits})</span>
@@ -406,11 +496,12 @@ export default function Playground() {
                       </div>
                       <div className="h-64">
                         <ResponsiveContainer width="100%" height="100%">
-                          <LineChart data={hydrographData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                          <LineChart data={hydrographData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+                            syncId="pg-time" onMouseMove={handleChartMove} onMouseLeave={handleChartLeave}>
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip content={<HydroTooltip unit="ft" />} />
+                            <Tooltip content={<HydroTooltip unit="ft" />} cursor={{ stroke: "hsl(var(--primary))", strokeWidth: 1, strokeDasharray: "3 3" }} />
                             <Legend
                               formatter={(value: string) => (
                                 <span className="text-xs text-muted-foreground">{value} (ft)</span>
@@ -459,26 +550,57 @@ export default function Playground() {
 
                 {bandData && (
                   <>
+                    <Card className="p-4 space-y-3">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                          <Switch id="compare-mode" checked={compareMode} onCheckedChange={setCompareMode} />
+                          <Label htmlFor="compare-mode" className="cursor-pointer">Compare two runs</Label>
+                        </div>
+                        <Button variant="outline" size="sm" onClick={exportEnsembleCsv}>
+                          <FileDown className="w-4 h-4 mr-2" /> Ensemble CSV
+                        </Button>
+                      </div>
+                      {compareMode && (
+                        <div className="grid sm:grid-cols-2 gap-3">
+                          <RunPicker label="Run A" value={runA} onChange={setRunA} ensemble={ensemble} color="hsl(var(--primary))" />
+                          <RunPicker label="Run B" value={runB} onChange={setRunB} ensemble={ensemble} color="hsl(35 90% 55%)" />
+                        </div>
+                      )}
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                        <HoverReadout hoverIdx={hoverIdx} timeSec={hoverTimeSec} />
+                        <Button variant="outline" size="sm" onClick={exportHoveredRowCsv} disabled={hoverIdx == null}>
+                          <FileDown className="w-4 h-4 mr-2" /> Hovered row CSV
+                        </Button>
+                      </div>
+                    </Card>
+
                     <Card className="p-4">
                       <div className="text-sm font-semibold mb-2">
                         Flow uncertainty bands — link {bandData.linkName} ({bandData.flowUnits})
                       </div>
                       <div className="text-xs text-muted-foreground mb-2">
-                        Light band: full min–max envelope. Darker band: p10–p90. Line: median (p50).
+                        Light band: full min–max envelope. Darker band: p10–p90. Line: median (p50){compareMode ? ", plus Run A (blue) & Run B (orange)" : ""}.
                       </div>
                       <div className="h-72">
                         <ResponsiveContainer width="100%" height="100%">
-                          <ComposedChart data={bandData.rows} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                          <ComposedChart data={bandData.rows} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+                            syncId="pg-time" onMouseMove={handleChartMove} onMouseLeave={handleChartLeave}>
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip content={<EnsembleTooltip flowUnits={bandData.flowUnits} />} />
+                            <Tooltip content={<EnsembleTooltip flowUnits={bandData.flowUnits} />} cursor={{ stroke: "hsl(var(--primary))", strokeWidth: 1, strokeDasharray: "3 3" }} />
                             <Legend />
                             <Area type="monotone" dataKey="flow_band_lo" stackId="env" stroke="none" fill="transparent" legendType="none" name="" />
                             <Area type="monotone" dataKey="flow_band_hi" stackId="env" stroke="none" fill="hsl(var(--primary) / 0.15)" name="min–max envelope" />
                             <Area type="monotone" dataKey="flow_iqr_lo" stackId="iqr" stroke="none" fill="transparent" legendType="none" name="" />
                             <Area type="monotone" dataKey="flow_iqr_hi" stackId="iqr" stroke="none" fill="hsl(var(--primary) / 0.35)" name="p10–p90" />
                             <Line type="monotone" dataKey="flow_p50" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} name="median" isAnimationActive={false} />
+                            {compareMode && (
+                              <Line type="monotone" dataKey="flow_runA" stroke="hsl(var(--primary))" strokeWidth={2} strokeDasharray="5 3" dot={false} name={`Run A (#${runA + 1})`} isAnimationActive={false} />
+                            )}
+                            {compareMode && (
+                              <Line type="monotone" dataKey="flow_runB" stroke="hsl(35 90% 55%)" strokeWidth={2} strokeDasharray="5 3" dot={false} name={`Run B (#${runB + 1})`} isAnimationActive={false} />
+                            )}
                           </ComposedChart>
                         </ResponsiveContainer>
                       </div>
@@ -490,17 +612,24 @@ export default function Playground() {
                       </div>
                       <div className="h-72">
                         <ResponsiveContainer width="100%" height="100%">
-                          <ComposedChart data={bandData.rows} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                          <ComposedChart data={bandData.rows} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+                            syncId="pg-time" onMouseMove={handleChartMove} onMouseLeave={handleChartLeave}>
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip content={<EnsembleTooltip flowUnits={bandData.flowUnits} isDepth />} />
+                            <Tooltip content={<EnsembleTooltip flowUnits={bandData.flowUnits} isDepth />} cursor={{ stroke: "hsl(var(--primary))", strokeWidth: 1, strokeDasharray: "3 3" }} />
                             <Legend />
                             <Area type="monotone" dataKey="depth_band_lo" stackId="env" stroke="none" fill="transparent" legendType="none" name="" />
                             <Area type="monotone" dataKey="depth_band_hi" stackId="env" stroke="none" fill="hsl(var(--accent) / 0.15)" name="min–max envelope" />
                             <Area type="monotone" dataKey="depth_iqr_lo" stackId="iqr" stroke="none" fill="transparent" legendType="none" name="" />
                             <Area type="monotone" dataKey="depth_iqr_hi" stackId="iqr" stroke="none" fill="hsl(var(--accent) / 0.35)" name="p10–p90" />
                             <Line type="monotone" dataKey="depth_p50" stroke="hsl(var(--accent))" strokeWidth={2} dot={false} name="median" isAnimationActive={false} />
+                            {compareMode && (
+                              <Line type="monotone" dataKey="depth_runA" stroke="hsl(var(--primary))" strokeWidth={2} strokeDasharray="5 3" dot={false} name={`Run A (#${runA + 1})`} isAnimationActive={false} />
+                            )}
+                            {compareMode && (
+                              <Line type="monotone" dataKey="depth_runB" stroke="hsl(35 90% 55%)" strokeWidth={2} strokeDasharray="5 3" dot={false} name={`Run B (#${runB + 1})`} isAnimationActive={false} />
+                            )}
                           </ComposedChart>
                         </ResponsiveContainer>
                       </div>
@@ -583,5 +712,52 @@ function Stat({ label, value, sub, warn }: { label: string; value: string; sub?:
       <div className="text-lg font-semibold tabular-nums">{value}</div>
       {sub && <div className="text-xs text-muted-foreground truncate">{sub}</div>}
     </Card>
+  );
+}
+
+function HoverReadout({ hoverIdx, timeSec }: { hoverIdx: number | null; timeSec: number | undefined }) {
+  return (
+    <div className="text-xs text-muted-foreground">
+      {hoverIdx == null || timeSec == null ? (
+        <span>Hover any chart to sync a crosshair across all panels.</span>
+      ) : (
+        <span>
+          Hovered timestep: <strong className="text-foreground tabular-nums">{fmtHours(timeSec)}</strong>{" "}
+          (index {hoverIdx})
+        </span>
+      )}
+    </div>
+  );
+}
+
+function RunPicker({
+  label, value, onChange, ensemble, color,
+}: {
+  label: string;
+  value: number;
+  onChange: (n: number) => void;
+  ensemble: EnsembleRow[];
+  color: string;
+}) {
+  const validRuns = ensemble.map((r, i) => ({ r, i })).filter(({ r }) => r.series);
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center gap-2">
+        <span className="inline-block w-3 h-3 rounded-sm" style={{ backgroundColor: color }} />
+        <Label className="text-xs">{label}</Label>
+      </div>
+      <Select value={String(value)} onValueChange={(v) => onChange(Number(v))}>
+        <SelectTrigger className="h-9 text-xs">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {validRuns.map(({ r, i }) => (
+            <SelectItem key={i} value={String(i)} className="text-xs">
+              #{i + 1} · n={r.manningN.toFixed(3)} · imp={r.pctImperv.toFixed(0)}% · rain×{r.rainfallMultiplier.toFixed(2)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
