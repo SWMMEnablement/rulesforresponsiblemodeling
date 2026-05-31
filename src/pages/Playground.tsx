@@ -122,6 +122,11 @@ function fmtHours(sec: number) {
   return `${h}:${m.toString().padStart(2, "0")}`;
 }
 
+function fmtTime(ts: number) {
+  const d = new Date(ts);
+  return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+}
+
 export default function Playground() {
   const [params, setParams] = useState<PlaygroundParams>(DEFAULT_PARAMS);
   const [running, setRunning] = useState(false);
