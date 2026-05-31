@@ -765,13 +765,14 @@ function HoverReadout({ hoverIdx, timeSec }: { hoverIdx: number | null; timeSec:
 }
 
 function RunPicker({
-  label, value, onChange, ensemble, color,
+  label, value, onChange, ensemble, color, exclude,
 }: {
   label: string;
   value: number;
   onChange: (n: number) => void;
   ensemble: EnsembleRow[];
   color: string;
+  exclude?: number;
 }) {
   const validRuns = ensemble.map((r, i) => ({ r, i })).filter(({ r }) => r.series);
   const selected = validRuns.find(({ i }) => i === value)?.r;
@@ -786,19 +787,22 @@ function RunPicker({
           <SelectValue placeholder="Choose a run…" />
         </SelectTrigger>
         <SelectContent className="min-w-[20rem]">
-          {validRuns.map(({ r, i }) => (
-            <SelectItem key={i} value={String(i)} className="text-xs">
-              <div className="flex flex-col gap-0.5 py-0.5">
-                <div className="font-medium">Run #{i + 1}</div>
-                <div className="text-muted-foreground">
-                  n={r.manningN.toFixed(4)} · imp={r.pctImperv.toFixed(0)}% · rain×{r.rainfallMultiplier.toFixed(2)}
+          {validRuns.map(({ r, i }) => {
+            const disabled = exclude !== undefined && i === exclude;
+            return (
+              <SelectItem key={i} value={String(i)} className="text-xs" disabled={disabled}>
+                <div className="flex flex-col gap-0.5 py-0.5">
+                  <div className="font-medium">Run #{i + 1}</div>
+                  <div className="text-muted-foreground">
+                    n={r.manningN.toFixed(4)} · imp={r.pctImperv.toFixed(0)}% · rain×{r.rainfallMultiplier.toFixed(2)}
+                  </div>
+                  <div className="text-muted-foreground">
+                    seed {r.seed} · {fmtTime(r.timestamp)}
+                  </div>
                 </div>
-                <div className="text-muted-foreground">
-                  seed {r.seed} · {fmtTime(r.timestamp)}
-                </div>
-              </div>
-            </SelectItem>
-          ))}
+              </SelectItem>
+            );
+          })}
         </SelectContent>
       </Select>
       {selected && (
