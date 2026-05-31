@@ -23,7 +23,6 @@ self.addEventListener('message', async (e: MessageEvent<RunRequest>) => {
   const t0 = performance.now();
   try {
     const M = await getModule();
-    // Reset filesystem entries
     for (const p of ['/in.inp', '/out.rpt', '/out.out']) {
       try { M.FS.unlink(p); } catch {}
     }
@@ -36,8 +35,15 @@ self.addEventListener('message', async (e: MessageEvent<RunRequest>) => {
     );
     let rpt = '';
     try { rpt = M.FS.readFile('/out.rpt', { encoding: 'utf8' }); } catch {}
+    let outBuf: ArrayBuffer | null = null;
+    try {
+      const bytes: Uint8Array = M.FS.readFile('/out.out');
+      // Copy into a standalone ArrayBuffer we can transfer.
+      const copy = new Uint8Array(bytes.byteLength);
+      copy.set(bytes);
+      outBuf = copy.buffer;
+    } catch {}
 
-    // Mass balance errors
     const massPtr: number = M._malloc(12);
     M.ccall('swmm_getMassBalErr', 'number', ['number', 'number', 'number'], [massPtr, massPtr + 4, massPtr + 8]);
     const runoffErr = M.HEAPF32[massPtr >> 2];
@@ -45,21 +51,22 @@ self.addEventListener('message', async (e: MessageEvent<RunRequest>) => {
     const qualErr = M.HEAPF32[(massPtr + 8) >> 2];
     M._free(massPtr);
 
-    // Error message (if any)
     const errPtr: number = M._malloc(256);
     M.ccall('swmm_getError', 'number', ['number', 'number'], [errPtr, 256]);
     const errMsg: string = M.UTF8ToString(errPtr);
     M._free(errPtr);
 
-    (self as any).postMessage({
+    const payload = {
       id,
       ok: rc === 0,
       rc,
       rpt,
+      out: outBuf,
       massBal: { runoffErr, flowErr, qualErr },
       errMsg,
       durationMs: performance.now() - t0,
-    });
+    };
+    (self as any).postMessage(payload, outBuf ? [outBuf] : []);
   } catch (err: any) {
     (self as any).postMessage({ id, ok: false, error: err?.message || String(err), durationMs: performance.now() - t0 });
   }
