@@ -128,6 +128,10 @@ export default function Playground() {
   const [series, setSeries] = useState<SwmmOutSeries | null>(null);
   const [ensemble, setEnsemble] = useState<EnsembleRow[]>([]);
   const [ensembleRunning, setEnsembleRunning] = useState(false);
+  const [compareMode, setCompareMode] = useState(false);
+  const [runA, setRunA] = useState<number>(0);
+  const [runB, setRunB] = useState<number>(1);
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
 
   const runOnce = useCallback(async (p: PlaygroundParams) => {
     setRunning(true);
