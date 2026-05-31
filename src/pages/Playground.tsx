@@ -241,6 +241,68 @@ export default function Playground() {
     };
   }, [ensemble]);
 
+  // Sync crosshair: any chart hover updates hoverIdx
+  const handleChartMove = useCallback((state: ChartHoverState) => {
+    if (state && typeof state.activeTooltipIndex === "number") setHoverIdx(state.activeTooltipIndex);
+    else setHoverIdx(null);
+  }, []);
+  const handleChartLeave = useCallback(() => setHoverIdx(null), []);
+
+  // CSV helpers
+  const downloadCsv = (filename: string, rows: Array<Record<string, unknown>>) => {
+    if (!rows.length) return;
+    const headers = Array.from(
+      rows.reduce<Set<string>>((set, r) => { Object.keys(r).forEach((k) => set.add(k)); return set; }, new Set())
+    );
+    const esc = (v: unknown) => {
+      if (v == null) return "";
+      const s = typeof v === "number" ? (Number.isFinite(v) ? String(v) : "") : String(v);
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const csv = [headers.join(","), ...rows.map((r) => headers.map((h) => esc(r[h])).join(","))].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportHydrographCsv = () => {
+    if (!hydrographData.length) return;
+    downloadCsv("swmm-hydrograph.csv", hydrographData as Array<Record<string, unknown>>);
+  };
+  const exportEnsembleCsv = () => {
+    if (!bandData) return;
+    // Build wide CSV: bands + every run's flow & depth at first link/node
+    const rows = bandData.rows.map((r, i) => {
+      const extra: Record<string, unknown> = {};
+      ensembleSeries.forEach((s, runIdx) => {
+        extra[`run${runIdx + 1}_flow_${s.links[0] ?? "L"}`] = s.linkFlow[0]?.[i];
+        extra[`run${runIdx + 1}_depth_${s.nodes[0] ?? "N"}`] = s.nodeDepth[0]?.[i];
+      });
+      return { ...r, ...extra };
+    });
+    downloadCsv("swmm-ensemble.csv", rows as Array<Record<string, unknown>>);
+  };
+  const exportHoveredRowCsv = () => {
+    if (hoverIdx == null) return;
+    const out: Record<string, unknown>[] = [];
+    if (hydrographData[hoverIdx]) out.push({ source: "single-run", ...hydrographData[hoverIdx] });
+    if (bandData?.rows[hoverIdx]) {
+      const r = bandData.rows[hoverIdx];
+      const extra: Record<string, unknown> = {};
+      ensembleSeries.forEach((s, runIdx) => {
+        extra[`run${runIdx + 1}_flow`] = s.linkFlow[0]?.[hoverIdx];
+        extra[`run${runIdx + 1}_depth`] = s.nodeDepth[0]?.[hoverIdx];
+      });
+      out.push({ source: "ensemble", ...r, ...extra });
+    }
+    if (out.length) downloadCsv(`swmm-timestep-${hoverIdx}.csv`, out);
+  };
+
+  const hoverTimeSec = hoverIdx != null ? bandData?.rows[hoverIdx]?.t ?? hydrographData[hoverIdx]?.t : undefined;
+
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
