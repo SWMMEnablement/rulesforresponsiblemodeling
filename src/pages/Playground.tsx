@@ -282,6 +282,19 @@ export default function Playground() {
   };
   const exportEnsembleCsv = () => {
     if (!bandData) return;
+    const meta: Record<string, unknown> = {};
+    if (compareMode) {
+      const a = ensemble[runA];
+      const b = ensemble[runB];
+      if (a) {
+        meta["runA_seed"] = a.seed;
+        meta["runA_timestamp"] = new Date(a.timestamp).toISOString();
+      }
+      if (b) {
+        meta["runB_seed"] = b.seed;
+        meta["runB_timestamp"] = new Date(b.timestamp).toISOString();
+      }
+    }
     // Build wide CSV: bands + every run's flow & depth at first link/node
     const rows = bandData.rows.map((r, i) => {
       const extra: Record<string, unknown> = {};
@@ -289,7 +302,7 @@ export default function Playground() {
         extra[`run${runIdx + 1}_flow_${s.links[0] ?? "L"}`] = s.linkFlow[0]?.[i];
         extra[`run${runIdx + 1}_depth_${s.nodes[0] ?? "N"}`] = s.nodeDepth[0]?.[i];
       });
-      return { ...r, ...extra };
+      return { ...meta, ...r, ...extra };
     });
     downloadCsv("swmm-ensemble.csv", rows as Array<Record<string, unknown>>);
   };
@@ -304,6 +317,18 @@ export default function Playground() {
         extra[`run${runIdx + 1}_flow`] = s.linkFlow[0]?.[hoverIdx];
         extra[`run${runIdx + 1}_depth`] = s.nodeDepth[0]?.[hoverIdx];
       });
+      if (compareMode) {
+        const a = ensemble[runA];
+        const b = ensemble[runB];
+        if (a) {
+          extra["runA_seed"] = a.seed;
+          extra["runA_timestamp"] = new Date(a.timestamp).toISOString();
+        }
+        if (b) {
+          extra["runB_seed"] = b.seed;
+          extra["runB_timestamp"] = new Date(b.timestamp).toISOString();
+        }
+      }
       out.push({ source: "ensemble", ...r, ...extra });
     }
     if (out.length) downloadCsv(`swmm-timestep-${hoverIdx}.csv`, out);
