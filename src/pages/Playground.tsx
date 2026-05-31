@@ -300,7 +300,10 @@ export default function Playground() {
     if (out.length) downloadCsv(`swmm-timestep-${hoverIdx}.csv`, out);
   };
 
-  const hoverTimeSec = hoverIdx != null ? bandData?.rows[hoverIdx]?.t ?? hydrographData[hoverIdx]?.t : undefined;
+  const hoverTimeSec: number | undefined = hoverIdx != null
+    ? (bandData?.rows[hoverIdx]?.t as number | undefined)
+      ?? (typeof hydrographData[hoverIdx]?.t === "number" ? (hydrographData[hoverIdx].t as number) : undefined)
+    : undefined;
 
 
   return (
