@@ -595,9 +595,9 @@ export default function Playground() {
                         </Button>
                       </div>
                       {compareMode && (
-                        <div className="grid sm:grid-cols-2 gap-3">
-                          <RunPicker label="Run A" value={runA} onChange={setRunA} ensemble={ensemble} color="hsl(var(--primary))" />
-                          <RunPicker label="Run B" value={runB} onChange={setRunB} ensemble={ensemble} color="hsl(35 90% 55%)" />
+                      <div className="grid sm:grid-cols-2 gap-3">
+                          <RunPicker label="Run A" value={runA} onChange={(v) => { setRunA(v); if (v === runB) setRunB((prev) => (prev === v ? (prev + 1) % ensemble.length : prev)); }} ensemble={ensemble} color="hsl(var(--primary))" />
+                          <RunPicker label="Run B" value={runB} onChange={setRunB} ensemble={ensemble} color="hsl(35 90% 55%)" exclude={runA} />
                         </div>
                       )}
                       <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
