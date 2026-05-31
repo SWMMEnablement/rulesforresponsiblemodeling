@@ -32,6 +32,8 @@ interface EnsembleRow {
   manningN: number;
   pctImperv: number;
   rainfallMultiplier: number;
+  seed: number;
+  timestamp: number;
   peakFlow?: number;
   peakDepth?: number;
   totalFloodVol?: number;
