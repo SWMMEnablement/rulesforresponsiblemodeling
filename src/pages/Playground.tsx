@@ -132,10 +132,9 @@ export default function Playground() {
     const [pMin, p10, p50, p90, pMax] = percentileBands(allFlowsFirstLink, [0, 0.1, 0.5, 0.9, 1]);
     const allDepthsFirstNode = ensembleSeries.map((s) => s.nodeDepth[0]);
     const [dMin, d10, d50, d90, dMax] = percentileBands(allDepthsFirstNode, [0, 0.1, 0.5, 0.9, 1]);
-    const rows = ref.times.map((t, i) => ({
+    const rows = Array.from(ref.times).map((t, i) => ({
       t,
       flow_min: pMin[i], flow_p10: p10[i], flow_p50: p50[i], flow_p90: p90[i], flow_max: pMax[i],
-      // Recharts stacked area trick: render absolute lower bound + delta = upper
       flow_band_lo: pMin[i], flow_band_hi: pMax[i] - pMin[i],
       flow_iqr_lo: p10[i], flow_iqr_hi: p90[i] - p10[i],
       depth_min: dMin[i], depth_p50: d50[i], depth_max: dMax[i],
