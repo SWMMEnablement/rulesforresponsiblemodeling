@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Play, Download, AlertTriangle, FlaskConical } from "lucide-react";
+import type { TooltipProps } from "recharts";
 import {
   ResponsiveContainer, ComposedChart, LineChart, Line, Area, XAxis, YAxis,
   Tooltip, Legend, CartesianGrid,
