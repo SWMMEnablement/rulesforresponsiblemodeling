@@ -410,9 +410,12 @@ export default function Playground() {
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
-                              labelFormatter={(v) => `t = ${fmtHours(Number(v))}`} />
-                            <Legend />
+                            <Tooltip content={<HydroTooltip unit="ft" />} />
+                            <Legend
+                              formatter={(value: string) => (
+                                <span className="text-xs text-muted-foreground">{value} (ft)</span>
+                              )}
+                            />
                             {series.nodes.map((name, i) => (
                               <Line key={name} type="monotone" dataKey={`depth_${name}`} name={name}
                                 stroke={`hsl(${(i * 137) % 360} 60% 55%)`} dot={false} strokeWidth={2} isAnimationActive={false} />
