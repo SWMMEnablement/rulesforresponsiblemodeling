@@ -32,6 +32,8 @@ interface EnsembleRow {
   manningN: number;
   pctImperv: number;
   rainfallMultiplier: number;
+  seed: number;
+  timestamp: number;
   peakFlow?: number;
   peakDepth?: number;
   totalFloodVol?: number;
@@ -120,6 +122,11 @@ function fmtHours(sec: number) {
   return `${h}:${m.toString().padStart(2, "0")}`;
 }
 
+function fmtTime(ts: number) {
+  const d = new Date(ts);
+  return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+}
+
 export default function Playground() {
   const [params, setParams] = useState<PlaygroundParams>(DEFAULT_PARAMS);
   const [running, setRunning] = useState(false);
@@ -150,6 +157,7 @@ export default function Playground() {
     const N = 20;
     const rows: EnsembleRow[] = [];
     for (let i = 0; i < N; i++) {
+      const seed = Math.floor(Math.random() * 1_000_000);
       const manningN = 0.011 + Math.random() * 0.014;
       const rainfallMultiplier = 0.7 + Math.random() * 0.8;
       const pctImperv = Math.max(0, Math.min(100, 60 + (Math.random() - 0.5) * 30));
@@ -163,6 +171,7 @@ export default function Playground() {
         : undefined;
       rows.push({
         manningN, pctImperv, rainfallMultiplier,
+        seed, timestamp: Date.now(),
         peakFlow: s.peakLinkFlow,
         peakDepth: s.peakNodeDepth,
         totalFloodVol: floodVol,
@@ -740,24 +749,39 @@ function RunPicker({
   color: string;
 }) {
   const validRuns = ensemble.map((r, i) => ({ r, i })).filter(({ r }) => r.series);
+  const selected = validRuns.find(({ i }) => i === value)?.r;
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       <div className="flex items-center gap-2">
-        <span className="inline-block w-3 h-3 rounded-sm" style={{ backgroundColor: color }} />
-        <Label className="text-xs">{label}</Label>
+        <span className="inline-block w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: color }} />
+        <Label className="text-xs font-medium">{label}</Label>
       </div>
       <Select value={String(value)} onValueChange={(v) => onChange(Number(v))}>
-        <SelectTrigger className="h-9 text-xs">
-          <SelectValue />
+        <SelectTrigger className="h-10 text-xs">
+          <SelectValue placeholder="Choose a run…" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="min-w-[20rem]">
           {validRuns.map(({ r, i }) => (
             <SelectItem key={i} value={String(i)} className="text-xs">
-              #{i + 1} · n={r.manningN.toFixed(3)} · imp={r.pctImperv.toFixed(0)}% · rain×{r.rainfallMultiplier.toFixed(2)}
+              <div className="flex flex-col gap-0.5 py-0.5">
+                <div className="font-medium">Run #{i + 1}</div>
+                <div className="text-muted-foreground">
+                  n={r.manningN.toFixed(4)} · imp={r.pctImperv.toFixed(0)}% · rain×{r.rainfallMultiplier.toFixed(2)}
+                </div>
+                <div className="text-muted-foreground">
+                  seed {r.seed} · {fmtTime(r.timestamp)}
+                </div>
+              </div>
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
+      {selected && (
+        <div className="text-[11px] text-muted-foreground space-y-0.5 pl-5">
+          <div>n={selected.manningN.toFixed(4)} · imp={selected.pctImperv.toFixed(0)}% · rain×{selected.rainfallMultiplier.toFixed(2)}</div>
+          <div>seed {selected.seed} · {fmtTime(selected.timestamp)}</div>
+        </div>
+      )}
     </div>
   );
 }
