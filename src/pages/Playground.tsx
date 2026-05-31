@@ -282,6 +282,19 @@ export default function Playground() {
   };
   const exportEnsembleCsv = () => {
     if (!bandData) return;
+    const meta: Record<string, unknown> = {};
+    if (compareMode) {
+      const a = ensemble[runA];
+      const b = ensemble[runB];
+      if (a) {
+        meta["runA_seed"] = a.seed;
+        meta["runA_timestamp"] = new Date(a.timestamp).toISOString();
+      }
+      if (b) {
+        meta["runB_seed"] = b.seed;
+        meta["runB_timestamp"] = new Date(b.timestamp).toISOString();
+      }
+    }
     // Build wide CSV: bands + every run's flow & depth at first link/node
     const rows = bandData.rows.map((r, i) => {
       const extra: Record<string, unknown> = {};
@@ -289,7 +302,7 @@ export default function Playground() {
         extra[`run${runIdx + 1}_flow_${s.links[0] ?? "L"}`] = s.linkFlow[0]?.[i];
         extra[`run${runIdx + 1}_depth_${s.nodes[0] ?? "N"}`] = s.nodeDepth[0]?.[i];
       });
-      return { ...r, ...extra };
+      return { ...meta, ...r, ...extra };
     });
     downloadCsv("swmm-ensemble.csv", rows as Array<Record<string, unknown>>);
   };
@@ -304,6 +317,18 @@ export default function Playground() {
         extra[`run${runIdx + 1}_flow`] = s.linkFlow[0]?.[hoverIdx];
         extra[`run${runIdx + 1}_depth`] = s.nodeDepth[0]?.[hoverIdx];
       });
+      if (compareMode) {
+        const a = ensemble[runA];
+        const b = ensemble[runB];
+        if (a) {
+          extra["runA_seed"] = a.seed;
+          extra["runA_timestamp"] = new Date(a.timestamp).toISOString();
+        }
+        if (b) {
+          extra["runB_seed"] = b.seed;
+          extra["runB_timestamp"] = new Date(b.timestamp).toISOString();
+        }
+      }
       out.push({ source: "ensemble", ...r, ...extra });
     }
     if (out.length) downloadCsv(`swmm-timestep-${hoverIdx}.csv`, out);
@@ -570,9 +595,9 @@ export default function Playground() {
                         </Button>
                       </div>
                       {compareMode && (
-                        <div className="grid sm:grid-cols-2 gap-3">
-                          <RunPicker label="Run A" value={runA} onChange={setRunA} ensemble={ensemble} color="hsl(var(--primary))" />
-                          <RunPicker label="Run B" value={runB} onChange={setRunB} ensemble={ensemble} color="hsl(35 90% 55%)" />
+                      <div className="grid sm:grid-cols-2 gap-3">
+                          <RunPicker label="Run A" value={runA} onChange={(v) => { setRunA(v); if (v === runB) setRunB((prev) => (prev === v ? (prev + 1) % ensemble.length : prev)); }} ensemble={ensemble} color="hsl(var(--primary))" />
+                          <RunPicker label="Run B" value={runB} onChange={setRunB} ensemble={ensemble} color="hsl(35 90% 55%)" exclude={runA} />
                         </div>
                       )}
                       <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
@@ -740,13 +765,14 @@ function HoverReadout({ hoverIdx, timeSec }: { hoverIdx: number | null; timeSec:
 }
 
 function RunPicker({
-  label, value, onChange, ensemble, color,
+  label, value, onChange, ensemble, color, exclude,
 }: {
   label: string;
   value: number;
   onChange: (n: number) => void;
   ensemble: EnsembleRow[];
   color: string;
+  exclude?: number;
 }) {
   const validRuns = ensemble.map((r, i) => ({ r, i })).filter(({ r }) => r.series);
   const selected = validRuns.find(({ i }) => i === value)?.r;
@@ -761,19 +787,22 @@ function RunPicker({
           <SelectValue placeholder="Choose a run…" />
         </SelectTrigger>
         <SelectContent className="min-w-[20rem]">
-          {validRuns.map(({ r, i }) => (
-            <SelectItem key={i} value={String(i)} className="text-xs">
-              <div className="flex flex-col gap-0.5 py-0.5">
-                <div className="font-medium">Run #{i + 1}</div>
-                <div className="text-muted-foreground">
-                  n={r.manningN.toFixed(4)} · imp={r.pctImperv.toFixed(0)}% · rain×{r.rainfallMultiplier.toFixed(2)}
+          {validRuns.map(({ r, i }) => {
+            const disabled = exclude !== undefined && i === exclude;
+            return (
+              <SelectItem key={i} value={String(i)} className="text-xs" disabled={disabled}>
+                <div className="flex flex-col gap-0.5 py-0.5">
+                  <div className="font-medium">Run #{i + 1}</div>
+                  <div className="text-muted-foreground">
+                    n={r.manningN.toFixed(4)} · imp={r.pctImperv.toFixed(0)}% · rain×{r.rainfallMultiplier.toFixed(2)}
+                  </div>
+                  <div className="text-muted-foreground">
+                    seed {r.seed} · {fmtTime(r.timestamp)}
+                  </div>
                 </div>
-                <div className="text-muted-foreground">
-                  seed {r.seed} · {fmtTime(r.timestamp)}
-                </div>
-              </div>
-            </SelectItem>
-          ))}
+              </SelectItem>
+            );
+          })}
         </SelectContent>
       </Select>
       {selected && (
