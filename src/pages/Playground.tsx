@@ -152,6 +152,7 @@ export default function Playground() {
     const N = 20;
     const rows: EnsembleRow[] = [];
     for (let i = 0; i < N; i++) {
+      const seed = Math.floor(Math.random() * 1_000_000);
       const manningN = 0.011 + Math.random() * 0.014;
       const rainfallMultiplier = 0.7 + Math.random() * 0.8;
       const pctImperv = Math.max(0, Math.min(100, 60 + (Math.random() - 0.5) * 30));
@@ -165,6 +166,7 @@ export default function Playground() {
         : undefined;
       rows.push({
         manningN, pctImperv, rainfallMultiplier,
+        seed, timestamp: Date.now(),
         peakFlow: s.peakLinkFlow,
         peakDepth: s.peakNodeDepth,
         totalFloodVol: floodVol,
