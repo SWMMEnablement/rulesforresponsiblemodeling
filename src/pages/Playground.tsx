@@ -749,24 +749,39 @@ function RunPicker({
   color: string;
 }) {
   const validRuns = ensemble.map((r, i) => ({ r, i })).filter(({ r }) => r.series);
+  const selected = validRuns.find(({ i }) => i === value)?.r;
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       <div className="flex items-center gap-2">
-        <span className="inline-block w-3 h-3 rounded-sm" style={{ backgroundColor: color }} />
-        <Label className="text-xs">{label}</Label>
+        <span className="inline-block w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: color }} />
+        <Label className="text-xs font-medium">{label}</Label>
       </div>
       <Select value={String(value)} onValueChange={(v) => onChange(Number(v))}>
-        <SelectTrigger className="h-9 text-xs">
-          <SelectValue />
+        <SelectTrigger className="h-10 text-xs">
+          <SelectValue placeholder="Choose a run…" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="min-w-[20rem]">
           {validRuns.map(({ r, i }) => (
             <SelectItem key={i} value={String(i)} className="text-xs">
-              #{i + 1} · n={r.manningN.toFixed(3)} · imp={r.pctImperv.toFixed(0)}% · rain×{r.rainfallMultiplier.toFixed(2)}
+              <div className="flex flex-col gap-0.5 py-0.5">
+                <div className="font-medium">Run #{i + 1}</div>
+                <div className="text-muted-foreground">
+                  n={r.manningN.toFixed(4)} · imp={r.pctImperv.toFixed(0)}% · rain×{r.rainfallMultiplier.toFixed(2)}
+                </div>
+                <div className="text-muted-foreground">
+                  seed {r.seed} · {fmtTime(r.timestamp)}
+                </div>
+              </div>
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
+      {selected && (
+        <div className="text-[11px] text-muted-foreground space-y-0.5 pl-5">
+          <div>n={selected.manningN.toFixed(4)} · imp={selected.pctImperv.toFixed(0)}% · rain×{selected.rainfallMultiplier.toFixed(2)}</div>
+          <div>seed {selected.seed} · {fmtTime(selected.timestamp)}</div>
+        </div>
+      )}
     </div>
   );
 }
