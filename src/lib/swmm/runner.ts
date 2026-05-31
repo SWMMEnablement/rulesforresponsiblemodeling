@@ -4,6 +4,7 @@ export interface SwmmRunResult {
   ok: boolean;
   rc: number;
   rpt: string;
+  out: ArrayBuffer | null;
   massBal: { runoffErr: number; flowErr: number; qualErr: number };
   errMsg: string;
   durationMs: number;
