@@ -449,18 +449,30 @@ export default function Playground() {
                 )}
                 {series && (
                   <>
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <HoverReadout hoverIdx={hoverIdx} timeSec={hoverTimeSec} />
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" onClick={exportHoveredRowCsv} disabled={hoverIdx == null}>
+                          <FileDown className="w-4 h-4 mr-2" /> Hovered row CSV
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={exportHydrographCsv}>
+                          <FileDown className="w-4 h-4 mr-2" /> Full hydrograph CSV
+                        </Button>
+                      </div>
+                    </div>
                     <Card className="p-4">
                       <div className="text-sm font-semibold mb-2">
                         Link flow ({series.flowUnits}) — {series.links.join(", ") || "no links"}
                       </div>
                       <div className="h-64">
                         <ResponsiveContainer width="100%" height="100%">
-                          <LineChart data={hydrographData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                          <LineChart data={hydrographData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+                            syncId="pg-time" onMouseMove={handleChartMove} onMouseLeave={handleChartLeave}>
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))"
                               label={{ value: "time (h:mm)", position: "insideBottom", offset: -2, fill: "hsl(var(--muted-foreground))" }} />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip content={<HydroTooltip unit={series.flowUnits} />} />
+                            <Tooltip content={<HydroTooltip unit={series.flowUnits} />} cursor={{ stroke: "hsl(var(--primary))", strokeWidth: 1, strokeDasharray: "3 3" }} />
                             <Legend
                               formatter={(value: string) => (
                                 <span className="text-xs text-muted-foreground">{value} ({series.flowUnits})</span>
@@ -481,11 +493,12 @@ export default function Playground() {
                       </div>
                       <div className="h-64">
                         <ResponsiveContainer width="100%" height="100%">
-                          <LineChart data={hydrographData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                          <LineChart data={hydrographData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+                            syncId="pg-time" onMouseMove={handleChartMove} onMouseLeave={handleChartLeave}>
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip content={<HydroTooltip unit="ft" />} />
+                            <Tooltip content={<HydroTooltip unit="ft" />} cursor={{ stroke: "hsl(var(--primary))", strokeWidth: 1, strokeDasharray: "3 3" }} />
                             <Legend
                               formatter={(value: string) => (
                                 <span className="text-xs text-muted-foreground">{value} (ft)</span>
