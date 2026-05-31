@@ -42,6 +42,7 @@ import GradeReport from "./pages/GradeReport";
 import Animations from "./pages/Animations";
 import Progress from "./pages/Progress";
 import CrossReference from "./pages/CrossReference";
+import Playground from "./pages/Playground";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -90,6 +91,7 @@ const App = () => (
             <Route path="/animations" element={<Animations />} />
             <Route path="/progress" element={<Progress />} />
             <Route path="/cross-reference" element={<CrossReference />} />
+            <Route path="/playground" element={<Playground />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
