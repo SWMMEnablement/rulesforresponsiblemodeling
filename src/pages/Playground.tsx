@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
@@ -9,6 +9,10 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Play, Download, AlertTriangle, FlaskConical } from "lucide-react";
 import {
+  ResponsiveContainer, ComposedChart, LineChart, Line, Area, XAxis, YAxis,
+  Tooltip, Legend, CartesianGrid,
+} from "recharts";
+import {
   TUTORIAL_INP,
   DEFAULT_PARAMS,
   applyParams,
@@ -17,49 +21,40 @@ import {
   type ReportSummary,
 } from "@/lib/swmm/tutorialModel";
 import { runSwmm, type SwmmRunResult } from "@/lib/swmm/runner";
+import { parseSwmmOut, percentileBands, integrateFlow, type SwmmOutSeries } from "@/lib/swmm/outParser";
 
 interface EnsembleRow {
   manningN: number;
   pctImperv: number;
   rainfallMultiplier: number;
   peakFlow?: number;
+  peakDepth?: number;
+  totalFloodVol?: number;
   continuityErr?: number;
+  series?: SwmmOutSeries;
   ok: boolean;
 }
 
 const PRESETS: Array<{ label: string; description: string; params: PlaygroundParams }> = [
-  {
-    label: "Baseline",
-    description: "Calibrated reference run.",
-    params: { manningN: 0.013, pctImperv: 60, rainfallMultiplier: 1.0 },
-  },
-  {
-    label: "Double the rain",
-    description: "Climate shock: 2× design storm intensity.",
-    params: { manningN: 0.013, pctImperv: 60, rainfallMultiplier: 2.0 },
-  },
-  {
-    label: "Pave it all",
-    description: "100% impervious — worst-case urbanization.",
-    params: { manningN: 0.013, pctImperv: 100, rainfallMultiplier: 1.0 },
-  },
-  {
-    label: "Absurdly rough pipes",
-    description: "Manning n = 0.10 (rule violation: implausible parameter).",
-    params: { manningN: 0.10, pctImperv: 60, rainfallMultiplier: 1.0 },
-  },
-  {
-    label: "Glass-smooth pipes",
-    description: "Manning n = 0.008 — supercritical instability risk.",
-    params: { manningN: 0.008, pctImperv: 60, rainfallMultiplier: 1.0 },
-  },
+  { label: "Baseline", description: "Calibrated reference run.", params: { manningN: 0.013, pctImperv: 60, rainfallMultiplier: 1.0 } },
+  { label: "Double the rain", description: "Climate shock: 2× design storm intensity.", params: { manningN: 0.013, pctImperv: 60, rainfallMultiplier: 2.0 } },
+  { label: "Pave it all", description: "100% impervious — worst-case urbanization.", params: { manningN: 0.013, pctImperv: 100, rainfallMultiplier: 1.0 } },
+  { label: "Absurdly rough pipes", description: "Manning n = 0.10 (rule violation: implausible parameter).", params: { manningN: 0.10, pctImperv: 60, rainfallMultiplier: 1.0 } },
+  { label: "Glass-smooth pipes", description: "Manning n = 0.008 — supercritical instability risk.", params: { manningN: 0.008, pctImperv: 60, rainfallMultiplier: 1.0 } },
 ];
+
+function fmtHours(sec: number) {
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  return `${h}:${m.toString().padStart(2, "0")}`;
+}
 
 export default function Playground() {
   const [params, setParams] = useState<PlaygroundParams>(DEFAULT_PARAMS);
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<SwmmRunResult | null>(null);
   const [summary, setSummary] = useState<ReportSummary | null>(null);
+  const [series, setSeries] = useState<SwmmOutSeries | null>(null);
   const [ensemble, setEnsemble] = useState<EnsembleRow[]>([]);
   const [ensembleRunning, setEnsembleRunning] = useState(false);
 
@@ -69,6 +64,7 @@ export default function Playground() {
     const r = await runSwmm(inp);
     setResult(r);
     setSummary(r.rpt ? parseReport(r.rpt) : null);
+    setSeries(r.out ? parseSwmmOut(r.out) : null);
     setRunning(false);
     return r;
   }, []);
@@ -79,19 +75,24 @@ export default function Playground() {
     const N = 20;
     const rows: EnsembleRow[] = [];
     for (let i = 0; i < N; i++) {
-      // Sample Manning's n uniformly in [0.011, 0.025] and rainfall multiplier in [0.7, 1.5]
       const manningN = 0.011 + Math.random() * 0.014;
       const rainfallMultiplier = 0.7 + Math.random() * 0.8;
       const pctImperv = Math.max(0, Math.min(100, 60 + (Math.random() - 0.5) * 30));
       const inp = applyParams(TUTORIAL_INP, { manningN, pctImperv, rainfallMultiplier });
       const r = await runSwmm(inp);
       const s = r.rpt ? parseReport(r.rpt) : {};
+      const out = r.out ? parseSwmmOut(r.out) : undefined;
+      const dt = out?.reportStep ?? 0;
+      const floodVol = out && dt > 0
+        ? out.nodeFlooding.reduce((acc, ts) => acc + integrateFlow(ts, dt), 0)
+        : undefined;
       rows.push({
-        manningN,
-        pctImperv,
-        rainfallMultiplier,
+        manningN, pctImperv, rainfallMultiplier,
         peakFlow: s.peakLinkFlow,
+        peakDepth: s.peakNodeDepth,
+        totalFloodVol: floodVol,
         continuityErr: s.continuityErrorFlow,
+        series: out,
         ok: r.ok,
       });
       setEnsemble([...rows]);
@@ -104,22 +105,68 @@ export default function Playground() {
     const blob = new Blob([result.rpt], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url;
-    a.download = "swmm-report.rpt";
-    a.click();
+    a.href = url; a.download = "swmm-report.rpt"; a.click();
     URL.revokeObjectURL(url);
   };
 
-  const peakFlows = ensemble.map((r) => r.peakFlow).filter((v): v is number => typeof v === "number");
-  const peakMin = peakFlows.length ? Math.min(...peakFlows) : 0;
-  const peakMax = peakFlows.length ? Math.max(...peakFlows) : 0;
-  const peakMean = peakFlows.length ? peakFlows.reduce((a, b) => a + b, 0) / peakFlows.length : 0;
+  // Single-run hydrograph data
+  const hydrographData = useMemo(() => {
+    if (!series || series.numPeriods === 0) return [];
+    return Array.from({ length: series.numPeriods }, (_, i) => {
+      const row: Record<string, number | string> = { t: series.times[i] };
+      series.links.forEach((name, li) => { row[`flow_${name}`] = series.linkFlow[li][i]; });
+      series.nodes.forEach((name, ni) => { row[`depth_${name}`] = series.nodeDepth[ni][i]; });
+      return row;
+    });
+  }, [series]);
+
+  // Ensemble bands
+  const ensembleSeries = useMemo(() => ensemble.filter((r) => r.series).map((r) => r.series!), [ensemble]);
+
+  const bandData = useMemo(() => {
+    if (ensembleSeries.length < 2) return null;
+    const ref = ensembleSeries[0];
+    // Build per-link flow bands (use first link only for primary chart)
+    if (ref.links.length === 0) return null;
+    const allFlowsFirstLink = ensembleSeries.map((s) => s.linkFlow[0]);
+    const [pMin, p10, p50, p90, pMax] = percentileBands(allFlowsFirstLink, [0, 0.1, 0.5, 0.9, 1]);
+    const allDepthsFirstNode = ensembleSeries.map((s) => s.nodeDepth[0]);
+    const [dMin, d10, d50, d90, dMax] = percentileBands(allDepthsFirstNode, [0, 0.1, 0.5, 0.9, 1]);
+    const rows = ref.times.map((t, i) => ({
+      t,
+      flow_min: pMin[i], flow_p10: p10[i], flow_p50: p50[i], flow_p90: p90[i], flow_max: pMax[i],
+      // Recharts stacked area trick: render absolute lower bound + delta = upper
+      flow_band_lo: pMin[i], flow_band_hi: pMax[i] - pMin[i],
+      flow_iqr_lo: p10[i], flow_iqr_hi: p90[i] - p10[i],
+      depth_min: dMin[i], depth_p50: d50[i], depth_max: dMax[i],
+      depth_band_lo: dMin[i], depth_band_hi: dMax[i] - dMin[i],
+      depth_iqr_lo: d10[i], depth_iqr_hi: d90[i] - d10[i],
+    }));
+    return { rows, linkName: ref.links[0], nodeName: ref.nodes[0], flowUnits: ref.flowUnits };
+  }, [ensembleSeries]);
+
+  // Ensemble scalar distribution stats
+  const stats = useMemo(() => {
+    const peakFlows = ensemble.map((r) => r.peakFlow).filter((v): v is number => typeof v === "number");
+    const peakDepths = ensemble.map((r) => r.peakDepth).filter((v): v is number => typeof v === "number");
+    const floods = ensemble.map((r) => r.totalFloodVol).filter((v): v is number => typeof v === "number");
+    const q = (arr: number[], p: number) => {
+      if (!arr.length) return 0;
+      const s = [...arr].sort((a, b) => a - b);
+      return s[Math.min(s.length - 1, Math.max(0, Math.round(p * (s.length - 1))))];
+    };
+    return {
+      peakFlow: { min: q(peakFlows, 0), p50: q(peakFlows, 0.5), max: q(peakFlows, 1) },
+      peakDepth: { min: q(peakDepths, 0), p50: q(peakDepths, 0.5), max: q(peakDepths, 1) },
+      flood: { min: q(floods, 0), p50: q(floods, 0.5), max: q(floods, 1) },
+    };
+  }, [ensemble]);
 
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>SWMM5 Playground — Rules for Responsible Modeling</title>
-        <meta name="description" content="Interactive WebAssembly SWMM5 lab. Adjust parameters, run real simulations, and watch modeling rules come alive." />
+        <meta name="description" content="Interactive WebAssembly SWMM5 lab with live hydrographs and Monte-Carlo uncertainty bands." />
       </Helmet>
       <Navigation />
 
@@ -133,8 +180,8 @@ export default function Playground() {
           <h1 className="text-4xl font-bold tracking-tight">SWMM5 Playground</h1>
           <p className="text-muted-foreground max-w-3xl">
             The real EPA SWMM5 hydraulic engine compiled to WebAssembly, running entirely in
-            your browser. Adjust parameters, launch ensembles, and feel the consequences of
-            ignoring modeling rules through immediate, visual feedback.
+            your browser. Adjust parameters, plot hydrographs, and run Monte-Carlo ensembles
+            to see uncertainty bands in real time.
           </p>
         </header>
 
@@ -154,16 +201,9 @@ export default function Playground() {
                   <span className="font-medium">Manning's n (conduit)</span>
                   <span className="tabular-nums text-muted-foreground">{params.manningN.toFixed(4)}</span>
                 </div>
-                <Slider
-                  min={0.008}
-                  max={0.25}
-                  step={0.001}
-                  value={[params.manningN]}
-                  onValueChange={([v]) => setParams({ ...params, manningN: v })}
-                />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Realistic: 0.011–0.025. Extreme values trigger instability.
-                </p>
+                <Slider min={0.008} max={0.25} step={0.001} value={[params.manningN]}
+                  onValueChange={([v]) => setParams({ ...params, manningN: v })} />
+                <p className="text-xs text-muted-foreground mt-1">Realistic: 0.011–0.025. Extreme values trigger instability.</p>
               </div>
 
               <div>
@@ -171,13 +211,8 @@ export default function Playground() {
                   <span className="font-medium">% Impervious</span>
                   <span className="tabular-nums text-muted-foreground">{params.pctImperv.toFixed(0)}%</span>
                 </div>
-                <Slider
-                  min={0}
-                  max={100}
-                  step={1}
-                  value={[params.pctImperv]}
-                  onValueChange={([v]) => setParams({ ...params, pctImperv: v })}
-                />
+                <Slider min={0} max={100} step={1} value={[params.pctImperv]}
+                  onValueChange={([v]) => setParams({ ...params, pctImperv: v })} />
               </div>
 
               <div>
@@ -185,13 +220,8 @@ export default function Playground() {
                   <span className="font-medium">Rainfall multiplier</span>
                   <span className="tabular-nums text-muted-foreground">×{params.rainfallMultiplier.toFixed(2)}</span>
                 </div>
-                <Slider
-                  min={0.1}
-                  max={5}
-                  step={0.05}
-                  value={[params.rainfallMultiplier]}
-                  onValueChange={([v]) => setParams({ ...params, rainfallMultiplier: v })}
-                />
+                <Slider min={0.1} max={5} step={0.05} value={[params.rainfallMultiplier]}
+                  onValueChange={([v]) => setParams({ ...params, rainfallMultiplier: v })} />
               </div>
             </div>
 
@@ -204,12 +234,10 @@ export default function Playground() {
               <h3 className="text-sm font-semibold mb-2">Scenario presets</h3>
               <div className="grid gap-2">
                 {PRESETS.map((p) => (
-                  <button
-                    key={p.label}
+                  <button key={p.label}
                     onClick={() => { setParams(p.params); runOnce(p.params); }}
                     disabled={running}
-                    className="text-left p-2 rounded border border-border hover:bg-muted/50 transition text-sm disabled:opacity-50"
-                  >
+                    className="text-left p-2 rounded border border-border hover:bg-muted/50 transition text-sm disabled:opacity-50">
                     <div className="font-medium">{p.label}</div>
                     <div className="text-xs text-muted-foreground">{p.description}</div>
                   </button>
@@ -220,9 +248,10 @@ export default function Playground() {
 
           {/* Results */}
           <div className="space-y-6">
-            <Tabs defaultValue="summary">
+            <Tabs defaultValue="hydrographs">
               <TabsList>
                 <TabsTrigger value="summary">Summary</TabsTrigger>
+                <TabsTrigger value="hydrographs">Hydrographs</TabsTrigger>
                 <TabsTrigger value="ensemble">Uncertainty Ensemble</TabsTrigger>
                 <TabsTrigger value="report">Full Report</TabsTrigger>
               </TabsList>
@@ -246,28 +275,21 @@ export default function Playground() {
                     )}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       <Stat label="Engine runtime" value={`${result.durationMs.toFixed(0)} ms`} />
-                      <Stat
-                        label="Flow continuity err"
+                      <Stat label="Flow continuity err"
                         value={summary?.continuityErrorFlow !== undefined ? `${summary.continuityErrorFlow.toFixed(2)}%` : "—"}
-                        warn={summary?.continuityErrorFlow !== undefined && Math.abs(summary.continuityErrorFlow) > 10}
-                      />
-                      <Stat
-                        label="Peak link flow"
+                        warn={summary?.continuityErrorFlow !== undefined && Math.abs(summary.continuityErrorFlow) > 10} />
+                      <Stat label="Peak link flow"
                         value={summary?.peakLinkFlow !== undefined ? `${summary.peakLinkFlow.toFixed(2)} cfs` : "—"}
-                        sub={summary?.peakLinkFlowName}
-                      />
-                      <Stat
-                        label="Peak node depth"
+                        sub={summary?.peakLinkFlowName} />
+                      <Stat label="Peak node depth"
                         value={summary?.peakNodeDepth !== undefined ? `${summary.peakNodeDepth.toFixed(2)} ft` : "—"}
-                        sub={summary?.peakNodeDepthName}
-                      />
+                        sub={summary?.peakNodeDepthName} />
                     </div>
                     {summary?.continuityErrorFlow !== undefined && Math.abs(summary.continuityErrorFlow) > 10 && (
                       <Card className="p-4 border-amber-500/40 bg-amber-500/10">
                         <p className="text-sm">
-                          <strong>Rule check: Continuity error &gt; 10%.</strong> Volumes are
-                          unreliable — reduce the routing time step or revisit your boundary conditions
-                          before trusting these results.
+                          <strong>Rule check: Continuity error &gt; 10%.</strong> Volumes are unreliable —
+                          reduce the routing time step or revisit your boundary conditions before trusting these results.
                         </p>
                       </Card>
                     )}
@@ -278,13 +300,69 @@ export default function Playground() {
                 )}
               </TabsContent>
 
+              <TabsContent value="hydrographs" className="space-y-4">
+                {!series && (
+                  <Card className="p-10 text-center text-muted-foreground">
+                    Run a simulation to see live link-flow and node-depth time series.
+                  </Card>
+                )}
+                {series && (
+                  <>
+                    <Card className="p-4">
+                      <div className="text-sm font-semibold mb-2">
+                        Link flow ({series.flowUnits}) — {series.links.join(", ") || "no links"}
+                      </div>
+                      <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <LineChart data={hydrographData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                            <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))"
+                              label={{ value: "time (h:mm)", position: "insideBottom", offset: -2, fill: "hsl(var(--muted-foreground))" }} />
+                            <YAxis stroke="hsl(var(--muted-foreground))" />
+                            <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
+                              labelFormatter={(v) => `t = ${fmtHours(Number(v))}`} />
+                            <Legend />
+                            {series.links.map((name, i) => (
+                              <Line key={name} type="monotone" dataKey={`flow_${name}`} name={name}
+                                stroke={`hsl(${(i * 67) % 360} 70% 55%)`} dot={false} strokeWidth={2} isAnimationActive={false} />
+                            ))}
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </Card>
+
+                    <Card className="p-4">
+                      <div className="text-sm font-semibold mb-2">
+                        Node depth (ft) — {series.nodes.join(", ") || "no nodes"}
+                      </div>
+                      <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <LineChart data={hydrographData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                            <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
+                            <YAxis stroke="hsl(var(--muted-foreground))" />
+                            <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
+                              labelFormatter={(v) => `t = ${fmtHours(Number(v))}`} />
+                            <Legend />
+                            {series.nodes.map((name, i) => (
+                              <Line key={name} type="monotone" dataKey={`depth_${name}`} name={name}
+                                stroke={`hsl(${(i * 137) % 360} 60% 55%)`} dot={false} strokeWidth={2} isAnimationActive={false} />
+                            ))}
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </Card>
+                  </>
+                )}
+              </TabsContent>
+
               <TabsContent value="ensemble" className="space-y-4">
                 <Card className="p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="font-semibold">Monte-Carlo uncertainty sweep</div>
                       <div className="text-xs text-muted-foreground">
-                        20 runs · sampled Manning n ∈ [0.011, 0.025], rainfall ×[0.7, 1.5], imperviousness ±15%
+                        20 runs · Manning n ∈ [0.011, 0.025], rainfall ×[0.7, 1.5], imperviousness ±15%
                       </div>
                     </div>
                     <Button onClick={runEnsemble} disabled={ensembleRunning} size="sm">
@@ -294,12 +372,74 @@ export default function Playground() {
                   </div>
                   {ensemble.length > 0 && (
                     <div className="grid grid-cols-3 gap-3 pt-2">
-                      <Stat label="Min peak flow" value={`${peakMin.toFixed(2)} cfs`} />
-                      <Stat label="Mean peak flow" value={`${peakMean.toFixed(2)} cfs`} />
-                      <Stat label="Max peak flow" value={`${peakMax.toFixed(2)} cfs`} />
+                      <Stat label="Peak flow (min · p50 · max)"
+                        value={`${stats.peakFlow.min.toFixed(2)} · ${stats.peakFlow.p50.toFixed(2)} · ${stats.peakFlow.max.toFixed(2)}`}
+                        sub="cfs" />
+                      <Stat label="Peak depth (min · p50 · max)"
+                        value={`${stats.peakDepth.min.toFixed(2)} · ${stats.peakDepth.p50.toFixed(2)} · ${stats.peakDepth.max.toFixed(2)}`}
+                        sub="ft" />
+                      <Stat label="Flood vol (min · p50 · max)"
+                        value={`${stats.flood.min.toFixed(1)} · ${stats.flood.p50.toFixed(1)} · ${stats.flood.max.toFixed(1)}`}
+                        sub="ft³ (∑ flooding · dt)" />
                     </div>
                   )}
                 </Card>
+
+                {bandData && (
+                  <>
+                    <Card className="p-4">
+                      <div className="text-sm font-semibold mb-2">
+                        Flow uncertainty bands — link {bandData.linkName} ({bandData.flowUnits})
+                      </div>
+                      <div className="text-xs text-muted-foreground mb-2">
+                        Light band: full min–max envelope. Darker band: p10–p90. Line: median (p50).
+                      </div>
+                      <div className="h-72">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <ComposedChart data={bandData.rows} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                            <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
+                            <YAxis stroke="hsl(var(--muted-foreground))" />
+                            <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
+                              labelFormatter={(v) => `t = ${fmtHours(Number(v))}`}
+                              formatter={(val: number, name: string) => [val?.toFixed?.(3), name]} />
+                            <Legend />
+                            <Area type="monotone" dataKey="flow_band_lo" stackId="env" stroke="none" fill="transparent" legendType="none" name="" />
+                            <Area type="monotone" dataKey="flow_band_hi" stackId="env" stroke="none" fill="hsl(var(--primary) / 0.15)" name="min–max envelope" />
+                            <Area type="monotone" dataKey="flow_iqr_lo" stackId="iqr" stroke="none" fill="transparent" legendType="none" name="" />
+                            <Area type="monotone" dataKey="flow_iqr_hi" stackId="iqr" stroke="none" fill="hsl(var(--primary) / 0.35)" name="p10–p90" />
+                            <Line type="monotone" dataKey="flow_p50" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} name="median" isAnimationActive={false} />
+                          </ComposedChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </Card>
+
+                    <Card className="p-4">
+                      <div className="text-sm font-semibold mb-2">
+                        Depth uncertainty bands — node {bandData.nodeName} (ft)
+                      </div>
+                      <div className="h-72">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <ComposedChart data={bandData.rows} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                            <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
+                            <YAxis stroke="hsl(var(--muted-foreground))" />
+                            <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
+                              labelFormatter={(v) => `t = ${fmtHours(Number(v))}`}
+                              formatter={(val: number, name: string) => [val?.toFixed?.(3), name]} />
+                            <Legend />
+                            <Area type="monotone" dataKey="depth_band_lo" stackId="env" stroke="none" fill="transparent" legendType="none" name="" />
+                            <Area type="monotone" dataKey="depth_band_hi" stackId="env" stroke="none" fill="hsl(var(--accent) / 0.15)" name="min–max envelope" />
+                            <Area type="monotone" dataKey="depth_iqr_lo" stackId="iqr" stroke="none" fill="transparent" legendType="none" name="" />
+                            <Area type="monotone" dataKey="depth_iqr_hi" stackId="iqr" stroke="none" fill="hsl(var(--accent) / 0.35)" name="p10–p90" />
+                            <Line type="monotone" dataKey="depth_p50" stroke="hsl(var(--accent))" strokeWidth={2} dot={false} name="median" isAnimationActive={false} />
+                          </ComposedChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </Card>
+                  </>
+                )}
+
                 {ensemble.length > 0 && (
                   <Card className="p-0 overflow-hidden">
                     <div className="max-h-80 overflow-auto">
@@ -310,7 +450,9 @@ export default function Playground() {
                             <th className="p-2">Manning n</th>
                             <th className="p-2">% Imperv</th>
                             <th className="p-2">Rain ×</th>
-                            <th className="p-2">Peak flow (cfs)</th>
+                            <th className="p-2">Peak flow</th>
+                            <th className="p-2">Peak depth</th>
+                            <th className="p-2">Flood vol</th>
                             <th className="p-2">Cont. err %</th>
                           </tr>
                         </thead>
@@ -322,6 +464,8 @@ export default function Playground() {
                               <td className="p-2">{r.pctImperv.toFixed(0)}</td>
                               <td className="p-2">{r.rainfallMultiplier.toFixed(2)}</td>
                               <td className="p-2">{r.peakFlow?.toFixed(2) ?? "—"}</td>
+                              <td className="p-2">{r.peakDepth?.toFixed(2) ?? "—"}</td>
+                              <td className="p-2">{r.totalFloodVol?.toFixed(1) ?? "—"}</td>
                               <td className="p-2">{r.continuityErr?.toFixed(2) ?? "—"}</td>
                             </tr>
                           ))}
@@ -348,13 +492,13 @@ export default function Playground() {
           <p className="text-sm text-muted-foreground">
             The EPA SWMM 5.2.4 C source is compiled to WebAssembly (≈450 KB) via Emscripten and
             run inside a Web Worker. Each simulation writes an INP file to an in-memory
-            filesystem, calls <code>swmm_run</code>, and parses the generated report. No server.
-            No data leaves your browser.
+            filesystem, calls <code>swmm_run</code>, parses the generated <code>.rpt</code> for
+            summary metrics, and decodes the binary <code>.out</code> file for full time series.
+            No server. No data leaves your browser.
           </p>
           <p className="text-sm text-muted-foreground">
-            This is an experimentation lab, not a production tool. The tutorial model is
-            intentionally tiny so runs complete in well under a second and uncertainty sweeps
-            stay interactive.
+            Uncertainty bands are computed per-timestep across the ensemble: the lighter shaded
+            region spans min–max, the darker region spans p10–p90, and the line is the median.
           </p>
         </Card>
       </main>
