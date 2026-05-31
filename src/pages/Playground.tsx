@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Play, Download, AlertTriangle, FlaskConical, FileDown } from "lucide-react";
 import type { TooltipProps } from "recharts";
-import type { CategoricalChartState } from "recharts/types/chart/generateCategoricalChart";
+type ChartHoverState = { activeLabel?: string | number; activeTooltipIndex?: number };
 import {
   ResponsiveContainer, ComposedChart, LineChart, Line, Area, XAxis, YAxis,
   Tooltip, Legend, CartesianGrid,
