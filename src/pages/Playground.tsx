@@ -547,26 +547,57 @@ export default function Playground() {
 
                 {bandData && (
                   <>
+                    <Card className="p-4 space-y-3">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                          <Switch id="compare-mode" checked={compareMode} onCheckedChange={setCompareMode} />
+                          <Label htmlFor="compare-mode" className="cursor-pointer">Compare two runs</Label>
+                        </div>
+                        <Button variant="outline" size="sm" onClick={exportEnsembleCsv}>
+                          <FileDown className="w-4 h-4 mr-2" /> Ensemble CSV
+                        </Button>
+                      </div>
+                      {compareMode && (
+                        <div className="grid sm:grid-cols-2 gap-3">
+                          <RunPicker label="Run A" value={runA} onChange={setRunA} ensemble={ensemble} color="hsl(var(--primary))" />
+                          <RunPicker label="Run B" value={runB} onChange={setRunB} ensemble={ensemble} color="hsl(35 90% 55%)" />
+                        </div>
+                      )}
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                        <HoverReadout hoverIdx={hoverIdx} timeSec={hoverTimeSec} />
+                        <Button variant="outline" size="sm" onClick={exportHoveredRowCsv} disabled={hoverIdx == null}>
+                          <FileDown className="w-4 h-4 mr-2" /> Hovered row CSV
+                        </Button>
+                      </div>
+                    </Card>
+
                     <Card className="p-4">
                       <div className="text-sm font-semibold mb-2">
                         Flow uncertainty bands — link {bandData.linkName} ({bandData.flowUnits})
                       </div>
                       <div className="text-xs text-muted-foreground mb-2">
-                        Light band: full min–max envelope. Darker band: p10–p90. Line: median (p50).
+                        Light band: full min–max envelope. Darker band: p10–p90. Line: median (p50){compareMode ? ", plus Run A (blue) & Run B (orange)" : ""}.
                       </div>
                       <div className="h-72">
                         <ResponsiveContainer width="100%" height="100%">
-                          <ComposedChart data={bandData.rows} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                          <ComposedChart data={bandData.rows} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+                            syncId="pg-time" onMouseMove={handleChartMove} onMouseLeave={handleChartLeave}>
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip content={<EnsembleTooltip flowUnits={bandData.flowUnits} />} />
+                            <Tooltip content={<EnsembleTooltip flowUnits={bandData.flowUnits} />} cursor={{ stroke: "hsl(var(--primary))", strokeWidth: 1, strokeDasharray: "3 3" }} />
                             <Legend />
                             <Area type="monotone" dataKey="flow_band_lo" stackId="env" stroke="none" fill="transparent" legendType="none" name="" />
                             <Area type="monotone" dataKey="flow_band_hi" stackId="env" stroke="none" fill="hsl(var(--primary) / 0.15)" name="min–max envelope" />
                             <Area type="monotone" dataKey="flow_iqr_lo" stackId="iqr" stroke="none" fill="transparent" legendType="none" name="" />
                             <Area type="monotone" dataKey="flow_iqr_hi" stackId="iqr" stroke="none" fill="hsl(var(--primary) / 0.35)" name="p10–p90" />
                             <Line type="monotone" dataKey="flow_p50" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} name="median" isAnimationActive={false} />
+                            {compareMode && (
+                              <Line type="monotone" dataKey="flow_runA" stroke="hsl(var(--primary))" strokeWidth={2} strokeDasharray="5 3" dot={false} name={`Run A (#${runA + 1})`} isAnimationActive={false} />
+                            )}
+                            {compareMode && (
+                              <Line type="monotone" dataKey="flow_runB" stroke="hsl(35 90% 55%)" strokeWidth={2} strokeDasharray="5 3" dot={false} name={`Run B (#${runB + 1})`} isAnimationActive={false} />
+                            )}
                           </ComposedChart>
                         </ResponsiveContainer>
                       </div>
@@ -578,17 +609,24 @@ export default function Playground() {
                       </div>
                       <div className="h-72">
                         <ResponsiveContainer width="100%" height="100%">
-                          <ComposedChart data={bandData.rows} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                          <ComposedChart data={bandData.rows} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+                            syncId="pg-time" onMouseMove={handleChartMove} onMouseLeave={handleChartLeave}>
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip content={<EnsembleTooltip flowUnits={bandData.flowUnits} isDepth />} />
+                            <Tooltip content={<EnsembleTooltip flowUnits={bandData.flowUnits} isDepth />} cursor={{ stroke: "hsl(var(--primary))", strokeWidth: 1, strokeDasharray: "3 3" }} />
                             <Legend />
                             <Area type="monotone" dataKey="depth_band_lo" stackId="env" stroke="none" fill="transparent" legendType="none" name="" />
                             <Area type="monotone" dataKey="depth_band_hi" stackId="env" stroke="none" fill="hsl(var(--accent) / 0.15)" name="min–max envelope" />
                             <Area type="monotone" dataKey="depth_iqr_lo" stackId="iqr" stroke="none" fill="transparent" legendType="none" name="" />
                             <Area type="monotone" dataKey="depth_iqr_hi" stackId="iqr" stroke="none" fill="hsl(var(--accent) / 0.35)" name="p10–p90" />
                             <Line type="monotone" dataKey="depth_p50" stroke="hsl(var(--accent))" strokeWidth={2} dot={false} name="median" isAnimationActive={false} />
+                            {compareMode && (
+                              <Line type="monotone" dataKey="depth_runA" stroke="hsl(var(--primary))" strokeWidth={2} strokeDasharray="5 3" dot={false} name={`Run A (#${runA + 1})`} isAnimationActive={false} />
+                            )}
+                            {compareMode && (
+                              <Line type="monotone" dataKey="depth_runB" stroke="hsl(35 90% 55%)" strokeWidth={2} strokeDasharray="5 3" dot={false} name={`Run B (#${runB + 1})`} isAnimationActive={false} />
+                            )}
                           </ComposedChart>
                         </ResponsiveContainer>
                       </div>
