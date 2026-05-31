@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Play, Download, AlertTriangle, FlaskConical } from "lucide-react";
+import type { TooltipProps } from "recharts";
 import {
   ResponsiveContainer, ComposedChart, LineChart, Line, Area, XAxis, YAxis,
   Tooltip, Legend, CartesianGrid,
@@ -33,6 +34,72 @@ interface EnsembleRow {
   continuityErr?: number;
   series?: SwmmOutSeries;
   ok: boolean;
+}
+
+/** Custom tooltip for hydrograph LineCharts — shows exact values with units. */
+function HydroTooltip({ active, payload, label, unit }: TooltipProps<number, string> & { unit: string }) {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className="rounded-lg border border-border bg-card px-3 py-2 shadow-xl text-xs">
+      <div className="font-semibold text-foreground mb-1.5">{fmtHours(Number(label))}</div>
+      <div className="space-y-1">
+        {payload.map((entry) => (
+          <div key={entry.dataKey} className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: entry.color }} />
+            <span className="text-muted-foreground">{entry.name}:</span>
+            <span className="font-mono font-medium text-foreground tabular-nums">
+              {typeof entry.value === "number" ? entry.value.toFixed(3) : entry.value} {unit}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Custom tooltip for ensemble uncertainty bands — shows actual percentile values. */
+function EnsembleTooltip({ active, payload, label, flowUnits, isDepth }: TooltipProps<number, string> & { flowUnits: string; isDepth?: boolean }) {
+  if (!active || !payload?.length) return null;
+  const row = payload[0]?.payload as Record<string, number> | undefined;
+  if (!row) return null;
+  const unit = isDepth ? "ft" : flowUnits;
+  const prefix = isDepth ? "depth" : "flow";
+  const vals = {
+    min: row[`${prefix}_min`],
+    p10: row[`${prefix}_p10`],
+    p50: row[`${prefix}_p50`],
+    p90: row[`${prefix}_p90`],
+    max: row[`${prefix}_max`],
+  };
+  const bandColor = isDepth ? "hsl(var(--secondary))" : "hsl(var(--primary))";
+  return (
+    <div className="rounded-lg border border-border bg-card px-3 py-2 shadow-xl text-xs">
+      <div className="font-semibold text-foreground mb-1.5">{fmtHours(Number(label))}</div>
+      <div className="space-y-1">
+        <div className="flex items-center gap-2">
+          <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: bandColor, opacity: 0.35 }} />
+          <span className="text-muted-foreground">p10–p90:</span>
+          <span className="font-mono font-medium text-foreground tabular-nums">
+            {vals.p10?.toFixed(3)} … {vals.p90?.toFixed(3)} {unit}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: bandColor, opacity: 0.15 }} />
+          <span className="text-muted-foreground">min–max:</span>
+          <span className="font-mono font-medium text-foreground tabular-nums">
+            {vals.min?.toFixed(3)} … {vals.max?.toFixed(3)} {unit}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: bandColor }} />
+          <span className="text-muted-foreground">median:</span>
+          <span className="font-mono font-medium text-foreground tabular-nums">
+            {vals.p50?.toFixed(3)} {unit}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 const PRESETS: Array<{ label: string; description: string; params: PlaygroundParams }> = [
@@ -318,9 +385,12 @@ export default function Playground() {
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))"
                               label={{ value: "time (h:mm)", position: "insideBottom", offset: -2, fill: "hsl(var(--muted-foreground))" }} />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
-                              labelFormatter={(v) => `t = ${fmtHours(Number(v))}`} />
-                            <Legend />
+                            <Tooltip content={<HydroTooltip unit={series.flowUnits} />} />
+                            <Legend
+                              formatter={(value: string) => (
+                                <span className="text-xs text-muted-foreground">{value} ({series.flowUnits})</span>
+                              )}
+                            />
                             {series.links.map((name, i) => (
                               <Line key={name} type="monotone" dataKey={`flow_${name}`} name={name}
                                 stroke={`hsl(${(i * 67) % 360} 70% 55%)`} dot={false} strokeWidth={2} isAnimationActive={false} />
@@ -340,9 +410,12 @@ export default function Playground() {
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
-                              labelFormatter={(v) => `t = ${fmtHours(Number(v))}`} />
-                            <Legend />
+                            <Tooltip content={<HydroTooltip unit="ft" />} />
+                            <Legend
+                              formatter={(value: string) => (
+                                <span className="text-xs text-muted-foreground">{value} (ft)</span>
+                              )}
+                            />
                             {series.nodes.map((name, i) => (
                               <Line key={name} type="monotone" dataKey={`depth_${name}`} name={name}
                                 stroke={`hsl(${(i * 137) % 360} 60% 55%)`} dot={false} strokeWidth={2} isAnimationActive={false} />
@@ -399,9 +472,7 @@ export default function Playground() {
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
-                              labelFormatter={(v) => `t = ${fmtHours(Number(v))}`}
-                              formatter={(val: number, name: string) => [val?.toFixed?.(3), name]} />
+                            <Tooltip content={<EnsembleTooltip flowUnits={bandData.flowUnits} />} />
                             <Legend />
                             <Area type="monotone" dataKey="flow_band_lo" stackId="env" stroke="none" fill="transparent" legendType="none" name="" />
                             <Area type="monotone" dataKey="flow_band_hi" stackId="env" stroke="none" fill="hsl(var(--primary) / 0.15)" name="min–max envelope" />
@@ -423,9 +494,7 @@ export default function Playground() {
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
-                              labelFormatter={(v) => `t = ${fmtHours(Number(v))}`}
-                              formatter={(val: number, name: string) => [val?.toFixed?.(3), name]} />
+                            <Tooltip content={<EnsembleTooltip flowUnits={bandData.flowUnits} isDepth />} />
                             <Legend />
                             <Area type="monotone" dataKey="depth_band_lo" stackId="env" stroke="none" fill="transparent" legendType="none" name="" />
                             <Area type="monotone" dataKey="depth_band_hi" stackId="env" stroke="none" fill="hsl(var(--accent) / 0.15)" name="min–max envelope" />
