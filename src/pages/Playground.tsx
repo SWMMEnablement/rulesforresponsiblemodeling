@@ -472,9 +472,7 @@ export default function Playground() {
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                             <XAxis dataKey="t" tickFormatter={fmtHours} stroke="hsl(var(--muted-foreground))" />
                             <YAxis stroke="hsl(var(--muted-foreground))" />
-                            <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
-                              labelFormatter={(v) => `t = ${fmtHours(Number(v))}`}
-                              formatter={(val: number, name: string) => [val?.toFixed?.(3), name]} />
+                            <Tooltip content={<EnsembleTooltip flowUnits={bandData.flowUnits} />} />
                             <Legend />
                             <Area type="monotone" dataKey="flow_band_lo" stackId="env" stroke="none" fill="transparent" legendType="none" name="" />
                             <Area type="monotone" dataKey="flow_band_hi" stackId="env" stroke="none" fill="hsl(var(--primary) / 0.15)" name="min–max envelope" />
