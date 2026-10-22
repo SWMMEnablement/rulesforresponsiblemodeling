@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { waterBudget } from "@/lib/modelingMath";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
@@ -12,69 +13,6 @@ import {
 interface WaterBalanceCalculatorProps {
   className?: string;
 }
-
-export const WaterBalanceCalculator = ({ className = "" }: WaterBalanceCalculatorProps) => {
-  // Input parameters
-  const [annualPrecipitation, setAnnualPrecipitation] = useState(1000); // mm/year
-  const [imperviousness, setImperviousness] = useState(30); // %
-  const [vegetationCover, setVegetationCover] = useState(50); // %
-  const [soilInfiltrationRate, setSoilInfiltrationRate] = useState(25); // mm/hr
-  const [averageTemperature, setAverageTemperature] = useState(15); // °C
-
-  // Calculate water balance components
-  const results = useMemo(() => {
-    const P = annualPrecipitation;
-    const imp = imperviousness / 100;
-    const veg = vegetationCover / 100;
-    const infRate = soilInfiltrationRate;
-    const temp = averageTemperature;
-
-    // Evapotranspiration estimation (simplified Thornthwaite-based)
-    // Higher temperature and vegetation increase ET
-    const potentialET = Math.min(P * 0.8, 50 + temp * 30 + veg * 200);
-    const actualET = potentialET * (1 - imp * 0.7) * (0.5 + veg * 0.5);
-
-    // Infiltration/Groundwater recharge
-    // Higher soil rate and lower imperviousness increase infiltration
-    const availableForInfiltration = P - actualET;
-    const infiltrationCapacity = (infRate / 50) * (1 - imp);
-    const infiltration = Math.max(0, availableForInfiltration * infiltrationCapacity * 0.6);
-
-    // Surface runoff
-    // Remaining water after ET and infiltration
-    const surfaceRunoff = Math.max(0, P - actualET - infiltration);
-
-    // Direct runoff from impervious surfaces
-    const imperviousRunoff = P * imp * 0.9;
-    
-    // Pervious area runoff
-    const perviousRunoff = Math.max(0, surfaceRunoff - imperviousRunoff);
-
-    // Total runoff
-    const totalRunoff = imperviousRunoff + perviousRunoff;
-
-    // Groundwater contribution to baseflow (portion of infiltration)
-    const baseflow = infiltration * 0.4;
-
-    // Deep percolation
-    const deepPercolation = infiltration * 0.6;
-
-    // Check water balance closure
-    const closure = P - actualET - totalRunoff - infiltration;
-
-    return {
-      precipitation: P,
-      evapotranspiration: Math.round(actualET),
-      infiltration: Math.round(infiltration),
-      surfaceRunoff: Math.round(totalRunoff),
-      baseflow: Math.round(baseflow),
-      deepPercolation: Math.round(deepPercolation),
-      runoffCoefficient: (totalRunoff / P * 100).toFixed(1),
-      etFraction: (actualET / P * 100).toFixed(1),
-      rechargeFraction: (infiltration / P * 100).toFixed(1),
-      closure: Math.abs(closure) < 1 ? "Balanced" : `${closure.toFixed(0)} mm gap`
-    };
-  }, [annualPrecipitation, imperviousness, vegetationCover, soilInfiltrationRate, averageTemperature]);
 
   const ParameterSlider = ({ 
     label, 
@@ -155,6 +93,34 @@ export const WaterBalanceCalculator = ({ className = "" }: WaterBalanceCalculato
       </div>
     </div>
   );
+
+
+export const WaterBalanceCalculator = ({ className = "" }: WaterBalanceCalculatorProps) => {
+  // Input parameters
+  const [annualPrecipitation, setAnnualPrecipitation] = useState(1000); // mm/year
+  const [imperviousness, setImperviousness] = useState(30); // %
+  const [vegetationCover, setVegetationCover] = useState(50); // %
+  const [soilInfiltrationRate, setSoilInfiltrationRate] = useState(25); // mm/hr
+  const [averageTemperature, setAverageTemperature] = useState(15); // °C
+
+  // Calculate water balance components
+  const results = useMemo(() => {
+    const P = annualPrecipitation;
+    const { actualET, infiltration, totalRunoff, baseflow, deepPercolation, closure } = waterBudget(P, imperviousness, vegetationCover, soilInfiltrationRate, averageTemperature);
+
+    return {
+      precipitation: P,
+      evapotranspiration: Math.round(actualET),
+      infiltration: Math.round(infiltration),
+      surfaceRunoff: Math.round(totalRunoff),
+      baseflow: Math.round(baseflow),
+      deepPercolation: Math.round(deepPercolation),
+      runoffCoefficient: (totalRunoff / P * 100).toFixed(1),
+      etFraction: (actualET / P * 100).toFixed(1),
+      rechargeFraction: (infiltration / P * 100).toFixed(1),
+      closure: Math.abs(closure) < 1 ? "Balanced" : `${closure.toFixed(0)} mm gap`
+    };
+  }, [annualPrecipitation, imperviousness, vegetationCover, soilInfiltrationRate, averageTemperature]);
 
   return (
     <Card className={`p-6 ${className}`}>
@@ -238,6 +204,7 @@ export const WaterBalanceCalculator = ({ className = "" }: WaterBalanceCalculato
         {/* Results */}
         <div className="space-y-6">
           <h4 className="font-semibold text-foreground border-b pb-2">Annual Water Balance</h4>
+          <Badge variant="outline">{results.closure}</Badge>
           
           <div className="grid grid-cols-2 gap-4">
             <ResultBox
@@ -265,7 +232,7 @@ export const WaterBalanceCalculator = ({ className = "" }: WaterBalanceCalculato
               icon={ArrowDown}
             />
             <ResultBox
-              label="Baseflow"
+              label="Baseflow (part of recharge)"
               value={results.baseflow}
               unit="mm/yr"
               percentage={(results.baseflow / results.precipitation * 100).toFixed(1)}
@@ -341,7 +308,7 @@ export const WaterBalanceCalculator = ({ className = "" }: WaterBalanceCalculato
       <div className="mt-6 p-4 bg-muted/30 rounded-lg text-xs text-muted-foreground">
         <strong>Note:</strong> This simplified calculator demonstrates water balance concepts. 
         Actual modeling requires detailed input data, process-based equations, and validation against observations.
-        The water balance equation: P = ET + Q + ΔS (where ΔS ≈ GW recharge over long periods).
+        Steady-state budget: P = ET + surface runoff + groundwater recharge. Baseflow is part of recharge, not an additional term. Storage change is assumed zero.
       </div>
     </Card>
   );
