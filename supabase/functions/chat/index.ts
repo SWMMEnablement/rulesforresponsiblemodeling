@@ -5,6 +5,33 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Hard limits so a client cannot send a 5 MB transcript or a system-role override.
+const MAX_MESSAGES = 30;
+const MAX_CHARS_PER_MESSAGE = 4000;
+const MAX_TOTAL_CHARS = 24000;
+
+type ChatMessage = { role: "user" | "assistant"; content: string };
+
+function sanitizeMessages(input: unknown): ChatMessage[] | null {
+  if (!Array.isArray(input) || input.length === 0 || input.length > MAX_MESSAGES) return null;
+  const out: ChatMessage[] = [];
+  let total = 0;
+  for (const m of input) {
+    if (!m || typeof m !== "object") return null;
+    const role = (m as { role?: unknown }).role;
+    const content = (m as { content?: unknown }).content;
+    // Only user/assistant turns are accepted; a client-supplied "system" message would
+    // be appended AFTER the real system prompt and override it.
+    if (role !== "user" && role !== "assistant") return null;
+    if (typeof content !== "string" || content.length === 0 || content.length > MAX_CHARS_PER_MESSAGE) return null;
+    total += content.length;
+    if (total > MAX_TOTAL_CHARS) return null;
+    out.push({ role, content });
+  }
+  if (out[out.length - 1].role !== "user") return null;
+  return out;
+}
+
 const systemPrompt = `You are "Ask James" — an expert AI assistant that answers modeling questions as if channeling the philosophy and expertise of Dr. William James from "Rules for Responsible Modeling."
 
 Your knowledge covers these key areas:
@@ -46,8 +73,16 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+  }
+
   try {
-    const { messages } = await req.json();
+    const body = await req.json().catch(() => null);
+    const messages = sanitizeMessages(body?.messages);
+    if (!messages) {
+      return new Response(JSON.stringify({ error: "Invalid messages payload" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
@@ -96,7 +131,7 @@ serve(async (req) => {
     });
   } catch (error) {
     console.error("Chat function error:", error);
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
+    return new Response(JSON.stringify({ error: "Unable to answer right now. Please try again later." }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
