@@ -100,9 +100,10 @@ Width: ${(stats.p95 - stats.p5).toFixed(2)} m³/s (${((stats.p95 - stats.p5) / s
 ## Reporting Recommendation
 ${stats.cv > 40 ? "⚠️ HIGH UNCERTAINTY: CV > 40%. Report full distribution to stakeholders.\nConsider: gathering more data, reducing parameter ranges, or simplifying model." : stats.cv > 20 ? "⚠️ MODERATE UNCERTAINTY: CV 20-40%. Include confidence bounds in all results." : "✅ LOW UNCERTAINTY: CV < 20%. Parameter uncertainty is well-constrained."}
 
-## James's Rule 10: Quantify Uncertainty
-"Single-point estimates without uncertainty communication
-are incomplete and potentially misleading."
+## App takeaway: Quantify Uncertainty
+Application-authored paraphrase, not a quotation from William James.
+Single-point estimates without uncertainty communication
+are incomplete and potentially misleading.
 `;
     const blob = new Blob([txt], { type: "text/plain" });
     const url = URL.createObjectURL(blob);

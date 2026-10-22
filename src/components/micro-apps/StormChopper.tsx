@@ -66,9 +66,10 @@ Based on Rules for Responsible Modeling — Ch.6
 ## Recommendation
 ${analysis.riskLevel === "critical" ? "Time-step too coarse — peak is severely attenuated. Use Δt ≤ 5 min." : analysis.riskLevel === "warning" ? "Moderate peak loss. Consider a finer time-step for design storms." : "Time-step adequately captures the storm peak."}
 
-## Rule 6: Respect the Resolution of Your Data
-"The model time-step should be fine enough to capture the
- fastest process that matters to your decision."
+## App takeaway: Respect the Resolution of Your Data
+Application-authored paraphrase, not a quotation from William James.
+The model time-step should be fine enough to capture the
+ fastest process that matters to your decision.
 `;
     const blob = new Blob([txt], { type: "text/plain" });
     const url = URL.createObjectURL(blob);

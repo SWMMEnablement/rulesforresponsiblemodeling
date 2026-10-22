@@ -115,9 +115,10 @@ ${metrics.nse > 0.7 ? "✅ NSE > 0.7: Good overall fit" : "❌ NSE < 0.7: Improv
 ${Math.abs(metrics.pbias) < 15 ? "✅ |PBIAS| < 15%: Volume bias acceptable" : "❌ |PBIAS| > 15%: Volume mismatch — check rainfall input (Ch.6)"}
 ${metrics.kge > 0.5 ? "✅ KGE > 0.5: Balanced performance" : "❌ KGE < 0.5: Multiple error sources — use multi-objective calibration (Ch.14)"}
 
-## James's Rule 9: Choose Appropriate Objective Functions
-"No single objective function captures all aspects of model performance.
-Use multiple metrics to evaluate different hydrograph features."
+## App takeaway: Choose Appropriate Objective Functions
+Application-authored paraphrase, not a quotation from William James.
+No single objective function captures all aspects of model performance.
+Use multiple metrics to evaluate different hydrograph features.
 `;
     const blob = new Blob([txt], { type: "text/plain" });
     const url = URL.createObjectURL(blob);

@@ -68,9 +68,10 @@ ${analysis.riskLevel === "warning" ? "- [ ] Perform sensitivity analysis (Ch. 11
 - [ ] Inventory available data sources and assess quality
 - [ ] Document data gaps and their impact on model reliability
 
-## James's Rule 1: Be Clear About the Purpose
-"Always document the specific decisions the model will inform
-before writing a single line of code."
+## App takeaway: Be Clear About the Purpose
+Application-authored paraphrase, not a quotation from William James.
+Always document the specific decisions the model will inform
+before writing a single line of code.
 `;
     const blob = new Blob([template], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
