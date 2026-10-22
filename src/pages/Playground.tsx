@@ -570,7 +570,7 @@ export default function Playground() {
 
               <TabsContent value="ensemble" className="space-y-4">
                 <Card className="p-4 space-y-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <div className="font-semibold">Monte-Carlo uncertainty sweep</div>
                       <div className="text-xs text-muted-foreground">
@@ -583,7 +583,7 @@ export default function Playground() {
                     </Button>
                   </div>
                   {ensemble.length > 0 && (
-                    <div className="grid grid-cols-3 gap-3 pt-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
                       <Stat label="Peak flow (min · p50 · max)"
                         value={`${stats.peakFlow.min.toFixed(2)} · ${stats.peakFlow.p50.toFixed(2)} · ${stats.peakFlow.max.toFixed(2)}`}
                         sub="cfs" />
@@ -758,7 +758,7 @@ function Stat({ label, value, sub, warn }: { label: string; value: string; sub?:
   return (
     <Card className={`p-3 ${warn ? "border-amber-500/50 bg-amber-500/5" : ""}`}>
       <div className="text-xs text-muted-foreground">{label}</div>
-      <div className="text-lg font-semibold tabular-nums">{value}</div>
+      <div className="text-base font-semibold tabular-nums break-words">{value}</div>
       {sub && <div className="text-xs text-muted-foreground truncate">{sub}</div>}
     </Card>
   );
@@ -798,8 +798,8 @@ function RunPicker({
         <Label className="text-xs font-medium">{label}</Label>
       </div>
       <Select value={String(value)} onValueChange={(v) => onChange(Number(v))}>
-        <SelectTrigger className="h-10 text-xs">
-          <SelectValue placeholder="Choose a run…" />
+        <SelectTrigger className="h-10 text-xs" aria-label={label}>
+          <SelectValue placeholder="Choose a run…">{selected ? `Run #${value + 1}` : "Choose a run…"}</SelectValue>
         </SelectTrigger>
         <SelectContent className="min-w-[20rem]">
           {validRuns.map(({ r, i }) => {

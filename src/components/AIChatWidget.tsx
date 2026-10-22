@@ -135,6 +135,7 @@ export const AIChatWidget = () => {
   if (!isOpen) {
     return (
       <Button
+        aria-label="Open Ask James"
         onClick={() => setIsOpen(true)}
         className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50 bg-gradient-to-br from-primary to-primary-light hover:scale-105 transition-transform"
         size="icon"
@@ -170,6 +171,7 @@ export const AIChatWidget = () => {
             variant="ghost" 
             size="icon" 
             className="h-8 w-8"
+            aria-label={isMinimized ? "Restore chat" : "Minimize chat"}
             onClick={() => setIsMinimized(!isMinimized)}
           >
             <Minimize2 className="h-4 w-4" />
@@ -178,6 +180,7 @@ export const AIChatWidget = () => {
             variant="ghost" 
             size="icon" 
             className="h-8 w-8"
+            aria-label="Close chat"
             onClick={() => {
               setIsOpen(false);
               setIsMinimized(false);
