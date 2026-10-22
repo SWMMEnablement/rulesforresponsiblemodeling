@@ -229,7 +229,7 @@ export const FrameworkMap = () => {
           {/* Interactive Map */}
           <div className="lg:col-span-2">
             <Card className="p-4 md:p-6 relative overflow-hidden bg-card/50 backdrop-blur">
-              <div className="relative w-full aspect-[4/3] min-h-[400px]">
+              <div className="relative w-full aspect-[4/3] md:min-h-[400px]">
                 {/* SVG for connections */}
                 <svg 
                   className="absolute inset-0 w-full h-full pointer-events-none"

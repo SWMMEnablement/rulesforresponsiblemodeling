@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import mermaid from "mermaid";
+import { useTheme } from "next-themes";
 
 interface MermaidDiagramProps {
   chart: string;
@@ -8,13 +9,15 @@ interface MermaidDiagramProps {
 export const MermaidDiagram = ({ chart }: MermaidDiagramProps) => {
   const elementRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
-    // Initialize mermaid
+    // Initialize mermaid for the current colour scheme. With theme:'default' the edge
+    // strokes are near-black and vanish on the dark background.
     mermaid.initialize({
       startOnLoad: false,
-      theme: 'default',
-      securityLevel: 'loose',
+      theme: resolvedTheme === "dark" ? "dark" : "default",
+      securityLevel: 'strict',
       fontFamily: 'inherit',
     });
 
@@ -26,7 +29,7 @@ export const MermaidDiagram = ({ chart }: MermaidDiagramProps) => {
           elementRef.current.innerHTML = '';
           
           // Generate unique ID for this diagram
-          const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
+          const id = `mermaid-${Math.random().toString(36).slice(2, 11)}`;
           
           // Render the mermaid diagram
           const { svg } = await mermaid.render(id, chart.trim());
@@ -43,7 +46,7 @@ export const MermaidDiagram = ({ chart }: MermaidDiagramProps) => {
     };
 
     renderDiagram();
-  }, [chart]);
+  }, [chart, resolvedTheme]);
 
   return <div ref={elementRef} className="flex justify-center my-4 w-full" />;
 };

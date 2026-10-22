@@ -142,13 +142,22 @@ export default function Playground() {
 
   const runOnce = useCallback(async (p: PlaygroundParams) => {
     setRunning(true);
-    const inp = applyParams(TUTORIAL_INP, p);
-    const r = await runSwmm(inp);
-    setResult(r);
-    setSummary(r.rpt ? parseReport(r.rpt) : null);
-    setSeries(r.out ? parseSwmmOut(r.out) : null);
-    setRunning(false);
-    return r;
+    try {
+      const inp = applyParams(TUTORIAL_INP, p);
+      const r = await runSwmm(inp);
+      setResult(r);
+      setSummary(r.rpt ? parseReport(r.rpt) : null);
+      setSeries(r.out ? parseSwmmOut(r.out) : null);
+      return r;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      setResult({ ok: false, rc: -1, rpt: "", out: null, massBal: { runoffErr: NaN, flowErr: NaN, qualErr: NaN }, errMsg: message, durationMs: 0, error: message });
+      setSummary(null);
+      setSeries(null);
+      return null;
+    } finally {
+      setRunning(false);
+    }
   }, []);
 
   const runEnsemble = useCallback(async () => {
@@ -162,7 +171,13 @@ export default function Playground() {
       const rainfallMultiplier = 0.7 + Math.random() * 0.8;
       const pctImperv = Math.max(0, Math.min(100, 60 + (Math.random() - 0.5) * 30));
       const inp = applyParams(TUTORIAL_INP, { manningN, pctImperv, rainfallMultiplier });
-      const r = await runSwmm(inp);
+      let r: SwmmRunResult;
+      try {
+        r = await runSwmm(inp);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        r = { ok: false, rc: -1, rpt: "", out: null, massBal: { runoffErr: NaN, flowErr: NaN, qualErr: NaN }, errMsg: message, durationMs: 0, error: message };
+      }
       const s = r.rpt ? parseReport(r.rpt) : {};
       const out = r.out ? parseSwmmOut(r.out) : undefined;
       const dt = out?.reportStep ?? 0;
@@ -205,7 +220,7 @@ export default function Playground() {
   }, [series]);
 
   // Ensemble bands
-  const ensembleSeries = useMemo(() => ensemble.filter((r) => r.series).map((r) => r.series!), [ensemble]);
+  const ensembleSeries = useMemo(() => ensemble.flatMap((r) => r.ok && r.series?.ok ? [r.series] : []), [ensemble]);
 
   const bandData = useMemo(() => {
     if (ensembleSeries.length < 2) return null;
@@ -215,8 +230,8 @@ export default function Playground() {
     const [pMin, p10, p50, p90, pMax] = percentileBands(allFlowsFirstLink, [0, 0.1, 0.5, 0.9, 1]);
     const allDepthsFirstNode = ensembleSeries.map((s) => s.nodeDepth[0]);
     const [dMin, d10, d50, d90, dMax] = percentileBands(allDepthsFirstNode, [0, 0.1, 0.5, 0.9, 1]);
-    const sA = compareMode ? ensembleSeries[runA] : undefined;
-    const sB = compareMode ? ensembleSeries[runB] : undefined;
+    const sA = compareMode ? ensemble[runA]?.series : undefined;
+    const sB = compareMode ? ensemble[runB]?.series : undefined;
     const rows = Array.from(ref.times).map((t, i) => ({
       t,
       flow_min: pMin[i], flow_p10: p10[i], flow_p50: p50[i], flow_p90: p90[i], flow_max: pMax[i],
@@ -231,7 +246,7 @@ export default function Playground() {
       depth_runB: sB?.nodeDepth[0]?.[i] ?? null,
     }));
     return { rows, linkName: ref.links[0], nodeName: ref.nodes[0], flowUnits: ref.flowUnits };
-  }, [ensembleSeries, compareMode, runA, runB]);
+  }, [ensembleSeries, ensemble, compareMode, runA, runB]);
 
   // Ensemble scalar distribution stats
   const stats = useMemo(() => {
@@ -363,7 +378,7 @@ export default function Playground() {
           </p>
         </header>
 
-        <div className="grid lg:grid-cols-[1fr_2fr] gap-6">
+        <div className="grid lg:grid-cols-[1fr_2fr] gap-6 *:min-w-0">
           {/* Controls */}
           <Card className="p-6 space-y-6">
             <div>
@@ -427,7 +442,7 @@ export default function Playground() {
           {/* Results */}
           <div className="space-y-6">
             <Tabs defaultValue="hydrographs">
-              <TabsList>
+              <TabsList className="h-auto flex-wrap">
                 <TabsTrigger value="summary">Summary</TabsTrigger>
                 <TabsTrigger value="hydrographs">Hydrographs</TabsTrigger>
                 <TabsTrigger value="ensemble">Uncertainty Ensemble</TabsTrigger>

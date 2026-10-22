@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local environment (holds the Supabase publishable key the DOWNLOAD-NOTES tell you to create)
+.env
+.env.*
+!.env.example
