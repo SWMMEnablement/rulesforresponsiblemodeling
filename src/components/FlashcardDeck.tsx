@@ -49,17 +49,6 @@ export const FlashcardDeck = () => {
       cards = [...flashcardData].sort(() => Math.random() - 0.5).slice(0, 20);
     }
 
-    if (cards.length === 0) {
-      if (cardMode === "review") {
-        toast.info("No cards due for review! Come back later.");
-        setMode("new");
-      } else if (cardMode === "new") {
-        toast.info("All cards learned! Try review mode.");
-        setMode("review");
-      }
-      return;
-    }
-
     setCurrentCards(cards);
     setCurrentIndex(0);
     setShowAnswer(false);
@@ -86,7 +75,8 @@ export const FlashcardDeck = () => {
       setShowAnswer(false);
     } else {
       toast.success("Session complete! Great work!");
-      loadCards(mode);
+      setCurrentCards([]);
+      setCurrentIndex(0);
     }
   };
 
@@ -175,8 +165,10 @@ export const FlashcardDeck = () => {
             onClick={() => {
               if (confirm("Reset all progress? This cannot be undone.")) {
                 resetProgress();
+                setMode("new");
+                setCurrentCards(flashcardData.slice(0, 10));
+                setCurrentIndex(0);
                 toast.success("Progress reset successfully");
-                loadCards(mode);
               }
             }}
             className="gap-2"
@@ -203,6 +195,7 @@ export const FlashcardDeck = () => {
           <div className="flex justify-center">
             <div className="w-full max-w-2xl">
               <Flashcard
+                key={currentCard.id}
                 term={currentCard.term}
                 definition={currentCard.definition}
                 chapter={currentCard.chapter}

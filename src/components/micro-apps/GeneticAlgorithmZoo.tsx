@@ -120,8 +120,9 @@ Based on Rules for Responsible Modeling — Ch.14
 - Fitness: ${best.fitness.toFixed(4)}
 ${bestEver ? `- Best Ever Fitness: ${bestEver.fitness.toFixed(4)}` : ""}
 
-## Rule 14: Automated Calibration Needs Human Oversight
-"GA finds optimal numbers — but only you can judge if they're physically meaningful."
+## App takeaway: Automated Calibration Needs Human Oversight
+Application-authored paraphrase, not a quotation from William James.
+GA finds optimal numbers — but only you can judge if they're physically meaningful.
 `;
     const blob = new Blob([txt], { type: "text/plain" });
     const url = URL.createObjectURL(blob);

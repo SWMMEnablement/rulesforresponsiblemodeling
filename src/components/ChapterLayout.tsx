@@ -38,13 +38,14 @@ export const ChapterLayout = ({ chapterNumber, title, children }: ChapterLayoutP
 
         <div className="flex-1 flex flex-col min-w-0">
           {/* Header */}
-          <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
+          {/* top-16 = height of the global <Navigation/> (h-16); z-40 keeps it under the nav's z-50 */}
+          <header className="sticky top-16 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
             {/* Reading Progress Bar */}
             <Progress 
               value={readingProgress} 
               className="h-1 rounded-none bg-muted/50" 
             />
-            <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-4">
                 <SidebarTrigger />
                 <nav className="flex items-center gap-2">
@@ -76,7 +77,7 @@ export const ChapterLayout = ({ chapterNumber, title, children }: ChapterLayoutP
                   <Printer className="w-4 h-4" />
                 </Button>
                 <BookmarkButton chapterNumber={chapterNumber} title={title} />
-                <div className="text-sm text-muted-foreground">
+                <div className="text-sm text-muted-foreground whitespace-nowrap hidden sm:block">
                   Chapter {chapterNumber} of 17
                 </div>
               </div>

@@ -158,7 +158,7 @@ MD Insight Explorer is an interactive web-based viewer for Allan Goyen's PhD dis
 **Location:** `src/components/CatchmentMap.tsx` (354 lines)
 
 **Map provider:** Mapbox GL JS  
-**Default token:** Hardcoded public token (`pk.eyJ1...`) — user can override via input field  
+**Default token:** Hardcoded public token (`[redacted: configure a URL-restricted Mapbox token]`) — user can override via input field  
 **Center:** Giralang, Canberra, ACT, Australia `[149.0833, -35.2167]`  
 **Zoom:** 14.5 with 45° pitch  
 **Style:** `mapbox://styles/mapbox/satellite-streets-v12`
@@ -282,7 +282,7 @@ Single-page app with only one real route. React Router v6 with `BrowserRouter`.
 | Recharts | Data visualization charts | No |
 | shadcn/ui | UI component library | No |
 
-**⚠️ Mapbox Token:** Currently hardcoded as `pk.eyJ1IjoiZGlja2luc29ucmUiLCJhIjoiY21oczd6eDllMWdoNDJpcTZ5dW9wN2J3aiJ9.Hwy-aXZytiY9I4q1WLnMmA`. Replace with your own token if redeploying.
+**⚠️ Mapbox Token:** Currently hardcoded as `[redacted: configure a URL-restricted Mapbox token]`. Replace with your own token if redeploying.
 
 ---
 

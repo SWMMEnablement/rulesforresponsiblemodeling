@@ -2,17 +2,25 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Home, BookOpen, Library, GraduationCap, Menu, Moon, Sun, Keyboard, Quote, Code, FlaskConical, ClipboardCheck, SearchX, ExternalLink, Award, Sparkles, BarChart3, Grid3X3, Zap, Beaker } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { useState } from "react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { ShortcutsModal } from "@/components/ShortcutsModal";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 export const Navigation = () => {
-  const isMobile = useIsMobile();
+  const [isMobile, setIsMobile] = useState(() => !window.matchMedia("(min-width: 1280px)").matches);
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1280px)");
+    const update = () => setIsMobile(!media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
   const [open, setOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
 
   useKeyboardShortcuts({
     onOpenHelp: () => setShortcutsOpen(true),
@@ -37,8 +45,16 @@ export const Navigation = () => {
     { to: "https://replit.com/@robertdickinson/SWMM-Docs-Explorer", icon: ExternalLink, label: "SWMM Explorer", external: true },
   ];
 
+  // 16 links do not fit in a 1280px row (measured 2498px): keep the first 7 inline and
+  // fold the rest into a "More" menu instead of letting them clip off-screen.
+  const INLINE_LINKS = 5;
+  const inlineLinks = navLinks.slice(0, INLINE_LINKS);
+  const overflowLinks = navLinks.slice(INLINE_LINKS);
+
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    // `theme` is "system" by default, so comparing it to "dark" made the first click a
+    // no-op on a dark OS. resolvedTheme is what is actually on screen.
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
 
   return (
@@ -46,13 +62,13 @@ export const Navigation = () => {
       <ShortcutsModal open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
       <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-6 h-6 text-primary" />
-            <span className="font-bold text-sm lg:text-lg whitespace-nowrap">Rules for Responsible Modeling</span>
+        <div className="flex items-center justify-between h-16 gap-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <BookOpen className="w-6 h-6 text-primary shrink-0" />
+            <span className="font-bold text-xs sm:text-sm whitespace-nowrap">Rules for Responsible Modeling</span>
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <Button
               variant="ghost"
               size="sm"
@@ -79,11 +95,11 @@ export const Navigation = () => {
             {isMobile ? (
               <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" aria-label="Open navigation">
                     <Menu className="w-5 h-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-64">
+                <SheetContent side="right" className="w-64 overflow-y-auto">
                   <div className="flex flex-col gap-4 mt-8">
                     {navLinks.map((link) =>
                       link.external ? (
@@ -107,23 +123,47 @@ export const Navigation = () => {
               </Sheet>
             ) : (
               <>
-                {navLinks.map((link) =>
+                {inlineLinks.map((link) =>
                   link.external ? (
-                    <a key={link.to} href={link.to} target="_blank" rel="noopener noreferrer">
-                      <Button variant="ghost" size="sm" className="gap-2">
+                    <Button key={link.to} variant="ghost" size="sm" className="gap-2" asChild>
+                      <a href={link.to} target="_blank" rel="noopener noreferrer">
                         <link.icon className="w-4 h-4" />
                         <span>{link.label}</span>
-                      </Button>
-                    </a>
+                      </a>
+                    </Button>
                   ) : (
-                    <Link key={link.to} to={link.to}>
-                      <Button variant="ghost" size="sm" className="gap-2">
+                    <Button key={link.to} variant="ghost" size="sm" className="gap-2" asChild>
+                      <Link to={link.to}>
                         <link.icon className="w-4 h-4" />
                         <span>{link.label}</span>
-                      </Button>
-                    </Link>
+                      </Link>
+                    </Button>
                   )
                 )}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="gap-1">
+                      More <ChevronDown className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    {overflowLinks.map((link) => (
+                      <DropdownMenuItem key={link.to} asChild>
+                        {link.external ? (
+                          <a href={link.to} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 cursor-pointer">
+                            <link.icon className="w-4 h-4" />
+                            {link.label}
+                          </a>
+                        ) : (
+                          <Link to={link.to} className="flex items-center gap-2 cursor-pointer">
+                            <link.icon className="w-4 h-4" />
+                            {link.label}
+                          </Link>
+                        )}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             )}
           </div>

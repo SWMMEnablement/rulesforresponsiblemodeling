@@ -21,7 +21,8 @@ export function TableOfContents() {
   }
 
   return (
-    <Sidebar className={open ? "w-64" : "w-14"} collapsible="icon">
+    // top-16 / 100svh-4rem: start below the sticky global <Navigation/> instead of underneath it
+    <Sidebar className={`top-16 h-[calc(100svh-4rem)] ${open ? "w-64" : "w-14"}`} collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="flex items-center gap-2">

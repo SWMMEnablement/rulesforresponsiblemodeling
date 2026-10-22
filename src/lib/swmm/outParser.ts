@@ -51,7 +51,7 @@ const MAGIC = 516114522;
 // Number of base (non-pollutant) variables per object class in SWMM5.
 const N_SUBC_BASE = 8;   // rainfall, snow depth, evap loss, infil loss, runoff, gw flow, gw elev, soil moist
 const N_NODE_BASE = 6;   // depth, head, stored vol, lateral inflow, total inflow, flooding
-const N_LINK_BASE = 5;   // flow, depth, velocity, froude, capacity
+const N_LINK_BASE = 5;   // flow, depth, velocity, volume, capacity (SWMM 5.1+; Froude was 5.0)
 const N_SYS_VARS = 15;
 
 // Indices into node/link variable arrays:
@@ -118,7 +118,10 @@ export function parseSwmmOut(buf: ArrayBuffer): SwmmOutSeries {
   // Reporting interval: it lives just before resultsOffset. We need reportStep.
   // Structure right before results: double startDate(8) + int reportStep(4) = 12 bytes.
   const intervalOff = resultsOffset - 12;
-  // const startDateTime = intervalOff >= 0 ? dv.getFloat64(intervalOff, true) : 0;
+  // SWMM stamps each record with the END of its reporting period, so the first record
+  // is at startDate + reportStep, not at startDate. Measure elapsed time from the
+  // report start date so the hydrograph isn't shifted one step early.
+  const startDateTime = intervalOff >= 0 ? dv.getFloat64(intervalOff, true) : 0;
   const reportStep = intervalOff >= 0 ? dv.getInt32(intervalOff + 8, true) : 0;
 
   // Allocate time series
@@ -134,7 +137,7 @@ export function parseSwmmOut(buf: ArrayBuffer): SwmmOutSeries {
     const base = resultsOffset + t * perPeriodBytes;
     if (base + perPeriodBytes > buf.byteLength) { return { ...empty, ok: false }; }
     const date = dv.getFloat64(base, true);
-    times[t] = t === 0 ? 0 : (date - dv.getFloat64(resultsOffset, true)) * 86400;
+    times[t] = Math.round((date - startDateTime) * 86400);
     let o = base + 8;
     // Skip subcatchments
     o += Nsubc * nSubcVars * 4;

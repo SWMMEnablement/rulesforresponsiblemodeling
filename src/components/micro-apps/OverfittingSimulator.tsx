@@ -70,9 +70,10 @@ Consider: Simplify subcatchment discretization, reduce calibration parameters, u
 But verify with sensitivity analysis (Ch.11) that additional complexity is warranted.`
   : `Model complexity appears appropriate for available data. Proceed with calibration (Ch.12).`}
 
-## James's Rule 4: Optimal Complexity
-"The ideal model is the simplest one that adequately serves
-the purpose for which it was developed."
+## App takeaway: Optimal Complexity
+Application-authored paraphrase, not a quotation from William James.
+The ideal model is the simplest one that adequately serves
+the purpose for which it was developed.
 `;
     const blob = new Blob([txt], { type: "text/plain" });
     const url = URL.createObjectURL(blob);

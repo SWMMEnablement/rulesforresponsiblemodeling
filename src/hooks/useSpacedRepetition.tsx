@@ -25,17 +25,22 @@ export const useSpacedRepetition = (flashcards: FlashcardData[]) => {
   const [progress, setProgress] = useState<Map<string, CardProgress>>(() => {
     const stored = safeStorage.getItem(STORAGE_KEY);
     if (stored) {
-      const parsed = JSON.parse(stored);
-      return new Map(
-        Object.entries(parsed).map(([id, data]: [string, any]) => [
-          id,
-          {
-            ...data,
-            nextReview: new Date(data.nextReview),
-            lastReviewed: data.lastReviewed ? new Date(data.lastReviewed) : undefined,
-          },
-        ])
-      );
+      try {
+        const parsed = JSON.parse(stored) as Record<string, Omit<CardProgress, "nextReview" | "lastReviewed"> & { nextReview: string; lastReviewed?: string }>;
+        return new Map(
+          Object.entries(parsed).map(([id, data]) => [
+            id,
+            {
+              ...data,
+              nextReview: new Date(data.nextReview),
+              lastReviewed: data.lastReviewed ? new Date(data.lastReviewed) : undefined,
+            },
+          ])
+        );
+      } catch (e) {
+        // Corrupt localStorage must not take the whole page down.
+        console.warn("Ignoring unreadable flashcard progress:", e);
+      }
     }
     return new Map();
   });
@@ -108,7 +113,7 @@ export const useSpacedRepetition = (flashcards: FlashcardData[]) => {
       lastReviewed: new Date(),
     };
 
-    setProgress(new Map(progress.set(id, updated)));
+    setProgress((prev) => new Map(prev).set(id, updated));
   };
 
   const getDueCards = (): FlashcardData[] => {

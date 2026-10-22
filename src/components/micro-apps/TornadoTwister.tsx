@@ -62,8 +62,9 @@ ${results.map((r, i) => `${i + 1}. ${r.name}: ±${r.swing.toFixed(1)}% output sw
 Most sensitive parameter: ${results[0].name} (±${results[0].swing.toFixed(1)}%)
 Least sensitive parameter: ${results[results.length - 1].name} (±${results[results.length - 1].swing.toFixed(1)}%)
 
-## Rule 11: Test Sensitivity Before Calibrating
-"Know which parameters matter before spending time tuning all of them."
+## App takeaway: Test Sensitivity Before Calibrating
+Application-authored paraphrase, not a quotation from William James.
+Know which parameters matter before spending time tuning all of them.
 `;
     const blob = new Blob([txt], { type: "text/plain" });
     const url = URL.createObjectURL(blob);

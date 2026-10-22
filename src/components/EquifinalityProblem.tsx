@@ -6,22 +6,15 @@ import { Button } from "./ui/button";
 import { HelpCircle, AlertTriangle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
-const equifinalitySets = [
-  { n: 0.010, imp: 75, label: "Low n, High Imp" },
-  { n: 0.013, imp: 65, label: "Mid n, Mid Imp" },
-  { n: 0.018, imp: 55, label: "High n, Low Imp" },
-  { n: 0.020, imp: 48, label: "Very High n, Low Imp" },
-];
+import { equifinalitySets, equifinalityFlow } from "@/lib/modelingMath";
 
 export const EquifinalityProblem = () => {
   const [manningN, setManningN] = useState(13); // x1000
-  const [imperviousness, setImperviousness] = useState(65);
+  const [imperviousness, setImperviousness] = useState(56);
   const [showFuture, setShowFuture] = useState(false);
 
   const currentQ = useMemo(() => {
-    const nEffect = (0.015 - manningN / 1000) * 800;
-    const impEffect = (imperviousness - 60) * 0.4;
-    return Math.round(47 + nEffect + impEffect);
+    return Math.round(equifinalityFlow(manningN / 1000, imperviousness));
   }, [manningN, imperviousness]);
 
   const futureQ = useMemo(() => {
@@ -31,12 +24,12 @@ export const EquifinalityProblem = () => {
     return Math.round(47 + nEffect + impEffect);
   }, [manningN, imperviousness]);
 
-  const nseScore = useMemo(() => {
+  const fitScore = useMemo(() => {
     const diff = Math.abs(currentQ - 47);
     return Math.max(0, (1 - diff / 30)).toFixed(2);
   }, [currentQ]);
 
-  const isGoodFit = Number(nseScore) > 0.8;
+  const isGoodFit = Number(fitScore) > 0.8;
 
   return (
     <TooltipProvider delayDuration={200}>
@@ -80,7 +73,7 @@ export const EquifinalityProblem = () => {
         {/* Current output */}
         <div className={`p-4 rounded-lg mb-4 ${isGoodFit ? "bg-emerald-500/10" : "bg-destructive/10"}`}>
           <p className="font-semibold text-sm text-foreground">
-            Current Peak Flow: {currentQ} CFS — NSE: {nseScore} {isGoodFit ? "✓ Good fit" : "✗ Poor fit"}
+            Current Peak Flow: {currentQ} CFS — Peak-flow fit: {fitScore} {isGoodFit ? "✓ Good fit" : "✗ Poor fit"}
           </p>
           <p className="text-xs text-muted-foreground mt-1">Target: 47 CFS (observed)</p>
         </div>

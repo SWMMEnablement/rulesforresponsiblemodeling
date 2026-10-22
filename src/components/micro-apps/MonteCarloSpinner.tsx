@@ -6,10 +6,11 @@ import { Slider } from "@/components/ui/slider";
 import { Link } from "react-router-dom";
 import { Dices, Download, BookOpen, ArrowLeft, Play, RotateCcw, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
+import { physicalSample } from "@/lib/modelingMath";
 
 // Simple seeded random
 const seededRandom = (seed: number) => {
-  let s = seed;
+  let s = (Math.abs(Math.floor(seed)) % 2147483646) + 1;
   return () => { s = (s * 16807 + 0) % 2147483647; return s / 2147483647; };
 };
 
@@ -34,15 +35,15 @@ export const MonteCarloSpinner = () => {
 
     for (let i = 0; i < numSims; i++) {
       // Normal-ish distribution via Box-Muller
-      const u1 = rng(), u2 = rng();
+      const u1 = Math.max(rng(), Number.EPSILON), u2 = rng();
       const z1 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
       const z2 = Math.sqrt(-2 * Math.log(u1)) * Math.sin(2 * Math.PI * u2);
       const z3 = Math.sqrt(-2 * Math.log(Math.max(rng(), 0.001))) * Math.cos(2 * Math.PI * rng());
 
       // Base values with perturbation
-      const roughness = 0.013 * (1 + z1 * roughnessRange / 100);
-      const imperv = 0.45 * (1 + z2 * impervRange / 100);
-      const slope = 0.02 * (1 + z3 * slopeRange / 100);
+      const roughness = physicalSample(0.013, z1, roughnessRange, 0.001);
+      const imperv = physicalSample(0.45, z2, impervRange, 0, 1);
+      const slope = physicalSample(0.02, z3, slopeRange, 0.0001);
 
       // Simplified flow calculation
       const basePeak = 25;
@@ -99,9 +100,10 @@ Width: ${(stats.p95 - stats.p5).toFixed(2)} m³/s (${((stats.p95 - stats.p5) / s
 ## Reporting Recommendation
 ${stats.cv > 40 ? "⚠️ HIGH UNCERTAINTY: CV > 40%. Report full distribution to stakeholders.\nConsider: gathering more data, reducing parameter ranges, or simplifying model." : stats.cv > 20 ? "⚠️ MODERATE UNCERTAINTY: CV 20-40%. Include confidence bounds in all results." : "✅ LOW UNCERTAINTY: CV < 20%. Parameter uncertainty is well-constrained."}
 
-## James's Rule 10: Quantify Uncertainty
-"Single-point estimates without uncertainty communication
-are incomplete and potentially misleading."
+## App takeaway: Quantify Uncertainty
+Application-authored paraphrase, not a quotation from William James.
+Single-point estimates without uncertainty communication
+are incomplete and potentially misleading.
 `;
     const blob = new Blob([txt], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
@@ -234,7 +236,7 @@ are incomplete and potentially misleading."
                 { val: stats.p50, label: "P50", color: "rgb(59,130,246)" },
                 { val: stats.p95, label: "P95", color: "rgb(239,68,68)" },
               ].map(({ val, label, color }) => {
-                const xPos = pad.left + ((val - histogram.minVal) / (histogram.maxVal - histogram.minVal)) * cW;
+                const xPos = pad.left + ((val - histogram.minVal) / (histogram.maxVal - histogram.minVal || 1)) * cW;
                 return (
                   <g key={label}>
                     <line x1={xPos} y1={pad.top} x2={xPos} y2={pad.top + cH}

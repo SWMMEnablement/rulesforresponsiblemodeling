@@ -10,7 +10,8 @@ interface Message {
   content: string;
 }
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const CHAT_URL = SUPABASE_URL ? `${SUPABASE_URL}/functions/v1/chat` : null;
 
 export const AIChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,13 +19,14 @@ export const AIChatWidget = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  // Radix ScrollArea forwards its ref to the Root (overflow-hidden), not the Viewport that
+  // actually scrolls, so setting scrollTop on it did nothing. A sentinel at the end of the
+  // message list + scrollIntoView works regardless of the wrapper.
+  const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    bottomRef.current?.scrollIntoView({ block: "end" });
   }, [messages]);
 
   useEffect(() => {
@@ -34,6 +36,7 @@ export const AIChatWidget = () => {
   }, [isOpen, isMinimized]);
 
   const streamChat = async (userMessages: Message[]) => {
+    if (!CHAT_URL) throw new Error("The chat backend is not configured for this deployment (VITE_SUPABASE_URL is empty).");
     const resp = await fetch(CHAT_URL, {
       method: "POST",
       headers: {
@@ -132,6 +135,7 @@ export const AIChatWidget = () => {
   if (!isOpen) {
     return (
       <Button
+        aria-label="Open Ask James"
         onClick={() => setIsOpen(true)}
         className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50 bg-gradient-to-br from-primary to-primary-light hover:scale-105 transition-transform"
         size="icon"
@@ -145,7 +149,8 @@ export const AIChatWidget = () => {
     <div 
       className={cn(
         "fixed bottom-6 right-6 z-50 bg-card border border-border rounded-2xl shadow-2xl transition-all duration-300",
-        isMinimized ? "w-72 h-14" : "w-96 h-[32rem]"
+        // never wider than the viewport minus the 1.5rem right offset on phones
+        isMinimized ? "w-72 max-w-[calc(100vw-3rem)] h-14" : "w-96 max-w-[calc(100vw-3rem)] h-[32rem] max-h-[calc(100vh-3rem)]"
       )}
     >
       {/* Header */}
@@ -166,6 +171,7 @@ export const AIChatWidget = () => {
             variant="ghost" 
             size="icon" 
             className="h-8 w-8"
+            aria-label={isMinimized ? "Restore chat" : "Minimize chat"}
             onClick={() => setIsMinimized(!isMinimized)}
           >
             <Minimize2 className="h-4 w-4" />
@@ -174,6 +180,7 @@ export const AIChatWidget = () => {
             variant="ghost" 
             size="icon" 
             className="h-8 w-8"
+            aria-label="Close chat"
             onClick={() => {
               setIsOpen(false);
               setIsMinimized(false);
@@ -187,7 +194,7 @@ export const AIChatWidget = () => {
       {!isMinimized && (
         <>
           {/* Messages */}
-          <ScrollArea className="h-[calc(100%-8rem)] p-4" ref={scrollRef}>
+          <ScrollArea className="h-[calc(100%-8rem)] p-4">
             {messages.length === 0 ? (
               <div className="space-y-4">
                 <p className="text-sm text-muted-foreground text-center">
@@ -237,6 +244,7 @@ export const AIChatWidget = () => {
                     )}
                   </div>
                 ))}
+                <div ref={bottomRef} />
                 {isLoading && messages[messages.length - 1]?.role === "user" && (
                   <div className="flex gap-2">
                     <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center flex-shrink-0">

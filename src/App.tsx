@@ -1,52 +1,56 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CommandPalette } from "@/components/CommandPalette";
 import { AIChatWidget } from "@/components/AIChatWidget";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Chapter1 from "./pages/Chapter1";
-import Chapter2 from "./pages/Chapter2";
-import Chapter3 from "./pages/Chapter3";
-import Chapter4 from "./pages/Chapter4";
-import Chapter5 from "./pages/Chapter5";
-import Chapter6 from "./pages/Chapter6";
-import Chapter7 from "./pages/Chapter7";
-import Chapter8 from "./pages/Chapter8";
-import Chapter9 from "./pages/Chapter9";
-import Chapter10 from "./pages/Chapter10";
-import Chapter11 from "./pages/Chapter11";
-import Chapter12 from "./pages/Chapter12";
-import Chapter13 from "./pages/Chapter13";
-import Chapter14 from "./pages/Chapter14";
-import Chapter15 from "./pages/Chapter15";
-import Chapter16 from "./pages/Chapter16";
-import Chapter17 from "./pages/Chapter17";
-import AllNotes from "./pages/AllNotes";
-import CodeLibrary from "./pages/CodeLibrary";
-import AboutAuthor from "./pages/AboutAuthor";
-import Resources from "./pages/Resources";
-import Glossary from "./pages/Glossary";
-import StudyGuide from "./pages/StudyGuide";
-import KeyQuotes from "./pages/KeyQuotes";
-import CaseVignettes from "./pages/CaseVignettes";
-import PhDThesis from "./pages/PhDThesis";
-import ResponsibilityQuiz from "./pages/ResponsibilityQuiz";
-import ModelAutopsiesPage from "./pages/ModelAutopsies";
-import { MicroAppsIndex, MicroAppPage } from "./pages/MicroApps";
-import GradeReport from "./pages/GradeReport";
-import Animations from "./pages/Animations";
-import Progress from "./pages/Progress";
-import CrossReference from "./pages/CrossReference";
-import Playground from "./pages/Playground";
+const Chapter1 = lazy(() => import("./pages/Chapter1"));
+const Chapter2 = lazy(() => import("./pages/Chapter2"));
+const Chapter3 = lazy(() => import("./pages/Chapter3"));
+const Chapter4 = lazy(() => import("./pages/Chapter4"));
+const Chapter5 = lazy(() => import("./pages/Chapter5"));
+const Chapter6 = lazy(() => import("./pages/Chapter6"));
+const Chapter7 = lazy(() => import("./pages/Chapter7"));
+const Chapter8 = lazy(() => import("./pages/Chapter8"));
+const Chapter9 = lazy(() => import("./pages/Chapter9"));
+const Chapter10 = lazy(() => import("./pages/Chapter10"));
+const Chapter11 = lazy(() => import("./pages/Chapter11"));
+const Chapter12 = lazy(() => import("./pages/Chapter12"));
+const Chapter13 = lazy(() => import("./pages/Chapter13"));
+const Chapter14 = lazy(() => import("./pages/Chapter14"));
+const Chapter15 = lazy(() => import("./pages/Chapter15"));
+const Chapter16 = lazy(() => import("./pages/Chapter16"));
+const Chapter17 = lazy(() => import("./pages/Chapter17"));
+const AllNotes = lazy(() => import("./pages/AllNotes"));
+const CodeLibrary = lazy(() => import("./pages/CodeLibrary"));
+const AboutAuthor = lazy(() => import("./pages/AboutAuthor"));
+const Resources = lazy(() => import("./pages/Resources"));
+const Glossary = lazy(() => import("./pages/Glossary"));
+const StudyGuide = lazy(() => import("./pages/StudyGuide"));
+const KeyQuotes = lazy(() => import("./pages/KeyQuotes"));
+const CaseVignettes = lazy(() => import("./pages/CaseVignettes"));
+const PhDThesis = lazy(() => import("./pages/PhDThesis"));
+const ResponsibilityQuiz = lazy(() => import("./pages/ResponsibilityQuiz"));
+const ModelAutopsiesPage = lazy(() => import("./pages/ModelAutopsies"));
+const MicroAppsIndex = lazy(() => import("./pages/MicroApps").then((m) => ({ default: m.MicroAppsIndex })));
+const MicroAppPage = lazy(() => import("./pages/MicroApps").then((m) => ({ default: m.MicroAppPage })));
+const GradeReport = lazy(() => import("./pages/GradeReport"));
+const Animations = lazy(() => import("./pages/Animations"));
+const Progress = lazy(() => import("./pages/Progress"));
+const CrossReference = lazy(() => import("./pages/CrossReference"));
+const Playground = lazy(() => import("./pages/Playground"));
 const queryClient = new QueryClient();
 
 const App = () => (
   <ErrorBoundary>
+  <HelmetProvider>
   <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <TooltipProvider>
@@ -55,6 +59,9 @@ const App = () => (
         <BrowserRouter>
           <CommandPalette />
           <AIChatWidget />
+          {/* Route-level code splitting: the eager build shipped one 3.1 MB chunk (jspdf,
+              mermaid, recharts and all 17 chapters) to every visitor. */}
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading…</div>}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/chapter/1" element={<Chapter1 />} />
@@ -95,10 +102,12 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </Suspense>
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
+  </HelmetProvider>
   </ErrorBoundary>
 );
 

@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { runoffCoefficient as calculateRunoff, sensitivityLevel } from "@/lib/modelingMath";
 import { Card } from "./ui/card";
 import { Slider } from "./ui/slider";
 import { Button } from "./ui/button";
@@ -32,7 +33,7 @@ const parameters: Parameter[] = [
     max: 0.03,
     unit: "",
     sensitivity: "medium",
-    description: "Roughness coefficient for pipe flow"
+    description: "Pipe routing parameter; does not change volume in this simplified runoff budget"
   },
   {
     name: "Depression Storage",
@@ -50,7 +51,7 @@ const parameters: Parameter[] = [
     max: 1000,
     unit: "m",
     sensitivity: "low",
-    description: "Representative width for overland flow"
+    description: "Timing parameter; does not change volume in this simplified runoff budget"
   },
   {
     name: "Infiltration Rate",
@@ -62,30 +63,6 @@ const parameters: Parameter[] = [
     description: "Maximum rate water infiltrates into soil"
   }
 ];
-
-// Simplified runoff model for demonstration
-const calculateRunoff = (params: Record<string, number>, rainfall: number = 50): number => {
-  const imperviousness = params["Imperviousness"] / 100;
-  const depressionStorage = params["Depression Storage"];
-  const infiltrationRate = params["Infiltration Rate"];
-  const manningsN = params["Manning's n (Conduit)"];
-  const width = params["Subcatchment Width"];
-  
-  // Effective rainfall after initial abstraction
-  const effectiveRainfall = Math.max(0, rainfall - depressionStorage);
-  
-  // Runoff from impervious and pervious areas
-  const imperviousRunoff = effectiveRainfall * imperviousness;
-  const perviousRunoff = Math.max(0, effectiveRainfall - infiltrationRate * 0.5) * (1 - imperviousness);
-  
-  // Flow velocity factor (inverse of Manning's n, scaled by width)
-  const velocityFactor = (0.02 / manningsN) * (width / 500);
-  
-  // Total runoff coefficient
-  const runoff = (imperviousRunoff + perviousRunoff) * velocityFactor;
-  
-  return Math.max(0, Math.min(100, runoff));
-};
 
 export const SensitivityCalculator = () => {
   const [paramValues, setParamValues] = useState<Record<string, number>>(
@@ -112,7 +89,7 @@ export const SensitivityCalculator = () => {
       const maxRunoff = calculateRunoff(maxParams);
       
       const change = Math.abs(maxRunoff - minRunoff);
-      results.push({ name: param.name, change, sensitivity: param.sensitivity });
+      results.push({ name: param.name, change, sensitivity: sensitivityLevel(change) });
     });
     
     return results.sort((a, b) => b.change - a.change);
@@ -150,10 +127,10 @@ export const SensitivityCalculator = () => {
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-foreground">{param.name}</span>
                     <Badge 
-                      variant={param.sensitivity === "high" ? "destructive" : param.sensitivity === "medium" ? "default" : "secondary"}
+                      variant={sensitivityResults.find(r => r.name === param.name)?.sensitivity === "high" ? "destructive" : sensitivityResults.find(r => r.name === param.name)?.sensitivity === "medium" ? "default" : "secondary"}
                       className="text-xs"
                     >
-                      {param.sensitivity}
+                      {sensitivityResults.find(r => r.name === param.name)?.sensitivity}
                     </Badge>
                   </div>
                   <span className="text-sm font-mono text-primary">

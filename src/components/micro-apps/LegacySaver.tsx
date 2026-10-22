@@ -81,8 +81,9 @@ ${analysis.riskLevel === "critical" ? "- URGENT: Model is at extreme risk of bei
 ${analysis.riskLevel === "warning" ? "- Complete calibration documentation\n- Set up version control if not in place\n- Schedule knowledge-transfer session" : ""}
 - Review and update documentation quarterly
 
-## Rule 17: Plan for Your Model's Legacy
-"A model that dies with its creator was never truly finished."
+## App takeaway: Plan for Your Model's Legacy
+Application-authored paraphrase, not a quotation from William James.
+A model that dies with its creator was never truly finished.
 `;
     const blob = new Blob([txt], { type: "text/plain" });
     const url = URL.createObjectURL(blob);

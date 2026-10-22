@@ -32,7 +32,7 @@ const rulesData = [
   {
     chapter: 5,
     title: "Continuous Simulation",
-    rule: "Continuous ≠ sequential events",
+    rule: "Continuous is not sequential events",
     quote: "Continuous simulation fundamentally changes how we think about antecedent conditions and long-term behavior."
   },
   {
@@ -155,8 +155,9 @@ export const PDFReferenceCard = ({ variant = "full", className = "" }: PDFRefere
       doc.setFontSize(9);
       
       rulesData.forEach((rule, index) => {
-        // Check if we need a new page
-        if (yPos > pageHeight - 35) {
+        const quoteLines = doc.splitTextToSize(`"${rule.quote}"`, contentWidth - 6);
+        const blockHeight = 10 + quoteLines.length * 4 + 6;
+        if (yPos + blockHeight > pageHeight - 25) {
           doc.addPage();
           yPos = margin;
         }
@@ -170,13 +171,12 @@ export const PDFReferenceCard = ({ variant = "full", className = "" }: PDFRefere
         // Rule summary
         doc.setFont("helvetica", "bold");
         doc.setTextColor(0, 0, 0);
-        doc.text(`→ ${rule.rule}`, margin + 3, yPos);
+        doc.text(`- ${rule.rule}`, margin + 3, yPos);
         yPos += 5;
 
         // Quote (wrapped)
         doc.setFont("helvetica", "italic");
         doc.setTextColor(100, 100, 100);
-        const quoteLines = doc.splitTextToSize(`"${rule.quote}"`, contentWidth - 6);
         doc.text(quoteLines, margin + 3, yPos);
         yPos += quoteLines.length * 4 + 6;
       });
@@ -238,7 +238,7 @@ export const PDFReferenceCard = ({ variant = "full", className = "" }: PDFRefere
             Printable Reference Card
           </h3>
           <p className="text-sm text-muted-foreground mb-4">
-            Download a one-page PDF summary of all 17 rules with key quotes. 
+            Download a printable PDF summary of all 17 rules with key quotes. 
             Perfect for printing and keeping at your desk.
           </p>
           <Button 

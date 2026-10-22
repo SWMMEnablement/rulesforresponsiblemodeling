@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { safeStorage } from "@/lib/storage";
 
 const NOTES_KEY = "chapter-notes";
@@ -48,9 +48,13 @@ export const useNotes = () => {
     }
   };
 
-  const getNote = (chapterNumber: number): ChapterNote | undefined => {
-    return notes.find((n) => n.chapterNumber === chapterNumber);
-  };
+  // Memoised: ChapterNotes uses getNote as an effect dependency. An unstable identity
+  // re-ran that effect on every render and reset the textarea to the saved note on
+  // every keystroke, making an existing note impossible to edit.
+  const getNote = useCallback(
+    (chapterNumber: number): ChapterNote | undefined => notes.find((n) => n.chapterNumber === chapterNumber),
+    [notes]
+  );
 
   const deleteNote = (chapterNumber: number) => {
     const filtered = notes.filter((n) => n.chapterNumber !== chapterNumber);

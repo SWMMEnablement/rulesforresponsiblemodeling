@@ -44,7 +44,10 @@ DRY_ONLY  NO
 
 [RAINGAGES]
 ;;Name      Format    Interval  SCF       Source
-RG1         INTENSITY 0:05      1.0       TIMESERIES DesignStorm
+;; Interval MUST equal the time-series spacing (0:30). With INTENSITY format each
+;; value is held for one gage interval, so a 0:05 interval here would deliver only
+;; 5 min of rain per 30-min entry = 1/6 of the intended storm (0.517 in, not 3.1 in).
+RG1         INTENSITY 0:30      1.0       TIMESERIES DesignStorm
 
 [SUBCATCHMENTS]
 ;;Name      RainGage  Outlet    Area  PctImperv  Width  Slope  CurbLen
@@ -63,8 +66,11 @@ S1          3.0      0.5      4      7        0
 J1      96    4         0          0         0
 
 [OUTFALLS]
-;;Name  Elev  Type   StageData  Gated
-OUT1    90    FREE   .          NO
+;;Name  Elev  Type   Gated
+;; A FREE outfall has no StageData column; "." is not a valid placeholder here
+;; (SWMM 5.2.4 reads it as the Gated flag and then "NO" as an unknown RouteTo
+;; subcatchment -> ERROR 209).
+OUT1    90    FREE   NO
 
 [CONDUITS]
 ;;Name  FromNode  ToNode  Length  Roughness  InOffset  OutOffset  InitFlow  MaxFlow
@@ -75,14 +81,15 @@ C1      J1        OUT1    400     0.013      0         0          0         0
 C1      CIRCULAR  1.5    0      0      0      1
 
 [TIMESERIES]
-;;Name        Date       Time   Value
-DesignStorm   ""         0:00   0.0
-DesignStorm   ""         0:30   0.5
-DesignStorm   ""         1:00   1.5
-DesignStorm   ""         1:30   3.0
-DesignStorm   ""         2:00   1.0
-DesignStorm   ""         2:30   0.2
-DesignStorm   ""         3:00   0.0
+;;Name        Time   Value
+;; No date column: an empty quoted token "" is not valid SWMM syntax (ERROR 211).
+DesignStorm   0:00   0.0
+DesignStorm   0:30   0.5
+DesignStorm   1:00   1.5
+DesignStorm   1:30   3.0
+DesignStorm   2:00   1.0
+DesignStorm   2:30   0.2
+DesignStorm   3:00   0.0
 
 [REPORT]
 INPUT       NO
@@ -118,7 +125,7 @@ export function applyParams(inp: string, params: PlaygroundParams): string {
   );
   // Scale rainfall timeseries values
   out = out.replace(
-    /(DesignStorm\s+""\s+\d+:\d+\s+)([\d.]+)/g,
+    /(\nDesignStorm\s+\d+:\d+\s+)([\d.]+)/g,
     (_m, p1, v) => `${p1}${(parseFloat(v) * params.rainfallMultiplier).toFixed(3)}`
   );
   return out;
