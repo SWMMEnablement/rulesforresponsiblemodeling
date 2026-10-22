@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { ModelBuilder } from "@/components/playground/ModelBuilder";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
@@ -747,6 +748,7 @@ export default function Playground() {
             region spans min–max, the darker region spans p10–p90, and the line is the median.
           </p>
         </Card>
+        <div id="model-builder"><ModelBuilder /></div>
       </main>
 
       <Footer />
