@@ -295,6 +295,10 @@ graph TD
                 https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html
               </a>
             </p>
+            <p className="text-xs border-l-4 border-amber-500 pl-3 not-italic">
+              Note: the CHI web page labels itself incomplete (some figures, math and tables missing) and says it was abstracted from a 1993 file.
+              It is not the 2005 4th edition. This chapter has not yet been matched to 4th-edition page numbers.
+            </p>
             <p className="mt-4 text-sm italic">
               This chapter presents original educational content inspired by concepts from the James textbook, 
               with focus on understanding and quantifying model uncertainty in hydrological applications.
