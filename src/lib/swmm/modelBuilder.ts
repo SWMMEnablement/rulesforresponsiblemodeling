@@ -110,3 +110,22 @@ export function nextId(prefix: string, taken: string[]): string {
   while (taken.includes(`${prefix}${i}`)) i++;
   return `${prefix}${i}`;
 }
+
+export type RenameResult = { ok: true; model: BuilderModel } | { ok: false; error: string };
+
+/** Rename one node and every pipe/subcatchment that points at it. Refuses blank or duplicate IDs. */
+export function renameNode(m: BuilderModel, oldId: string, rawId: string): RenameResult {
+  const id = rawId.replace(/\s/g, "");
+  if (!id) return { ok: false, error: "ID cannot be blank" };
+  if (id === oldId) return { ok: true, model: m };
+  if (m.nodes.some((n) => n.id === id)) return { ok: false, error: `Another node is already called ${id}` };
+  return {
+    ok: true,
+    model: {
+      ...m,
+      nodes: m.nodes.map((n) => (n.id === oldId ? { ...n, id } : n)),
+      conduits: m.conduits.map((c) => ({ ...c, from: c.from === oldId ? id : c.from, to: c.to === oldId ? id : c.to })),
+      subcatchments: m.subcatchments.map((s) => (s.outlet === oldId ? { ...s, outlet: id } : s)),
+    },
+  };
+}
