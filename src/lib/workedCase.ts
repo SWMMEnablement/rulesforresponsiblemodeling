@@ -226,9 +226,12 @@ export function passes(m: FitMetrics) {
 export const allPass = (m: FitMetrics) => Object.values(passes(m)).every(Boolean);
 
 // ---------- uncertainty ----------
-export interface CaseSample extends CaseParams { index: number; seed: number; rainFactor: number }
+export interface CaseSample extends CaseParams { index: number; seed: number; rainFactor: number; conduitN: number }
 
-/** Uniform ranges around the calibrated values; rainfall factor represents gauge error. */
+/** Uniform ranges around the calibrated values; rainfall factor represents gauge error.
+ * Pipe roughness was never calibrated (the observed storms barely fill C3), so it is sampled too. */
+export const ENSEMBLE_CONDUIT_N = { min: 0.011, max: 0.018 };
+
 export function sampleCaseEnsemble(center: CaseParams, masterSeed: number, n: number): CaseSample[] {
   const master = mulberry32(masterSeed);
   return Array.from({ length: n }, (_, index) => {
@@ -242,6 +245,7 @@ export function sampleCaseEnsemble(center: CaseParams, masterSeed: number, n: nu
       widthFactor: center.widthFactor * u(0.7, 1.4),
       maxInfil: Math.max(0.1, center.maxInfil * u(0.7, 1.3)),
       rainFactor: u(0.9, 1.1),
+      conduitN: u(ENSEMBLE_CONDUIT_N.min, ENSEMBLE_CONDUIT_N.max),
     };
   });
 }

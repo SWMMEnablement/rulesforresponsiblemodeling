@@ -52,3 +52,12 @@ describe("worked case", () => {
     expect(item?.status).toBe("fail");
   });
 });
+
+describe("worked case ensemble roughness", () => {
+  test("pipe roughness is sampled between 0.011 and 0.018", () => {
+    for (const s of sampleCaseEnsemble(TRUTH, 11, 200)) {
+      expect(s.conduitN).toBeGreaterThanOrEqual(0.011);
+      expect(s.conduitN).toBeLessThanOrEqual(0.018);
+    }
+  });
+});

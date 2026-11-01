@@ -79,7 +79,7 @@ Illustrative targets: NSE >= ${TARGETS.nse}, |peak error| <= ${TARGETS.peakErrPc
 ${metricRow("C", x.validation)}
 ${x.recalibratedAfterValidation ? "\n**Disclosure:** parameters were changed after the validation result was seen, so Event C is no longer an independent test.\n" : "\nParameters were locked before Event C was run and not changed afterwards.\n"}
 ## 7. Uncertainty
-${x.samples.length} runs, master seed **${x.seed}**. Each run draws, uniformly: imperviousness x0.85-1.15, width x0.7-1.4, max infiltration x0.7-1.3 around the calibrated values, and a rainfall factor 0.9-1.1 for gauge error.
+${x.samples.length} runs, master seed **${x.seed}**. Each run draws, uniformly: imperviousness x0.85-1.15, width x0.7-1.4, max infiltration x0.7-1.3 around the calibrated values, a rainfall factor 0.9-1.1 for gauge error, and pipe roughness 0.011-0.018 (not identifiable from the observed storms, which never filled C3).
 ${Math.round(x.coverage * 100)}% of usable Event C observations fall inside the 5-95% band.
 Re-running with the same seed reproduces every sample (results/ensemble.csv).
 
@@ -89,8 +89,8 @@ ${x.checklist.map((c) => `- [${icon[c.status]}] ${c.label} - ${c.detail}`).join(
 ## 9. Limitations
 - One rain gauge; real storms vary across the catchment.
 - Three events cannot cover every season or antecedent condition.
-- Parameter ranges for the ensemble are judgement calls; pipe roughness and model structure were not varied.
-- The uncertainty band covers parameter and rainfall uncertainty only.
+- Parameter ranges for the ensemble are judgement calls; model structure was not varied.
+- The uncertainty band covers parameter and rainfall uncertainty only, not measurement noise in the observations.
 
 ## 10. Files
 - model/*.inp - calibrated SWMM input for each event and the design storm
@@ -109,8 +109,8 @@ export function buildReviewZip(x: PackageInput): Uint8Array {
   const logCsv = ["trial,timestamp,pct_imperv,width_factor,max_infil_in_hr,A_nse,A_peak_err_pct,A_vol_err_pct,A_timing_min,B_nse,B_peak_err_pct,B_vol_err_pct,B_timing_min,max_continuity_err_pct,after_validation",
     ...x.trials.map((t) => [t.trial, t.at, t.params.pctImperv, t.params.widthFactor, t.params.maxInfil,
       t.A.nse, t.A.peakErrPct, t.A.volErrPct, t.A.timingMin, t.B.nse, t.B.peakErrPct, t.B.volErrPct, t.B.timingMin, t.contErr, t.afterValidation ? 1 : 0].join(","))].join("\n");
-  const ensCsv = ["run,seed,pct_imperv,width_factor,max_infil_in_hr,rain_factor,design_peak_cfs",
-    ...x.samples.map((s, i) => [s.index + 1, s.seed, s.pctImperv.toFixed(3), s.widthFactor.toFixed(4), s.maxInfil.toFixed(4), s.rainFactor.toFixed(4), f(x.designPeaks[i], 3)].join(","))].join("\n");
+  const ensCsv = ["run,seed,pct_imperv,width_factor,max_infil_in_hr,rain_factor,conduit_n,design_peak_cfs",
+    ...x.samples.map((s, i) => [s.index + 1, s.seed, s.pctImperv.toFixed(3), s.widthFactor.toFixed(4), s.maxInfil.toFixed(4), s.rainFactor.toFixed(4), s.conduitN.toFixed(4), f(x.designPeaks[i], 3)].join(","))].join("\n");
   const metrics = {
     fictional: true, engine: ENGINE_VERSION, createdAt: x.createdAt, finalParams: x.final, targets: TARGETS,
     calibration: x.trials[x.trials.length - 1] ?? null, validation: x.validation, recalibratedAfterValidation: x.recalibratedAfterValidation,

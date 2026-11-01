@@ -222,8 +222,8 @@ export default function WorkedCase() {
       const designRuns: number[][] = [], valRuns: number[][] = [];
       let contErr = det.contErr;
       for (const s of samples) {
-        const d = await runFlow(s, "D", { rainFactor: s.rainFactor });
-        const v = await runFlow(s, "C", { rainFactor: s.rainFactor });
+        const d = await runFlow(s, "D", { rainFactor: s.rainFactor, conduitN: s.conduitN });
+        const v = await runFlow(s, "C", { rainFactor: s.rainFactor, conduitN: s.conduitN });
         designRuns.push(d.flow); valRuns.push(v.flow);
         contErr = Math.max(contErr, d.contErr, v.contErr);
         setProgress(designRuns.length);
@@ -471,7 +471,7 @@ export default function WorkedCase() {
           {validation && locked && observed && (
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                A calibrated model is one plausible answer, not the answer. This step runs {ENSEMBLE_SIZE} versions of the model with imperviousness ±15%, width ×0.7–1.4 and infiltration ±30% around your values, plus ±10% rainfall for gauge error.
+                A calibrated model is one plausible answer, not the answer. This step runs {ENSEMBLE_SIZE} versions of the model with imperviousness ±15%, width ×0.7–1.4 and infiltration ±30% around your values, plus ±10% rainfall for gauge error. Pipe roughness (0.011–0.018) is varied too: the observed storms never filled pipe C3, so the data could not pin it down, yet it matters once the design storm surcharges the pipe.
                 The same seed always gives the same runs.
               </p>
               <div className="flex flex-wrap items-end gap-3">
