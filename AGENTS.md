@@ -9,3 +9,4 @@
 - Record each user-visible release in the What's New changelog data (newest first, dates from project history) because the footer's last-updated date is derived from it.
 - Store Model Library .inp files in the visitor's browser (IndexedDB) through the modelLibrary helper, because the app has no sign-in and model files can exceed localStorage quotas.
 - Generate worked-case observations from a hidden parameter set plus seeded noise in the workedCase helper, and label the case and its targets as fictional and illustrative, so the example stays reproducible and never passes as real data.
+- Ground Ask James answers in the app's own chapter summaries picked by the chatSources helper and shown as numbered, clickable citations labelled as app summaries, because the app holds no verified text of the 2005 book.
