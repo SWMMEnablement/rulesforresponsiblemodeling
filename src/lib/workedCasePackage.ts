@@ -112,7 +112,7 @@ export function buildReviewZip(x: PackageInput): Uint8Array {
   const ensCsv = ["run,seed,pct_imperv,width_factor,max_infil_in_hr,rain_factor,design_peak_cfs",
     ...x.samples.map((s, i) => [s.index + 1, s.seed, s.pctImperv.toFixed(3), s.widthFactor.toFixed(4), s.maxInfil.toFixed(4), s.rainFactor.toFixed(4), f(x.designPeaks[i], 3)].join(","))].join("\n");
   const metrics = {
-    fictional: true, engine: ENGINE_VERSION, createdAt: x.createdAt, finalParams: x.final, targets: x.targets ?? TARGETS,
+    fictional: true, engine: ENGINE_VERSION, createdAt: x.createdAt, finalParams: x.final, targets: TARGETS,
     calibration: x.trials[x.trials.length - 1] ?? null, validation: x.validation, recalibratedAfterValidation: x.recalibratedAfterValidation,
     uncertainty: { seed: x.seed, runs: x.samples.length, p5: x.p5, p50: x.p50, p95: x.p95, exceedProb: x.exceedProb, coverage: x.coverage, capacityCfs: C3_CAPACITY_CFS },
     checklist: x.checklist,
@@ -141,6 +141,3 @@ With real data there is no answer key - which is why validation and uncertainty 
   return zipSync({ "fernhollow-review-package": files });
 }
 
-declare module "@/lib/workedCasePackage" {
-  interface PackageInput { targets?: typeof TARGETS }
-}
