@@ -287,7 +287,7 @@ export function ModelBuilder() {
                   <h3 className="font-semibold">{selNode.kind === "junction" ? "Junction" : "Outfall"}</h3>
                   <NodeIdField key={selNode.id} value={selNode.id} onCommit={(v) => {
                     const r = renameNode(model, selNode.id, v);
-                    if (!r.ok) return r.error;
+                    if ("error" in r) return r.error;
                     update(() => r.model);
                     setSel({ type: "node", id: r.model.nodes.find((n) => n.id === v.replace(/\s/g, ""))?.id ?? selNode.id });
                     return null;
