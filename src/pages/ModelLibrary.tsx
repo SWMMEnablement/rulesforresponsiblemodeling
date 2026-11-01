@@ -294,9 +294,9 @@ export default function ModelLibrary() {
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
                   <div className="max-h-72 overflow-auto">
                     <table className="w-full">
-                      <thead><tr className="text-left text-muted-foreground"><th>Link</th><th>Max flow ({series?.flowUnits})</th><th>Min flow ({series?.flowUnits})</th><th>Max |flow| ({series?.flowUnits})</th><th>Peak depth (ft)</th></tr></thead>
-                      <tbody>{peaks.links.map((l) => <tr key={l.id} className="border-t"><td>{l.id}</td><td>{l.flow.max.toFixed(2)}</td><td className={l.flow.min < 0 ? "text-warning font-medium" : ""}>{l.flow.min.toFixed(2)}</td><td>{l.flow.absMax.toFixed(2)}</td><td>{l.depth.toFixed(2)}</td></tr>)}</tbody>
                       <caption className="caption-bottom text-left text-xs text-muted-foreground pt-1">Negative flow means flow against the link's drawn direction (reverse flow).</caption>
+                      <thead><tr className="text-left text-muted-foreground"><th>Link</th><th>Max flow ({series?.flowUnits})</th><th>Min flow ({series?.flowUnits})</th><th>Max |flow| ({series?.flowUnits})</th><th>Peak depth</th></tr></thead>
+                      <tbody>{peaks.links.map((l) => <tr key={l.id} className="border-t"><td>{l.id}</td><td>{l.flow.max.toFixed(2)}</td><td className={l.flow.min < 0 ? "text-warning font-medium" : ""}>{l.flow.min.toFixed(2)}</td><td>{l.flow.absMax.toFixed(2)}</td><td>{l.depth.toFixed(2)}</td></tr>)}</tbody>
                     </table>
                   </div>
                   <div className="max-h-72 overflow-auto">

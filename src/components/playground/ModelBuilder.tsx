@@ -12,7 +12,7 @@ import { runSwmm, type SwmmRunResult } from "@/lib/swmm/runner";
 import { parseSwmmOut, type SwmmOutSeries } from "@/lib/swmm/outParser";
 import { STARTER_MODEL, validateModel, writeInp, nextId, renameNode, type BuilderModel } from "@/lib/swmm/modelBuilder";
 import { TUTORIAL_INP } from "@/lib/swmm/tutorialModel";
-import { saveToLibrary } from "@/lib/swmm/modelLibrary";
+import { flowStats, maxOf, saveToLibrary } from "@/lib/swmm/modelLibrary";
 import { toast } from "@/hooks/use-toast";
 
 type Tool = "select" | "junction" | "outfall" | "subcatchment" | "conduit" | "delete";
@@ -402,9 +402,9 @@ export function ModelBuilder() {
           {peaks && (
             <div className="grid md:grid-cols-2 gap-4 text-sm">
               <table className="w-full">
-                <thead><tr className="text-left text-muted-foreground"><th>Link</th><th>Max flow ({series?.flowUnits})</th><th>Min flow ({series?.flowUnits})</th><th>Max |flow| ({series?.flowUnits})</th><th>Peak depth (ft)</th></tr></thead>
-                <tbody>{peaks.links.map((l) => <tr key={l.id} className="border-t"><td>{l.id}</td><td>{l.flow.max.toFixed(2)}</td><td className={l.flow.min < 0 ? "text-warning font-medium" : ""}>{l.flow.min.toFixed(2)}</td><td>{l.flow.absMax.toFixed(2)}</td><td>{l.depth.toFixed(2)}</td></tr>)}</tbody>
                 <caption className="caption-bottom text-left text-xs text-muted-foreground pt-1">Negative flow means flow against the link's drawn direction (reverse flow).</caption>
+                <thead><tr className="text-left text-muted-foreground"><th>Link</th><th>Max flow ({series?.flowUnits})</th><th>Min flow ({series?.flowUnits})</th><th>Max |flow| ({series?.flowUnits})</th><th>Peak depth</th></tr></thead>
+                <tbody>{peaks.links.map((l) => <tr key={l.id} className="border-t"><td>{l.id}</td><td>{l.flow.max.toFixed(2)}</td><td className={l.flow.min < 0 ? "text-warning font-medium" : ""}>{l.flow.min.toFixed(2)}</td><td>{l.flow.absMax.toFixed(2)}</td><td>{l.depth.toFixed(2)}</td></tr>)}</tbody>
               </table>
               <table className="w-full">
                 <thead><tr className="text-left text-muted-foreground"><th>Node</th><th>Peak depth</th><th>Peak flooding</th></tr></thead>
