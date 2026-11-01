@@ -62,13 +62,18 @@ export const CertificationBadge = () => {
 ╔═══════════════════════════════════════╗
 ║                                       ║
 ║   ✓ RESPONSIBLE MODELER               ║
-║     Certified by the William          ║
-║     James Framework                   ║
+║     Lesson completion badge           ║
+║     (not a professional credential)   ║
 ║                                       ║
 ║     Score: ${score}/10                       ║
 ║     Completed: ${date}             ║
 ║                                       ║
-║     rulesforresponsiblemodeling        ║
+║     Issued by: Rules for Responsible  ║
+║     Modeling interactive app          ║
+║     (Robert Dickinson)                ║
+║     Scope: 10-question quiz on the    ║
+║     app's 17 chapters; pass = 8/10    ║
+║     rulesforresponsiblemodeling       ║
 ║     .lovable.app                      ║
 ║                                       ║
 ╚═══════════════════════════════════════╝
@@ -105,13 +110,13 @@ export const CertificationBadge = () => {
                 <CheckCircle2 className="w-5 h-5 text-primary" />
                 <span className="font-bold text-foreground">RESPONSIBLE MODELER</span>
               </div>
-              <p className="text-xs text-muted-foreground">Certified by the William James Framework</p>
+              <p className="text-xs text-muted-foreground">Lesson completion badge · issued by this app</p>
               <p className="text-xs text-muted-foreground">{new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}</p>
             </div>
             <div className="flex gap-2 justify-center">
               <Button onClick={downloadBadge} className="gap-2"><Download className="w-4 h-4" /> Download Badge</Button>
               <Button variant="outline" onClick={() => {
-                const text = `I earned the Responsible Modeler certification! 🌊 Score: ${score}/10\n\nTest yourself: rulesforresponsiblemodeling.lovable.app`;
+                const text = `I earned the Responsible Modeler completion badge! 🌊 Score: ${score}/10\n\nTest yourself: rulesforresponsiblemodeling.lovable.app`;
                 navigator.clipboard.writeText(text);
               }} className="gap-2"><Share2 className="w-4 h-4" /> Share</Button>
             </div>
@@ -128,7 +133,7 @@ export const CertificationBadge = () => {
     return (
       <Card className="p-6 sm:p-8">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-foreground">Certification Quiz</h3>
+          <h3 className="font-bold text-foreground">Completion Quiz</h3>
           <Badge variant="outline">{currentQ + 1}/{certQuestions.length}</Badge>
         </div>
         <Progress value={(currentQ / certQuestions.length) * 100} className="h-2 mb-6" />
@@ -148,10 +153,10 @@ export const CertificationBadge = () => {
     <Card className="p-6 sm:p-8">
       <div className="flex items-center gap-3 mb-2">
         <Award className="w-7 h-7 text-primary" />
-        <h2 className="text-2xl font-bold text-foreground">Certified Responsible Modeler</h2>
+        <h2 className="text-2xl font-bold text-foreground">Responsible Modeler Completion Badge</h2>
       </div>
       <p className="text-muted-foreground mb-6 text-sm">
-        Earn your badge by passing a 10-question quiz on Dr. James's framework. Score 8/10 or higher to earn the "Responsible Modeler" certification badge for your LinkedIn profile.
+        Pass a 10-question quiz on the app's 17 chapters (8/10 or higher) to earn the "Responsible Modeler" completion badge. It is issued by this app (Rules for Responsible Modeling, Robert Dickinson) and shows lesson completion only. It is not a professional certification and is not endorsed by CHI or the James family.
       </p>
       <div className="flex flex-col items-center gap-4">
         <div className="border-2 border-dashed border-primary/30 rounded-xl p-8 text-center">
@@ -159,7 +164,7 @@ export const CertificationBadge = () => {
           <p className="font-semibold text-foreground">Responsible Modeler Badge</p>
           <p className="text-xs text-muted-foreground mt-1">Complete the quiz to unlock</p>
         </div>
-        <Button onClick={() => setStarted(true)} size="lg">Start Certification Quiz</Button>
+        <Button onClick={() => setStarted(true)} size="lg">Start Completion Quiz</Button>
       </div>
     </Card>
   );

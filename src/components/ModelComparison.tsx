@@ -88,26 +88,30 @@ export const ModelComparison = () => {
     ? "Your model has some critical gaps. Address the ⚠️ items to improve reliability."
     : warningCount >= 2
     ? "Your model is on the right track but could be improved in several areas."
-    : "Your model aligns well with James's framework. Keep up the responsible modeling!";
+    : "Your model meets these illustrative rules of thumb. Confirm them against your project's own evidence.";
 
   return (
     <TooltipProvider delayDuration={200}>
     <Card className="p-6 sm:p-8">
       <div className="flex items-center gap-3 mb-2">
         <GitCompareArrows className="w-7 h-7 text-primary" />
-        <h2 className="text-2xl font-bold text-foreground">James vs. Your Model</h2>
+        <h2 className="text-2xl font-bold text-foreground">Rules of Thumb vs. Your Model</h2>
         <Tooltip>
           <TooltipTrigger asChild>
             <HelpCircle className="w-5 h-5 text-muted-foreground cursor-help" />
           </TooltipTrigger>
           <TooltipContent side="right" className="max-w-xs">
-            <p>Compare your model setup against Dr. James's recommended standards. Enter your model's details and see where it meets or falls short of best practices.</p>
+            <p>Compare your model setup against illustrative rules of thumb written for this app. The numerical thresholds are teaching assumptions, not figures quoted from the James text.</p>
           </TooltipContent>
         </Tooltip>
       </div>
       <p className="text-muted-foreground mb-6 text-sm">
-        Input your model details and see how it compares to Dr. James's standards.
+        Input your model details and see how it compares to these rules of thumb.
       </p>
+      <div role="note" className="mb-6 rounded-md border-l-4 border-amber-500 bg-amber-500/10 px-3 py-2 text-xs text-foreground">
+        <strong>Illustrative thresholds.</strong> Values such as "about one rain gage per 30 subcatchments" or "3–5 calibration events" are teaching assumptions for this app.
+        They are not sourced standards. Set real targets from your project's data, regulator guidance and peer review.
+      </div>
 
       <div className="grid sm:grid-cols-2 gap-6 mb-6">
         <div className="space-y-2">
@@ -129,7 +133,7 @@ export const ModelComparison = () => {
               Rain Gages
               <Tooltip>
                 <TooltipTrigger asChild><HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help" /></TooltipTrigger>
-                <TooltipContent className="max-w-xs"><p>Number of rain gages providing input data. James recommends roughly 1 gage per 25–30 subcatchments as a minimum.</p></TooltipContent>
+                <TooltipContent className="max-w-xs"><p>Number of rain gages providing input data. Illustrative rule of thumb used here: about 1 gage per 25–30 subcatchments (an assumption, not a sourced standard).</p></TooltipContent>
               </Tooltip>
             </span>
             <Badge variant="outline">{rainGages}</Badge>
@@ -142,7 +146,7 @@ export const ModelComparison = () => {
               Calibration Events
               <Tooltip>
                 <TooltipTrigger asChild><HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help" /></TooltipTrigger>
-                <TooltipContent className="max-w-xs"><p>Number of observed storm events used to calibrate the model. James recommends a minimum of 3–5 independent events.</p></TooltipContent>
+                <TooltipContent className="max-w-xs"><p>Number of observed storm events used to calibrate the model. Illustrative rule of thumb used here: at least 3–5 independent events (an assumption, not a sourced standard).</p></TooltipContent>
               </Tooltip>
             </span>
             <Badge variant="outline">{calEvents}</Badge>
@@ -194,7 +198,7 @@ export const ModelComparison = () => {
                 <tr className="border-b">
                   <th className="text-left py-2 font-medium text-muted-foreground">Metric</th>
                   <th className="text-left py-2 font-medium text-muted-foreground">Your Model</th>
-                  <th className="text-left py-2 font-medium text-muted-foreground">James's Standard</th>
+                  <th className="text-left py-2 font-medium text-muted-foreground">Rule of thumb (illustrative)</th>
                   <th className="text-center py-2 font-medium text-muted-foreground">
                     Status
                     <Tooltip>

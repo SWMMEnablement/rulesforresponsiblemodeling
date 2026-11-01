@@ -198,6 +198,7 @@ const Resources = () => {
               <p className="text-muted-foreground mb-4">
                 William James' comprehensive guide to deterministic modeling practices (this textbook's source).
               </p>
+              <p className="text-xs text-muted-foreground mb-4">The linked CHI web page labels itself incomplete and was abstracted from a 1993 draft. It is not the 2005 4th edition.</p>
               <a 
                 href="https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html" 
                 target="_blank" 

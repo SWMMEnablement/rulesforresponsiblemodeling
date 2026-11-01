@@ -82,13 +82,17 @@ export const ModelAutopsies = () => {
             <HelpCircle className="w-5 h-5 text-muted-foreground cursor-help" />
           </TooltipTrigger>
           <TooltipContent side="right" className="max-w-xs">
-            <p>Real-world case studies of modeling failures. Each autopsy identifies what went wrong, which rules were violated, and what should have been done differently.</p>
+            <p>Illustrative composite scenarios of modeling failures. Each autopsy identifies what went wrong, which rules were violated, and what should have been done differently.</p>
           </TooltipContent>
         </Tooltip>
       </div>
-      <p className="text-muted-foreground mb-4 text-sm">
-        Learn from failures. Each autopsy details a real-world modeling failure, the rules violated, and what should have been done differently.
+      <p className="text-muted-foreground mb-3 text-sm">
+        Learn from failures. Each autopsy walks through a modeling failure, the rules violated, and what should have been done differently.
       </p>
+      <div role="note" className="mb-4 rounded-md border-l-4 border-amber-500 bg-amber-500/10 px-3 py-2 text-xs text-foreground">
+        <strong>Illustrative composites, not documented cases.</strong> These scenarios combine common failure patterns for teaching.
+        Their projects, counts and percentages are not tied to a specific, citable project, so do not quote them as evidence.
+      </div>
 
       {/* Category Filter Tags */}
       <div className="mb-3">

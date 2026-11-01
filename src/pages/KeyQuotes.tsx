@@ -187,13 +187,14 @@ const KeyQuotes = () => {
                   These quotes and insights are inspired by Dr. William James's publication "Rules for Responsible Modeling" 
                   (4th Edition), published by Computational Hydraulics International (CHI).
                 </p>
+                <p className="text-xs text-muted-foreground mb-4">The CHI web page labels itself incomplete and was abstracted from a 1993 draft, so it is not the 2005 4th edition.</p>
                 <a 
                   href="https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
                 >
-                  Access the Original Publication <ExternalLink className="w-4 h-4" />
+                  Read the CHI Web Version <ExternalLink className="w-4 h-4" />
                 </a>
               </div>
             </div>
@@ -355,7 +356,7 @@ graph LR
               >
                 <Button className="gap-2">
                   <ExternalLink className="w-4 h-4" />
-                  Access Original CHI Publication
+                  Read the CHI Web Version (incomplete, 1993 draft)
                 </Button>
               </a>
               <Link to="/about-author">

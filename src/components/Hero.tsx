@@ -66,7 +66,7 @@ export const Hero = () => {
           Master Responsible Hydraulic Modeling
         </p>
         <p className="text-lg text-white/80 mb-8 max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: "0.25s" }}>
-          17 chapters mapped directly to <span className="font-semibold text-white">SWMM5 &amp; InfoWorks ICM</span> — with simulators, autopsies of real failures, and a 10-question certification.
+          17 chapters mapped directly to <span className="font-semibold text-white">SWMM5 &amp; InfoWorks ICM</span> — with simulators, illustrative failure autopsies, and a 10-question completion badge.
         </p>
 
         {/* Primary CTA cluster */}
@@ -141,14 +141,14 @@ export const Hero = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white text-sm transition-colors"
           >
             <SearchX className="w-4 h-4" />
-            Model Autopsies — real failures
+            Model Autopsies — learn from failure
           </button>
           <Link
             to="/responsibility-quiz"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white text-sm transition-colors"
           >
             <Sparkles className="w-4 h-4" />
-            Earn certification badge
+            Earn completion badge
           </Link>
         </div>
 
@@ -179,7 +179,7 @@ export const Hero = () => {
             <Shield className="w-5 h-5 text-white" />
             <div className="text-left">
               <div className="text-xl font-bold text-white">10-Q</div>
-              <div className="text-xs text-white/80">Certification</div>
+              <div className="text-xs text-white/80">Completion badge</div>
             </div>
           </div>
         </div>

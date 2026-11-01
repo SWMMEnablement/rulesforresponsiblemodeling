@@ -125,6 +125,10 @@ export const ComplexitySimulator = () => {
       <p className="text-muted-foreground mb-6 text-sm">
         Adjust the sliders to see how model complexity, calibration parameters, and data quality affect reliability. <em>Based on Chapter 4: Optimal Complexity.</em>
       </p>
+      <div role="note" className="mb-6 rounded-md border-l-4 border-amber-500 bg-amber-500/10 px-3 py-2 text-xs text-foreground">
+        <strong>Illustrative curve.</strong> The "reliability %" comes from a simple teaching formula written for this app. It is not taken from the James text or fitted to data.
+        Use it to see the shape of the trade-off, not as a number to report.
+      </div>
 
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         <div className="space-y-2">
@@ -184,7 +188,7 @@ export const ComplexitySimulator = () => {
             <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
             <XAxis dataKey="subcatchments" label={{ value: "Subcatchments", position: "insideBottom", offset: -3, style: { fontSize: 12 } }} tick={{ fontSize: 11 }} />
             <YAxis label={{ value: "Reliability (%)", angle: -90, position: "insideLeft", style: { fontSize: 12 } }} tick={{ fontSize: 11 }} domain={[0, 100]} />
-            <RechartsTooltip formatter={(value: number) => [`${value}%`, "Reliability"]} labelFormatter={(v) => `${v} subcatchments`} />
+            <RechartsTooltip formatter={(value: number) => [`${value}%`, "Illustrative reliability"]} labelFormatter={(v) => `${v} subcatchments`} />
             <Area type="monotone" dataKey="reliability" stroke="hsl(200 90% 45%)" fill="url(#reliabilityGradient)" strokeWidth={2.5} dot={false} />
             <ReferenceLine x={optimalPoint} stroke="hsl(142 70% 45%)" strokeDasharray="5 5" label={{ value: `Optimal: ${optimalPoint}`, position: "top", style: { fontSize: 11, fill: "hsl(142 70% 45%)" } }} />
             <ReferenceLine x={subcatchments} stroke="hsl(0 84% 60%)" strokeWidth={2} label={{ value: `You: ${subcatchments}`, position: "top", style: { fontSize: 11, fill: "hsl(0 84% 60%)" } }} />
@@ -197,7 +201,7 @@ export const ComplexitySimulator = () => {
         <ZoneIcon className={`w-5 h-5 mt-0.5 shrink-0 ${zoneInfo.color}`} />
         <div className="flex-1">
           <p className={`font-semibold text-sm ${zoneInfo.color}`}>
-            {zoneInfo.label} — Reliability: {currentReliability}%
+            {zoneInfo.label} — Illustrative reliability: {currentReliability}%
           </p>
           <p className="text-sm text-muted-foreground mt-1">{zoneInfo.desc}</p>
           {zone === "overfitting" && (
