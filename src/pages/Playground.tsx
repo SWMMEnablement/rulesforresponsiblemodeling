@@ -28,6 +28,10 @@ import {
 } from "@/lib/swmm/tutorialModel";
 import { runSwmm, type SwmmRunResult } from "@/lib/swmm/runner";
 import { parseSwmmOut, percentileBands, integrateFlow, type SwmmOutSeries } from "@/lib/swmm/outParser";
+import { ENGINE_VERSION, ENSEMBLE_RANGES, sampleEnsemble } from "@/lib/swmm/ensembleSampling";
+import { Input } from "@/components/ui/input";
+
+const ENSEMBLE_SIZE = 20;
 
 interface EnsembleRow {
   manningN: number;
@@ -136,6 +140,8 @@ export default function Playground() {
   const [series, setSeries] = useState<SwmmOutSeries | null>(null);
   const [ensemble, setEnsemble] = useState<EnsembleRow[]>([]);
   const [ensembleRunning, setEnsembleRunning] = useState(false);
+  const [masterSeed, setMasterSeed] = useState<number>(2026);
+  const [ensembleMasterSeed, setEnsembleMasterSeed] = useState<number | null>(null);
   const [compareMode, setCompareMode] = useState(false);
   const [runA, setRunA] = useState<number>(0);
   const [runB, setRunB] = useState<number>(1);
@@ -164,13 +170,11 @@ export default function Playground() {
   const runEnsemble = useCallback(async () => {
     setEnsembleRunning(true);
     setEnsemble([]);
-    const N = 20;
     const rows: EnsembleRow[] = [];
-    for (let i = 0; i < N; i++) {
-      const seed = Math.floor(Math.random() * 1_000_000);
-      const manningN = 0.011 + Math.random() * 0.014;
-      const rainfallMultiplier = 0.7 + Math.random() * 0.8;
-      const pctImperv = Math.max(0, Math.min(100, 60 + (Math.random() - 0.5) * 30));
+    const seedUsed = Math.max(0, Math.floor(masterSeed)) >>> 0;
+    setEnsembleMasterSeed(seedUsed);
+    for (const sample of sampleEnsemble(seedUsed, ENSEMBLE_SIZE)) {
+      const { seed, manningN, rainfallMultiplier, pctImperv } = sample;
       const inp = applyParams(TUTORIAL_INP, { manningN, pctImperv, rainfallMultiplier });
       let r: SwmmRunResult;
       try {
@@ -198,7 +202,7 @@ export default function Playground() {
       setEnsemble([...rows]);
     }
     setEnsembleRunning(false);
-  }, []);
+  }, [masterSeed]);
 
   const downloadReport = () => {
     if (!result?.rpt) return;
@@ -321,6 +325,28 @@ export default function Playground() {
       return { ...meta, ...r, ...extra };
     });
     downloadCsv("swmm-ensemble.csv", rows as Array<Record<string, unknown>>);
+  };
+  /** Everything needed to repeat the ensemble exactly: inputs, samples, engine, settings. */
+  const exportReproPackage = () => {
+    if (!ensemble.length || ensembleMasterSeed == null) return;
+    const pkg = {
+      generatedAt: new Date().toISOString(),
+      engine: ENGINE_VERSION,
+      sampler: "mulberry32 PRNG; run seeds drawn from the master seed; each run's parameters drawn from its own seed",
+      settings: { masterSeed: ensembleMasterSeed, runs: ENSEMBLE_SIZE, distributions: ENSEMBLE_RANGES },
+      baseInputFile: TUTORIAL_INP,
+      runs: ensemble.map((r, i) => ({
+        run: i + 1, seed: r.seed, ok: r.ok,
+        params: { manningN: r.manningN, pctImperv: r.pctImperv, rainfallMultiplier: r.rainfallMultiplier },
+        results: { peakFlow: r.peakFlow, peakDepth: r.peakDepth, totalFloodVol: r.totalFloodVol, continuityErrPct: r.continuityErr },
+        inputFile: applyParams(TUTORIAL_INP, { manningN: r.manningN, pctImperv: r.pctImperv, rainfallMultiplier: r.rainfallMultiplier }),
+      })),
+    };
+    const blob = new Blob([JSON.stringify(pkg, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `swmm-ensemble-seed-${ensembleMasterSeed}.json`; a.click();
+    URL.revokeObjectURL(url);
   };
   const exportHoveredRowCsv = () => {
     if (hoverIdx == null) return;
@@ -575,13 +601,29 @@ export default function Playground() {
                     <div>
                       <div className="font-semibold">Monte-Carlo uncertainty sweep</div>
                       <div className="text-xs text-muted-foreground">
-                        20 runs · Manning n ∈ [0.011, 0.025], rainfall ×[0.7, 1.5], imperviousness ±15%
+                        {ENSEMBLE_SIZE} runs · Manning n ∈ [0.011, 0.025], rainfall ×[0.7, 1.5], imperviousness 45–75% (uniform)
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        The same master seed always repeats the same runs.
                       </div>
                     </div>
-                    <Button onClick={runEnsemble} disabled={ensembleRunning} size="sm">
-                      {ensembleRunning ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Play className="w-4 h-4 mr-2" />}
-                      Run ensemble
-                    </Button>
+                    <div className="flex flex-wrap items-end gap-2">
+                      <div className="space-y-1">
+                        <Label htmlFor="master-seed" className="text-xs">Master seed</Label>
+                        <Input id="master-seed" type="number" min={0} className="h-9 w-28"
+                          value={masterSeed}
+                          onChange={(e) => setMasterSeed(Number(e.target.value) || 0)} />
+                      </div>
+                      <Button onClick={runEnsemble} disabled={ensembleRunning} size="sm">
+                        {ensembleRunning ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Play className="w-4 h-4 mr-2" />}
+                        Run ensemble
+                      </Button>
+                      {ensemble.length > 0 && !ensembleRunning && (
+                        <Button variant="outline" size="sm" onClick={exportReproPackage}>
+                          <FileDown className="w-4 h-4 mr-2" /> Reproducibility package
+                        </Button>
+                      )}
+                    </div>
                   </div>
                   {ensemble.length > 0 && (
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
