@@ -10,7 +10,7 @@ import { Loader2, Play, Upload, Download, MousePointer2, Circle, Triangle, Squar
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from "recharts";
 import { runSwmm, type SwmmRunResult } from "@/lib/swmm/runner";
 import { parseSwmmOut, type SwmmOutSeries } from "@/lib/swmm/outParser";
-import { STARTER_MODEL, validateModel, writeInp, nextId, type BuilderModel } from "@/lib/swmm/modelBuilder";
+import { STARTER_MODEL, validateModel, writeInp, nextId, renameNode, type BuilderModel } from "@/lib/swmm/modelBuilder";
 import { TUTORIAL_INP } from "@/lib/swmm/tutorialModel";
 
 type Tool = "select" | "junction" | "outfall" | "subcatchment" | "conduit" | "delete";
@@ -285,14 +285,13 @@ export function ModelBuilder() {
               {selNode && (
                 <div className="space-y-2">
                   <h3 className="font-semibold">{selNode.kind === "junction" ? "Junction" : "Outfall"}</h3>
-                  {field("ID", selNode.id, (v) => {
-                    const id = v.replace(/\s/g, ""); const old = selNode.id;
-                    update((m) => ({ ...m,
-                      nodes: m.nodes.map((n) => (n.id === old ? { ...n, id } : n)),
-                      conduits: m.conduits.map((c) => ({ ...c, from: c.from === old ? id : c.from, to: c.to === old ? id : c.to })),
-                      subcatchments: m.subcatchments.map((s) => (s.outlet === old ? { ...s, outlet: id } : s)) }));
-                    setSel({ type: "node", id });
-                  }, "text")}
+                  <NodeIdField key={selNode.id} value={selNode.id} onCommit={(v) => {
+                    const r = renameNode(model, selNode.id, v);
+                    if ("error" in r) return r.error;
+                    update(() => r.model);
+                    setSel({ type: "node", id: r.model.nodes.find((n) => n.id === v.replace(/\s/g, ""))?.id ?? selNode.id });
+                    return null;
+                  }} />
                   {field("Invert elevation (ft)", selNode.invert, (v) => update((m) => ({ ...m, nodes: m.nodes.map((n) => (n.id === selNode.id ? { ...n, invert: num(v) } : n)) })))}
                   {selNode.kind === "junction" && field("Max depth (ft)", selNode.maxDepth, (v) => update((m) => ({ ...m, nodes: m.nodes.map((n) => (n.id === selNode.id ? { ...n, maxDepth: num(v) } : n)) })))}
                 </div>
@@ -414,3 +413,26 @@ export function ModelBuilder() {
     </Card>
   );
 }
+
+/** Edits a node ID locally and only renames on Enter/blur, so partial typing can't collide with another node. */
+function NodeIdField({ value, onCommit }: { value: string; onCommit: (v: string) => string | null }) {
+  const [draft, setDraft] = useState(value);
+  const [error, setError] = useState<string | null>(null);
+  const commit = () => {
+    const err = onCommit(draft);
+    setError(err);
+    if (err) setDraft(value);
+  };
+  return (
+    <div className="space-y-1">
+      <Label className="text-xs" htmlFor="node-id-field">ID</Label>
+      <Input id="node-id-field" type="text" value={draft} className="h-8"
+        onChange={(e) => { setDraft(e.target.value); setError(null); }}
+        onBlur={commit}
+        onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); commit(); } if (e.key === "Escape") { setDraft(value); setError(null); } }}
+        aria-invalid={!!error} />
+      {error ? <p className="text-xs text-destructive">{error}</p> : <p className="text-xs text-muted-foreground">Press Enter to rename.</p>}
+    </div>
+  );
+}
+
