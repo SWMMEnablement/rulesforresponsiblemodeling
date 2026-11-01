@@ -6,12 +6,14 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Loader2, Play, Upload, Download, MousePointer2, Circle, Triangle, Square, Spline, Trash2, FileCode, RotateCcw } from "lucide-react";
+import { Loader2, Play, Upload, Download, MousePointer2, Circle, Triangle, Square, Spline, Trash2, FileCode, RotateCcw, Archive } from "lucide-react";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from "recharts";
 import { runSwmm, type SwmmRunResult } from "@/lib/swmm/runner";
 import { parseSwmmOut, type SwmmOutSeries } from "@/lib/swmm/outParser";
 import { STARTER_MODEL, validateModel, writeInp, nextId, renameNode, type BuilderModel } from "@/lib/swmm/modelBuilder";
 import { TUTORIAL_INP } from "@/lib/swmm/tutorialModel";
+import { saveToLibrary } from "@/lib/swmm/modelLibrary";
+import { toast } from "@/hooks/use-toast";
 
 type Tool = "select" | "junction" | "outfall" | "subcatchment" | "conduit" | "delete";
 type Sel = { type: "node" | "conduit" | "sub"; id: string } | null;
@@ -195,6 +197,14 @@ export function ModelBuilder() {
             <FileCode className="h-4 w-4 mr-1" /> Tutorial model
           </Button>
           <Button variant="outline" size="sm" onClick={download}><Download className="h-4 w-4 mr-1" /> Download .inp</Button>
+          <Button variant="outline" size="sm" disabled={!inpText.trim()} onClick={async () => {
+            try {
+              const m = await saveToLibrary(fileName || (source === "tutorial" ? "Tutorial model.inp" : "Built model.inp"), inpText);
+              toast({ title: `Saved "${m.name}" to your Model Library` });
+            } catch (e) {
+              toast({ title: "Could not save to library", description: e instanceof Error ? e.message : String(e), variant: "destructive" });
+            }
+          }}><Archive className="h-4 w-4 mr-1" /> Save to library</Button>
           <Button size="sm" onClick={run} disabled={running || !inpText.trim() || (source === "builder" && issues.length > 0)}>
             {running ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Play className="h-4 w-4 mr-1" />} Run SWMM
           </Button>
