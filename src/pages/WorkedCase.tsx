@@ -272,7 +272,7 @@ export default function WorkedCase() {
       checklist, createdAt: new Date().toISOString(),
     });
     const a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([zip], { type: "application/zip" }));
+    a.href = URL.createObjectURL(new Blob([zip as unknown as BlobPart], { type: "application/zip" }));
     a.download = "fernhollow-review-package.zip";
     a.click();
     URL.revokeObjectURL(a.href);
