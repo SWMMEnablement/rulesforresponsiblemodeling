@@ -53,7 +53,7 @@ export const Footer = () => {
                 <Button variant="link" className="h-auto p-0 text-sm justify-start" asChild>
                   <a href="https://www.chiwater.com/Company/Staff/WJamesWebpage/original/homepage/Research/R184Pweb.html" target="_blank" rel="noopener noreferrer">
                     <BookOpen className="w-4 h-4 mr-2" />
-                    Original Publication (CHI)
+                    CHI Web Version (incomplete)
                     <ExternalLink className="w-3 h-3 ml-1" />
                   </a>
                 </Button>
