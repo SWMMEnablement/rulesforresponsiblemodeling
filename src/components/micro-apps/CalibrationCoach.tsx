@@ -5,36 +5,23 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
 import { Target, Download, RotateCcw } from "lucide-react";
+import { OBSERVED, START_PARAMS, nashSutcliffe, simulate, type CoachParams } from "@/lib/calibrationCoach";
 
-// Synthetic "observed" data
-const observed = [0, 2, 8, 25, 45, 38, 22, 12, 6, 3, 1, 0];
-const timeLabels = Array.from({ length: 12 }, (_, i) => `${i}h`);
+const observed = OBSERVED;
 
-const params = [
-  { id: "peakScale", label: "Peak scaling factor", min: 0.2, max: 2, step: 0.05, default: 1 },
-  { id: "timing", label: "Timing offset (hours)", min: -3, max: 3, step: 0.5, default: 0 },
-  { id: "baseflow", label: "Baseflow (m³/s)", min: 0, max: 10, step: 0.5, default: 0 },
-  { id: "recession", label: "Recession rate", min: 0.3, max: 1.5, step: 0.05, default: 1 },
+const params: { id: keyof CoachParams; label: string; min: number; max: number; step: number }[] = [
+  { id: "peakScale", label: "Peak scaling factor", min: 0.2, max: 2, step: 0.05 },
+  { id: "timing", label: "Timing offset (hours)", min: -3, max: 3, step: 0.25 },
+  { id: "baseflow", label: "Baseflow (m³/s)", min: 0, max: 10, step: 0.5 },
+  { id: "recession", label: "Recession length (1 = observed; >1 = slower)", min: 0.5, max: 2, step: 0.05 },
 ];
 
 export const CalibrationCoach = () => {
-  const [values, setValues] = useState<Record<string, number>>(
-    Object.fromEntries(params.map((p) => [p.id, p.default]))
-  );
+  const [values, setValues] = useState<CoachParams>(START_PARAMS);
   const [attempts, setAttempts] = useState(0);
 
-  const simulated = observed.map((_, i) => {
-    const shifted = i - values.timing;
-    const idx = Math.round(shifted);
-    const base = idx >= 0 && idx < observed.length ? observed[idx] : 0;
-    return Math.max(0, base * values.peakScale * values.recession + values.baseflow);
-  });
-
-  const meanObs = observed.reduce((s, v) => s + v, 0) / observed.length;
-  const ssRes = observed.reduce((s, v, i) => s + (v - simulated[i]) ** 2, 0);
-  const ssTot = observed.reduce((s, v) => s + (v - meanObs) ** 2, 0);
-  const nse = ssTot > 0 ? 1 - ssRes / ssTot : 0;
-  const nsePct = Math.round(nse * 100);
+  const simulated = simulate(values);
+  const nse = nashSutcliffe(observed, simulated);
 
   const maxVal = Math.max(...observed, ...simulated);
   const svgW = 400;
@@ -42,13 +29,12 @@ export const CalibrationCoach = () => {
   const barW = svgW / observed.length - 4;
 
   const reset = useCallback(() => {
-    setValues(Object.fromEntries(params.map((p) => [p.id, p.default])));
+    setValues(START_PARAMS);
     setAttempts(0);
   }, []);
 
-  const handleChange = (id: string, v: number) => {
+  const handleChange = (id: keyof CoachParams, v: number) => {
     setValues((p) => ({ ...p, [id]: v }));
-    setAttempts((a) => a + 1);
   };
 
   const nseColor = nse >= 0.75 ? "text-green-500" : nse >= 0.5 ? "text-yellow-500" : "text-red-500";
@@ -85,7 +71,7 @@ export const CalibrationCoach = () => {
           <Badge variant="outline">Chapter 8</Badge>
         </div>
       </div>
-      <p className="text-muted-foreground">Adjust parameters to match the simulated hydrograph (blue) to the observed (gray). Minimize the gap!</p>
+      <p className="text-muted-foreground">Adjust parameters to match the simulated hydrograph (blue) to the observed (gray). The model starts out of tune: find the settings that close the gap. The observed storm is a made-up teaching example, not a gauged record.</p>
 
       <Card className="p-5">
         <svg viewBox={`0 0 ${svgW} ${svgH}`} className="w-full">
@@ -108,9 +94,9 @@ export const CalibrationCoach = () => {
             <div key={p.id}>
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-foreground font-medium">{p.label}</span>
-                <span className="text-primary font-bold">{values[p.id]}</span>
+                <span className="text-primary font-bold">{values[p.id].toFixed(2)}</span>
               </div>
-              <Slider min={p.min} max={p.max} step={p.step} value={[values[p.id]]} onValueChange={([v]) => handleChange(p.id, v)} />
+              <Slider min={p.min} max={p.max} step={p.step} value={[values[p.id]]} onValueChange={([v]) => handleChange(p.id, v)} onValueCommit={() => setAttempts((a) => a + 1)} />
             </div>
           ))}
           <Button variant="outline" size="sm" onClick={reset} className="gap-2"><RotateCcw className="w-3 h-3" /> Reset</Button>
