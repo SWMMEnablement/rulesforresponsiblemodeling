@@ -35,6 +35,7 @@ All colors MUST be HSL.
     --accent-foreground: 200 95% 30%;
 
     --destructive: 0 84.2% 60.2%;
+    --warning: 32 95% 40%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 214 25% 88%;
@@ -97,6 +98,7 @@ All colors MUST be HSL.
     --accent-foreground: 200 90% 60%;
 
     --destructive: 0 62.8% 50%;
+    --warning: 38 92% 55%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 215 20% 24%;
