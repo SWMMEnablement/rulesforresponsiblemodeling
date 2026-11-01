@@ -15,7 +15,7 @@ import { runSwmm, type SwmmRunResult } from "@/lib/swmm/runner";
 import { parseSwmmOut, type SwmmOutSeries } from "@/lib/swmm/outParser";
 import { TUTORIAL_INP } from "@/lib/swmm/tutorialModel";
 import {
-  deleteModel, listModels, looksLikeInp, newModel, putModel, summarizeRun, uniqueName, type LibraryModel,
+  deleteModel, flowStats, listModels, maxOf, looksLikeInp, newModel, putModel, summarizeRun, uniqueName, type LibraryModel,
 } from "@/lib/swmm/modelLibrary";
 
 const fmtSize = (b: number) => (b < 1024 ? `${b} B` : b < 1048576 ? `${(b / 1024).toFixed(1)} KB` : `${(b / 1048576).toFixed(1)} MB`);
@@ -131,10 +131,9 @@ export default function ModelLibrary() {
   }, [series, plotLink]);
   const peaks = useMemo(() => {
     if (!series) return null;
-    const max = (a: Float32Array) => a.reduce((m, v) => Math.max(m, v), 0);
     return {
-      links: series.links.map((id, i) => ({ id, flow: max(series.linkFlow[i]), depth: max(series.linkDepth[i]) })),
-      nodes: series.nodes.map((id, i) => ({ id, depth: max(series.nodeDepth[i]), flood: max(series.nodeFlooding[i]) })),
+      links: series.links.map((id, i) => ({ id, flow: flowStats(series.linkFlow[i]), depth: maxOf(series.linkDepth[i]) })),
+      nodes: series.nodes.map((id, i) => ({ id, depth: maxOf(series.nodeDepth[i]), flood: maxOf(series.nodeFlooding[i]) })),
     };
   }, [series]);
 
@@ -228,7 +227,7 @@ export default function ModelLibrary() {
                             Last run {fmtDate(lr.at)}:{" "}
                             {lr.ok
                               ? <>flow continuity {pct(lr.flowErr)}, runoff continuity {pct(lr.runoffErr)}
-                                  {lr.peakFlow !== null && <>, peak flow {lr.peakFlow.toFixed(2)} {lr.flowUnits} in {lr.peakFlowLink}</>}
+                                  {lr.peakFlow !== null && <>, largest flow {Math.abs(lr.peakFlow).toFixed(2)} {lr.flowUnits} in {lr.peakFlowLink}{lr.peakFlow < 0 ? " (reverse direction)" : ""}</>}
                                   {lr.floodedNodes > 0 && <span className="text-destructive font-medium">, {lr.floodedNodes} node{lr.floodedNodes > 1 ? "s" : ""} flooded</span>}
                                 </>
                               : <>failed — {lr.error}</>}
@@ -295,8 +294,9 @@ export default function ModelLibrary() {
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
                   <div className="max-h-72 overflow-auto">
                     <table className="w-full">
-                      <thead><tr className="text-left text-muted-foreground"><th>Link</th><th>Peak flow</th><th>Peak depth</th></tr></thead>
-                      <tbody>{peaks.links.map((l) => <tr key={l.id} className="border-t"><td>{l.id}</td><td>{l.flow.toFixed(2)}</td><td>{l.depth.toFixed(2)}</td></tr>)}</tbody>
+                      <caption className="caption-bottom text-left text-xs text-muted-foreground pt-1">Negative flow means flow against the link's drawn direction (reverse flow).</caption>
+                      <thead><tr className="text-left text-muted-foreground"><th>Link</th><th>Max flow ({series?.flowUnits})</th><th>Min flow ({series?.flowUnits})</th><th>Max |flow| ({series?.flowUnits})</th><th>Peak depth</th></tr></thead>
+                      <tbody>{peaks.links.map((l) => <tr key={l.id} className="border-t"><td>{l.id}</td><td>{l.flow.max.toFixed(2)}</td><td className={l.flow.min < 0 ? "text-warning font-medium" : ""}>{l.flow.min.toFixed(2)}</td><td>{l.flow.absMax.toFixed(2)}</td><td>{l.depth.toFixed(2)}</td></tr>)}</tbody>
                     </table>
                   </div>
                   <div className="max-h-72 overflow-auto">

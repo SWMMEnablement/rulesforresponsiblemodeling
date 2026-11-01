@@ -15,7 +15,7 @@ import { ResponsiveContainer, ComposedChart, Line, Area, XAxis, YAxis, Tooltip, 
 import { runSwmm } from "@/lib/swmm/runner";
 import { parseSwmmOut } from "@/lib/swmm/outParser";
 import {
-  allPass, auditSeries, bandCoverage, buildCaseInp, C3_CAPACITY_CFS, EVENTS, fitMetrics, GAUGED_LINK, makeObserved, OBSERVED_EVENTS,
+  addContinuity, allPass, auditSeries, EMPTY_CONTINUITY, runContinuityErr, worstContinuity, bandCoverage, buildCaseInp, C3_CAPACITY_CFS, EVENTS, fitMetrics, GAUGED_LINK, makeObserved, OBSERVED_EVENTS,
   PARAM_RANGES, passes, quantile, rainDepthIn, reviewChecklist, runoffRatio, sampleCaseEnsemble, START_PARAMS, TARGETS, TRUTH, TRUTH_CONDUIT_N,
   type CaseParams, type CaseSample, type EventKey, type FitMetrics,
 } from "@/lib/workedCase";
@@ -33,7 +33,7 @@ async function runFlow(p: CaseParams, key: EventKey, opts?: { conduitN?: number;
   return {
     flow: Array.from(s.linkFlow[li]),
     times: Array.from(s.times, (t) => t / 3600),
-    contErr: Math.max(Math.abs(r.massBal.runoffErr) || 0, Math.abs(r.massBal.flowErr) || 0),
+    contErr: runContinuityErr(r.massBal.runoffErr, r.massBal.flowErr),
   };
 }
 
@@ -131,11 +131,11 @@ export default function WorkedCase() {
   // Step 4: uncertainty
   const [seed, setSeed] = useState(2005);
   const [ensemble, setEnsemble] = useState<{
-    samples: CaseSample[]; designPeaks: number[]; designDet: number; designDetFlow: number[];
+    seed: number; samples: CaseSample[]; designPeaks: number[]; designDet: number; designDetFlow: number[];
     design: { lo: number[]; mid: number[]; hi: number[] }; val: { lo: number[]; mid: number[]; hi: number[] }; coverage: number; contErr: number; progress: number;
   } | null>(null);
   const [progress, setProgress] = useState(0);
-  const [maxCont, setMaxCont] = useState(NaN);
+  const [contLog, setContLog] = useState(EMPTY_CONTINUITY);
   // Step 5
   const [packaged, setPackaged] = useState(false);
   const [revealed, setRevealed] = useState(false);
@@ -173,15 +173,15 @@ export default function WorkedCase() {
   const toggleExclude = (k: ObsKey, i: number) =>
     setExcluded((ex) => { const s = new Set(ex[k]); s.has(i) ? s.delete(i) : s.add(i); return { ...ex, [k]: s }; });
 
-  const noteCont = (c: number) => setMaxCont((m) => (Number.isFinite(m) ? Math.max(m, c) : c));
+  const noteCont = (errs: number[]) => setContLog((l) => addContinuity(l, errs));
 
   const runCalibration = async () => {
     if (!observed) return;
     setBusy("cal");
     try {
       const [a, b] = [await runFlow(params, "A"), await runFlow(params, "B")];
-      const contErr = Math.max(a.contErr, b.contErr);
-      noteCont(contErr);
+      const contErr = worstContinuity([a.contErr, b.contErr]);
+      noteCont([a.contErr, b.contErr]);
       setCalSims({ A: a.flow, B: b.flow });
       setTrials((t) => [...t, {
         trial: t.length + 1, at: new Date().toISOString(), params: { ...params },
@@ -201,7 +201,7 @@ export default function WorkedCase() {
       const p = { ...lastTrial.params };
       setLocked(p);
       const c = await runFlow(p, "C");
-      noteCont(c.contErr);
+      noteCont([c.contErr]);
       setValidation({ sim: c.flow, m: fitMetrics(observed.C, c.flow, excluded.C) });
       setEnsemble(null); setPackaged(false); setRevealed(false);
     } catch (e) { setLoadError(e instanceof Error ? e.message : String(e)); }
@@ -220,15 +220,16 @@ export default function WorkedCase() {
       const samples = sampleCaseEnsemble(locked, seed, ENSEMBLE_SIZE);
       const det = await runFlow(locked, "D");
       const designRuns: number[][] = [], valRuns: number[][] = [];
-      let contErr = det.contErr;
+      const errs = [det.contErr];
       for (const s of samples) {
         const d = await runFlow(s, "D", { rainFactor: s.rainFactor, conduitN: s.conduitN });
         const v = await runFlow(s, "C", { rainFactor: s.rainFactor, conduitN: s.conduitN });
         designRuns.push(d.flow); valRuns.push(v.flow);
-        contErr = Math.max(contErr, d.contErr, v.contErr);
+        errs.push(d.contErr, v.contErr);
         setProgress(designRuns.length);
       }
-      noteCont(contErr);
+      noteCont(errs);
+      const contErr = worstContinuity(errs);
       const bands = (runs: number[][]) => {
         const n = runs[0].length;
         const lo: number[] = [], mid: number[] = [], hi: number[] = [];
@@ -240,7 +241,7 @@ export default function WorkedCase() {
       };
       const val = bands(valRuns);
       setEnsemble({
-        samples, designPeaks: designRuns.map((r) => Math.max(...r)), designDet: Math.max(...det.flow), designDetFlow: det.flow,
+        seed, samples, designPeaks: designRuns.map((r) => Math.max(...r)), designDet: Math.max(...det.flow), designDetFlow: det.flow,
         design: bands(designRuns), val, coverage: bandCoverage(observed.C, val.lo, val.hi, excluded.C), contErr, progress: samples.length,
       });
       setPackaged(false);
@@ -257,7 +258,8 @@ export default function WorkedCase() {
   const checklist = reviewChecklist({
     auditReviewed: auditConfirmed, excludedFlags: excludedCount, totalFlags,
     calibrationTrials: trials.length, validated: !!validation, recalibratedAfterValidation: recalibrated,
-    validationPassed: validation ? allPass(validation.m) : false, maxContinuityErrPct: maxCont,
+    validationPassed: validation ? allPass(validation.m) : false,
+    maxContinuityErrPct: contLog.maxKnown, continuityUnknownRuns: contLog.unknownRuns,
     ensembleSize: ensemble?.samples.length ?? 0, coverage: ensemble?.coverage ?? NaN,
   });
 
@@ -266,7 +268,9 @@ export default function WorkedCase() {
     const zip = buildReviewZip({
       times, observed,
       excluded: { A: [...excluded.A].sort((a, b) => a - b), B: [...excluded.B].sort((a, b) => a - b), C: [...excluded.C].sort((a, b) => a - b) },
-      trials, final: locked, validation: validation.m, recalibratedAfterValidation: recalibrated, seed,
+      trials, final: locked, validation: validation.m, recalibratedAfterValidation: recalibrated,
+      // the seed that actually produced these samples, not whatever is typed in the box now
+      seed: ensemble.seed,
       samples: ensemble.samples, designPeaks: ensemble.designPeaks, designDeterministicPeak: ensemble.designDet,
       p5: peakStats.p5, p50: peakStats.p50, p95: peakStats.p95, exceedProb: peakStats.exceed, coverage: ensemble.coverage,
       checklist, createdAt: new Date().toISOString(),
@@ -483,6 +487,11 @@ export default function WorkedCase() {
                   {busy === "ens" ? <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Run {progress} of {ENSEMBLE_SIZE}</> : <><Play className="h-4 w-4 mr-1" /> Run {ENSEMBLE_SIZE} simulations</>}
                 </Button>
               </div>
+              {ensemble && ensemble.seed !== seed && (
+                <p className="text-sm text-warning">
+                  The seed box now says {seed}, but these results came from seed {ensemble.seed}. The review package records {ensemble.seed}. Run again to use the new seed.
+                </p>
+              )}
               {ensemble && peakStats && (
                 <>
                   <div className="grid gap-3 sm:grid-cols-3">

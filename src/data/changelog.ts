@@ -10,6 +10,11 @@ export const CHANGELOG: Release[] = [
     title: "Accuracy review and reproducible runs",
     summary: "Fixes from an outside review that graded the app 80/100, plus two monitoring fixes.",
     items: [
+      { kind: "fix", text: "Worked case: a missing continuity result shows as unknown and fails review instead of counting as 0%.", link: "/worked-case" },
+      { kind: "fix", text: "Worked case: the review package records the seed that actually produced the ensemble.", link: "/worked-case" },
+      { kind: "accuracy", text: "Ask James cites the app's chapter summaries with clickable links and says they are summaries, not quotes from William James." },
+      { kind: "fix", text: "Model Library and Builder tables show maximum, minimum (reverse) and largest flow with units.", link: "/model-library" },
+      { kind: "feature", text: "Worked Case, SWMM Playground and Model Library now have their own cards on the home page.", link: "/" },
       { kind: "accuracy", text: "Simulator scores, comparison rules of thumb and Model Autopsies are labelled as illustrative.", link: "/model-autopsies" },
       { kind: "accuracy", text: "Original-publication links note that the CHI web page is incomplete and comes from a 1993 draft." },
       { kind: "fix", text: "Calibration Coach starts out of tune, timing moves in quarter hours, and recession has its own effect.", link: "/micro-apps" },

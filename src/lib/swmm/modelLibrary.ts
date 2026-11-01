@@ -74,6 +74,21 @@ export function looksLikeInp(text: string): boolean {
   return /^\s*\[(OPTIONS|JUNCTIONS|OUTFALLS|CONDUITS|SUBCATCHMENTS|TITLE)\]/im.test(text);
 }
 
+/** Flow extremes for one link. Reverse (negative) flows are kept, not clipped at zero. */
+export interface FlowStats { max: number; min: number; absMax: number }
+export function flowStats(series: ArrayLike<number>): FlowStats {
+  if (series.length === 0) return { max: NaN, min: NaN, absMax: NaN };
+  let max = -Infinity, min = Infinity;
+  for (let i = 0; i < series.length; i++) { const v = series[i]; if (v > max) max = v; if (v < min) min = v; }
+  return { max, min, absMax: Math.max(Math.abs(max), Math.abs(min)) };
+}
+/** Largest value of a non-negative quantity (depth, flooding). */
+export const maxOf = (series: ArrayLike<number>) => {
+  let m = 0;
+  for (let i = 0; i < series.length; i++) if (series[i] > m) m = series[i];
+  return m;
+};
+
 export function summarizeRun(
   r: { ok: boolean; durationMs: number; massBal: { runoffErr: number; flowErr: number }; errMsg?: string; error?: string; rc?: number },
   series: { links: string[]; linkFlow: Float32Array[]; nodeFlooding: Float32Array[]; flowUnits: string } | null,

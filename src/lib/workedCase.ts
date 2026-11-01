@@ -268,6 +268,29 @@ export function bandCoverage(obs: number[], lower: number[], upper: number[], ex
   return total ? inside / total : NaN;
 }
 
+// ---------- continuity ----------
+/** Larger of the runoff and flow-routing continuity errors (%). A missing value stays unknown (NaN), never 0. */
+export function runContinuityErr(runoffErr: number, flowErr: number): number {
+  if (!Number.isFinite(runoffErr) || !Number.isFinite(flowErr)) return NaN;
+  return Math.max(Math.abs(runoffErr), Math.abs(flowErr));
+}
+/** Worst of several runs; unknown if any run is unknown. */
+export function worstContinuity(values: number[]): number {
+  if (values.length === 0 || values.some((v) => !Number.isFinite(v))) return NaN;
+  return Math.max(...values.map(Math.abs));
+}
+export interface ContinuityLog { runs: number; unknownRuns: number; maxKnown: number }
+export const EMPTY_CONTINUITY: ContinuityLog = { runs: 0, unknownRuns: 0, maxKnown: NaN };
+export function addContinuity(log: ContinuityLog, errs: number[]): ContinuityLog {
+  let { runs, unknownRuns, maxKnown } = log;
+  for (const e of errs) {
+    runs++;
+    if (!Number.isFinite(e)) unknownRuns++;
+    else maxKnown = Number.isFinite(maxKnown) ? Math.max(maxKnown, Math.abs(e)) : Math.abs(e);
+  }
+  return { runs, unknownRuns, maxKnown };
+}
+
 // ---------- review checklist ----------
 export interface CaseLog {
   auditReviewed: boolean;
@@ -278,10 +301,20 @@ export interface CaseLog {
   recalibratedAfterValidation: boolean;
   validationPassed: boolean;
   maxContinuityErrPct: number;
+  /** Runs for which SWMM reported no continuity error. Any such run blocks a pass. */
+  continuityUnknownRuns?: number;
   ensembleSize: number;
   coverage: number;
 }
 export interface CheckItem { label: string; status: "pass" | "warn" | "fail"; detail: string }
+
+function continuityItem(l: CaseLog): CheckItem {
+  const label = "Continuity errors small (under 1%)";
+  const unknown = l.continuityUnknownRuns ?? 0;
+  if (unknown > 0) return { label, status: "fail", detail: `SWMM reported no continuity error for ${unknown} run(s); treated as unknown, not 0%` };
+  if (!Number.isFinite(l.maxContinuityErrPct)) return { label, status: "fail", detail: "No runs yet" };
+  return { label, status: l.maxContinuityErrPct < 1 ? "pass" : "warn", detail: `Largest error ${l.maxContinuityErrPct.toFixed(2)}%` };
+}
 
 export function reviewChecklist(l: CaseLog): CheckItem[] {
   return [
@@ -293,8 +326,8 @@ export function reviewChecklist(l: CaseLog): CheckItem[] {
       detail: !l.validated ? "Validation not run" : l.validationPassed ? "Event C met every illustrative target" : "Event C missed at least one target; disclosed in report" },
     { label: "No tuning after seeing validation results", status: l.recalibratedAfterValidation ? "warn" : "pass",
       detail: l.recalibratedAfterValidation ? "Parameters were changed after validation; Event C is no longer independent" : "Validation stayed independent" },
-    { label: "Continuity errors small (under 1%)", status: !Number.isFinite(l.maxContinuityErrPct) ? "fail" : l.maxContinuityErrPct < 1 ? "pass" : "warn",
-      detail: Number.isFinite(l.maxContinuityErrPct) ? `Largest error ${l.maxContinuityErrPct.toFixed(2)}%` : "No runs yet" },
+    continuityItem(l),
+
     { label: "Uncertainty quantified with a recorded seed", status: l.ensembleSize >= 20 ? "pass" : "fail",
       detail: l.ensembleSize ? `${l.ensembleSize} runs` : "Ensemble not run" },
     { label: "Uncertainty band checked against held-out data", status: !Number.isFinite(l.coverage) ? "fail" : l.coverage >= 0.8 ? "pass" : "warn",

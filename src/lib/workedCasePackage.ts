@@ -108,7 +108,7 @@ export function buildReviewZip(x: PackageInput): Uint8Array {
     })].join(","))].join("\n");
   const logCsv = ["trial,timestamp,pct_imperv,width_factor,max_infil_in_hr,A_nse,A_peak_err_pct,A_vol_err_pct,A_timing_min,B_nse,B_peak_err_pct,B_vol_err_pct,B_timing_min,max_continuity_err_pct,after_validation",
     ...x.trials.map((t) => [t.trial, t.at, t.params.pctImperv, t.params.widthFactor, t.params.maxInfil,
-      t.A.nse, t.A.peakErrPct, t.A.volErrPct, t.A.timingMin, t.B.nse, t.B.peakErrPct, t.B.volErrPct, t.B.timingMin, t.contErr, t.afterValidation ? 1 : 0].join(","))].join("\n");
+      t.A.nse, t.A.peakErrPct, t.A.volErrPct, t.A.timingMin, t.B.nse, t.B.peakErrPct, t.B.volErrPct, t.B.timingMin, Number.isFinite(t.contErr) ? t.contErr : "unknown", t.afterValidation ? 1 : 0].join(","))].join("\n");
   const ensCsv = ["run,seed,pct_imperv,width_factor,max_infil_in_hr,rain_factor,conduit_n,design_peak_cfs",
     ...x.samples.map((s, i) => [s.index + 1, s.seed, s.pctImperv.toFixed(3), s.widthFactor.toFixed(4), s.maxInfil.toFixed(4), s.rainFactor.toFixed(4), s.conduitN.toFixed(4), f(x.designPeaks[i], 3)].join(","))].join("\n");
   const metrics = {

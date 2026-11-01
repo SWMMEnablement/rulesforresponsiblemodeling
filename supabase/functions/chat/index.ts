@@ -32,41 +32,52 @@ function sanitizeMessages(input: unknown): ChatMessage[] | null {
   return out;
 }
 
-const systemPrompt = `You are "Ask James" — an expert AI assistant that answers modeling questions as if channeling the philosophy and expertise of Dr. William James from "Rules for Responsible Modeling."
+type Source = { n: number; chapter: number; section: string; text: string };
+const MAX_SOURCES = 4;
+const MAX_SOURCE_CHARS = 1000;
 
-Your knowledge covers these key areas:
-- **Chapter 1**: Introduction - Models as tools for decision-making, not perfect predictions
-- **Chapter 2**: Discretization & Complexity - Spatial/temporal resolution tradeoffs
-- **Chapter 3**: Reliability of Input - Data quality and uncertainty characterization
-- **Chapter 4**: Optimal Complexity - Finding the right model complexity (parsimony)
-- **Chapter 5**: Continuous Simulation - Long-term modeling vs single events
-- **Chapter 6**: Rain Input Generation - Stochastic rainfall and disaggregation
-- **Chapter 7**: Dynamic Rain Systems - Storm cell movement and timing effects
-- **Chapter 8**: Decision Support Systems - PCSWMM and practical implementation
-- **Chapter 9**: Objective Functions - Performance metrics (NSE, RMSE, KGE)
-- **Chapter 10**: Uncertainty Analysis - Monte Carlo, confidence intervals
-- **Chapter 11**: Sensitivity Analysis - Parameter importance ranking
-- **Chapter 12**: State Variable Space - Mathematical system representation
-- **Chapter 13**: Performance Evaluation - Validation best practices
-- **Chapter 14**: Parameter Optimization - Genetic algorithms, calibration
-- **Chapter 15**: Fuzzy Logic - Handling imprecision in modeling
-- **Chapter 16**: Real-Time Uncertainty - Operational forecasting
-- **Chapter 17**: Conclusions - Framework and recommendations
+// Sources are the app's own chapter summaries, picked in the browser for the latest question.
+function sanitizeSources(input: unknown): Source[] {
+  if (!Array.isArray(input)) return [];
+  const out: Source[] = [];
+  for (const s of input.slice(0, MAX_SOURCES)) {
+    if (!s || typeof s !== "object") continue;
+    const { n, chapter, section, text } = s as Record<string, unknown>;
+    if (!Number.isInteger(n) || (n as number) < 1 || (n as number) > MAX_SOURCES) continue;
+    if (!Number.isInteger(chapter) || (chapter as number) < 1 || (chapter as number) > 17) continue;
+    if (typeof section !== "string" || typeof text !== "string" || !text.trim()) continue;
+    out.push({ n: n as number, chapter: chapter as number, section: section.slice(0, 120), text: text.slice(0, MAX_SOURCE_CHARS) });
+  }
+  return out;
+}
 
-Key principles to emphasize:
-1. Models inform decisions—they don't predict perfectly
+const basePrompt = `You are "Ask James", an AI study assistant for the interactive edition of "Rules for Responsible Modeling" by William James (4th edition, 2005). You are not William James and you do not have the book's text.
+
+Key principles of the framework:
+1. Models inform decisions; they don't predict perfectly
 2. Uncertainty should be quantified and communicated, not hidden
-3. Optimal complexity exists—too simple misses physics, too complex amplifies uncertainty
+3. Optimal complexity exists: too simple misses physics, too complex amplifies uncertainty
 4. Rainfall is often the largest uncertainty source in urban drainage
 5. Validation on independent data is essential
 
+Rules for honesty about sources:
+- You will be given numbered SOURCES. They are summaries written by the app's authors, NOT quotations from William James. Never present any wording as a direct quote from him, and never put his name on a quotation.
+- When a sentence relies on a source, put its marker right after it, e.g. "Validation needs independent data [2]."
+- Only name a chapter when a source gives it. Never invent section numbers, page numbers or quotations.
+- If no source covers the question, say "The app's chapter summaries don't cover this directly" and then give general modeling guidance, clearly labelled as general guidance.
+- Use "the framework suggests" or "the app's summary of Chapter N says", not "Dr. James says".
+
 When answering:
-- Frame answers as "Dr. James would caution..." or "According to the framework..." when appropriate
-- Reference specific chapters when relevant (e.g., "See Chapter 4, Section 4.3")
-- Provide practical SWMM5, ICM SWMM, or ICM InfoWorks examples where relevant
-- Keep answers concise but authoritative
-- When asked about subcatchment counts, always ask about available data first
-- Challenge assumptions about maximum complexity being best`;
+- Give practical SWMM5, ICM SWMM or ICM InfoWorks examples where relevant
+- Keep answers concise
+- When asked about subcatchment counts, ask about available data first
+- Challenge the assumption that maximum complexity is best`;
+
+function buildSystemPrompt(sources: Source[]): string {
+  if (sources.length === 0) return `${basePrompt}\n\nSOURCES: none matched this question.`;
+  const list = sources.map((s) => `[${s.n}] App summary of Chapter ${s.chapter}, "${s.section}": ${s.text}`).join("\n");
+  return `${basePrompt}\n\nSOURCES (app-written summaries, not quotations):\n${list}`;
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -80,6 +91,7 @@ serve(async (req) => {
   try {
     const body = await req.json().catch(() => null);
     const messages = sanitizeMessages(body?.messages);
+    const sources = sanitizeSources(body?.sources);
     if (!messages) {
       return new Response(JSON.stringify({ error: "Invalid messages payload" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
@@ -98,7 +110,7 @@ serve(async (req) => {
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: systemPrompt },
+          { role: "system", content: buildSystemPrompt(sources) },
           ...messages,
         ],
         stream: true,

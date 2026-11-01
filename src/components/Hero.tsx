@@ -1,4 +1,4 @@
-import { BookOpen, Activity, Code2, ExternalLink, Github, GraduationCap, Briefcase, Shield, ArrowRight, Search, Compass, SearchX, Layers, Sparkles, PlayCircle } from "lucide-react";
+import { BookOpen, Activity, Code2, ExternalLink, Github, GraduationCap, Briefcase, Shield, ArrowRight, Search, Compass, SearchX, Layers, Sparkles, PlayCircle, Route, FlaskConical, Archive } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -10,6 +10,12 @@ const quickPaths = [
   { to: "/study-guide", icon: GraduationCap, title: "Student Path", desc: "Foundation-first approach", preview: "Chapters 1–6 + diagnostic", time: "8-10 hrs", color: "from-blue-500 to-cyan-500" },
   { to: "/study-guide", icon: Briefcase, title: "Practitioner Review", desc: "Quick refresher for pros", preview: "SWMM5/ICM translation panels", time: "4-5 hrs", color: "from-emerald-500 to-teal-500" },
   { to: "/study-guide", icon: Shield, title: "Ethics Deep Dive", desc: "Philosophy & uncertainty", preview: "Autopsies + responsibility quiz", time: "3-4 hrs", color: "from-purple-500 to-pink-500" },
+];
+
+const engineTools = [
+  { to: "/worked-case", icon: Route, title: "Worked Case", desc: "Audit data, calibrate, validate, add uncertainty and download a review package. A made-up example, start to finish.", cta: "Start the case" },
+  { to: "/playground", icon: FlaskConical, title: "SWMM Playground", desc: "Change roughness, imperviousness and rainfall, run ensembles, or draw your own network.", cta: "Open the Playground" },
+  { to: "/model-library", icon: Archive, title: "Model Library", desc: "Keep your own .inp files in this browser and run any of them with one click.", cta: "Open your library" },
 ];
 
 const scrollTo = (id: string) => {
@@ -125,6 +131,27 @@ export const Hero = () => {
               </div>
             </Link>
           ))}
+        </div>
+
+        {/* Hands-on tools that run the real SWMM engine */}
+        <div className="mb-10 max-w-4xl mx-auto animate-slide-up" style={{ animationDelay: "0.31s" }}>
+          <p className="text-sm font-semibold uppercase tracking-wide text-white/80 mb-3">Hands-on with the real SWMM 5.2 engine</p>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {engineTools.map((t) => (
+              <Link key={t.to} to={t.to} className="group block h-full rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
+                <div className="h-full p-5 rounded-xl bg-white/15 backdrop-blur-sm border border-white/30 hover:bg-white/25 hover:border-white/50 hover:-translate-y-0.5 transition-all text-left">
+                  <div className="flex items-center gap-2 mb-2">
+                    <t.icon className="w-5 h-5 text-white" />
+                    <h3 className="font-semibold text-white">{t.title}</h3>
+                  </div>
+                  <p className="text-sm text-white/85 mb-3">{t.desc}</p>
+                  <span className="inline-flex items-center gap-1 text-sm font-medium text-white">
+                    {t.cta} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* Differentiator chips: SWMM5/ICM + Autopsies */}
