@@ -495,7 +495,8 @@ export default function WorkedCase() {
                     <div><p className="text-sm font-medium mb-1">Check: Event C observations vs band</p><FlowChart times={times} obs={observed.C} exclude={excluded.C} band={ensemble.val} /></div>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    {Math.round(ensemble.coverage * 100)}% of Event C observations fall inside the 5–95% band. If far fewer did, the band would be too narrow to trust.
+                    {Math.round(ensemble.coverage * 100)}% of Event C observations fall inside the 5–95% band.{" "}
+                    {ensemble.coverage >= 0.8 ? "That is close enough to the 90% you would expect." : "That is well short of the 90% you would expect: the band covers parameter and rainfall uncertainty but not gauge noise, so the true spread is wider. Say so in the report."}
                   </p>
                 </>
               )}
