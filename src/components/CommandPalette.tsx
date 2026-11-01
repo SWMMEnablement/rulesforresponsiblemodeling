@@ -68,7 +68,7 @@ const features = [
   { id: "model-comparison", label: "James vs. Your Model Comparison", description: "Compare your model against James's standards", path: null },
   { id: "model-autopsies", label: "Model Autopsies", description: "Case studies of modeling failures and lessons learned", path: "/model-autopsies" },
   { id: "software-translation", label: "SWMM5/ICM Translation Panels", description: "Map James's principles to specific software actions", path: null },
-  { id: "certification-badge", label: "Certified Responsible Modeler", description: "Earn your certification badge", path: null },
+  { id: "certification-badge", label: "Responsible Modeler Badge", description: "Earn a lesson completion badge", path: null },
   { id: "office-posters", label: "Office Poster Series", description: "Downloadable posters for engineering offices", path: null },
 ];
 
