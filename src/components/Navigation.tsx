@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, BookOpen, Library, GraduationCap, Menu, Moon, Sun, Keyboard, Quote, Code, FlaskConical, ClipboardCheck, SearchX, ExternalLink, Award, Sparkles, BarChart3, Grid3X3, Zap, Beaker } from "lucide-react";
+import { Home, BookOpen, Library, GraduationCap, Menu, Moon, Sun, Keyboard, Quote, Code, FlaskConical, ClipboardCheck, SearchX, ExternalLink, Award, Sparkles, BarChart3, Grid3X3, Zap, Beaker, History } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
@@ -42,6 +42,7 @@ export const Navigation = () => {
     { to: "/grade-report", icon: Award, label: "Grade Report" },
     { to: "/cross-reference", icon: Grid3X3, label: "Cross-Ref" },
     { to: "/progress", icon: BarChart3, label: "My Progress" },
+    { to: "/whats-new", icon: History, label: "What's New" },
     { to: "https://replit.com/@robertdickinson/SWMM-Docs-Explorer", icon: ExternalLink, label: "SWMM Explorer", external: true },
   ];
 

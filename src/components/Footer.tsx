@@ -1,10 +1,12 @@
 import { Code2, BookOpen, ExternalLink, Github, AlertCircle } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { CHANGELOG } from "@/data/changelog";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 
 const APP_VERSION = "2026.1";
-const LAST_UPDATED = "May 30, 2026";
+const LAST_UPDATED = new Date(`${CHANGELOG[0].date}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 const ISSUES_EMAIL = "robert.dickinson@gmail.com";
 const ISSUES_URL = `mailto:${ISSUES_EMAIL}?subject=${encodeURIComponent("Rules for Responsible Modeling — Issue Report")}`;
 
@@ -66,7 +68,7 @@ export const Footer = () => {
             <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
               <span>Version {APP_VERSION}</span>
               <span className="hidden md:inline">·</span>
-              <span>Updated {LAST_UPDATED}</span>
+              <Link to="/whats-new" className="hover:text-foreground underline-offset-2 hover:underline">Updated {LAST_UPDATED} · What's New</Link>
               <a href={ISSUES_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
                 <Github className="w-3.5 h-3.5" />
                 Report issue
