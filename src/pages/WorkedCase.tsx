@@ -294,7 +294,7 @@ export default function WorkedCase() {
             <Route className="w-8 h-8 text-primary" />
             <h1 className="text-3xl sm:text-4xl font-bold text-foreground">Worked Case: Fernhollow Brook</h1>
           </div>
-          <div className="rounded-lg border-l-4 border-accent bg-accent/10 p-4 text-sm text-foreground">
+          <div className="rounded-lg border-l-4 border-warning bg-warning/10 p-4 text-sm text-foreground">
             <strong>This is a made-up example.</strong> Fernhollow Brook, gauge FH-1 and every number on this page are fictional.
             The "observed" flows were made by running a hidden set of parameters and adding measurement noise, a logger gap and a sensor spike.
             Targets marked "illustrative" are choices for this exercise, not a published standard.
@@ -350,7 +350,7 @@ export default function WorkedCase() {
                   acc.push({ k, f, first: f.index, count: 1 }); return acc;
                 }, []).map(({ k, f, first, count }) => (
                   <div key={`${k}-${first}`} className="flex flex-wrap items-center gap-3 rounded-md bg-muted/50 p-2 text-sm">
-                    <AlertTriangle className="h-4 w-4 text-accent shrink-0" />
+                    <AlertTriangle className="h-4 w-4 text-warning shrink-0" />
                     <span className="font-medium">{EVENTS[k].label}</span>
                     {f.kind === "gap" ? (
                       <span>{count} missing records from {fmt(times[first])} h. Missing values are never used.</span>
@@ -447,7 +447,7 @@ export default function WorkedCase() {
                   <Button onClick={runValidation} disabled={!!busy}>
                     {busy === "val" ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Lock className="h-4 w-4 mr-1" />} Lock trial {lastTrial.trial} and validate
                   </Button>
-                  {!lastMatchesParams && <span className="text-xs text-accent-foreground bg-accent/20 rounded px-2 py-1">The sliders have moved since trial {lastTrial.trial}; run them first if you want to lock those values.</span>}
+                  {!lastMatchesParams && <span className="text-xs text-foreground bg-warning/15 rounded px-2 py-1">The sliders have moved since trial {lastTrial.trial}; run them first if you want to lock those values.</span>}
                 </div>
               ) : (
                 <>
@@ -512,7 +512,7 @@ export default function WorkedCase() {
             <ul className="space-y-2">
               {checklist.map((c) => (
                 <li key={c.label} className="flex items-start gap-2 text-sm">
-                  {c.status === "pass" ? <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary shrink-0" /> : c.status === "warn" ? <AlertTriangle className="h-4 w-4 mt-0.5 text-accent shrink-0" /> : <XCircle className="h-4 w-4 mt-0.5 text-muted-foreground shrink-0" />}
+                  {c.status === "pass" ? <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary shrink-0" /> : c.status === "warn" ? <AlertTriangle className="h-4 w-4 mt-0.5 text-warning shrink-0" /> : <XCircle className="h-4 w-4 mt-0.5 text-muted-foreground shrink-0" />}
                   <span><span className="font-medium text-foreground">{c.label}</span> <span className="text-muted-foreground">— {c.detail}</span></span>
                 </li>
               ))}
