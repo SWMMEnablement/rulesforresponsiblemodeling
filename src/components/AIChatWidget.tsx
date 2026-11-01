@@ -4,11 +4,9 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { ScrollArea } from "./ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { CHAT_LIMITS, trimChatHistory, type ChatTurn } from "@/lib/chatHistory";
 
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-}
+type Message = ChatTurn;
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const CHAT_URL = SUPABASE_URL ? `${SUPABASE_URL}/functions/v1/chat` : null;
@@ -43,7 +41,7 @@ export const AIChatWidget = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
       },
-      body: JSON.stringify({ messages: userMessages }),
+      body: JSON.stringify({ messages: trimChatHistory(userMessages) }),
     });
 
     if (!resp.ok) {
@@ -103,7 +101,7 @@ export const AIChatWidget = () => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
-    const userMessage: Message = { role: "user", content: input.trim() };
+    const userMessage: Message = { role: "user", content: input.trim().slice(0, CHAT_LIMITS.maxCharsPerMessage) };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
     setInput("");
@@ -116,8 +114,9 @@ export const AIChatWidget = () => {
       setMessages((prev) => [
         ...prev,
         { 
-          role: "assistant", 
-          content: error instanceof Error ? error.message : "Sorry, I encountered an error. Please try again." 
+          role: "assistant",
+          content: error instanceof Error ? error.message : "Sorry, I encountered an error. Please try again.",
+          isError: true,
         },
       ]);
     } finally {
