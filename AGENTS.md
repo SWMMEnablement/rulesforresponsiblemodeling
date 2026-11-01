@@ -7,3 +7,4 @@
 - Draw Playground ensemble samples only from the seeded sampler helper so a recorded master seed reproduces every run; never use Math.random for model inputs.
 - Label app-authored numeric rules, scores and case studies as illustrative unless a verifiable source is cited.
 - Record each user-visible release in the What's New changelog data (newest first, dates from project history) because the footer's last-updated date is derived from it.
+- Store Model Library .inp files in the visitor's browser (IndexedDB) through the modelLibrary helper, because the app has no sign-in and model files can exceed localStorage quotas.
