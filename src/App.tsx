@@ -48,6 +48,7 @@ const CrossReference = lazy(() => import("./pages/CrossReference"));
 const Playground = lazy(() => import("./pages/Playground"));
 const WhatsNew = lazy(() => import("./pages/WhatsNew"));
 const ModelLibrary = lazy(() => import("./pages/ModelLibrary"));
+const WorkedCase = lazy(() => import("./pages/WorkedCase"));
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -102,6 +103,7 @@ const App = () => (
             <Route path="/cross-reference" element={<CrossReference />} />
             <Route path="/playground" element={<Playground />} />
             <Route path="/model-library" element={<ModelLibrary />} />
+            <Route path="/worked-case" element={<WorkedCase />} />
             <Route path="/whats-new" element={<WhatsNew />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

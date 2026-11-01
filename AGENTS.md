@@ -8,3 +8,4 @@
 - Label app-authored numeric rules, scores and case studies as illustrative unless a verifiable source is cited.
 - Record each user-visible release in the What's New changelog data (newest first, dates from project history) because the footer's last-updated date is derived from it.
 - Store Model Library .inp files in the visitor's browser (IndexedDB) through the modelLibrary helper, because the app has no sign-in and model files can exceed localStorage quotas.
+- Generate worked-case observations from a hidden parameter set plus seeded noise in the workedCase helper, and label the case and its targets as fictional and illustrative, so the example stays reproducible and never passes as real data.

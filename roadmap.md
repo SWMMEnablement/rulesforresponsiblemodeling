@@ -17,5 +17,5 @@
 - [x] Describe the quiz badge as a completion badge with issuer and scope.
 - [ ] Publish so the live site includes the Playground (owner action).
 - [ ] 4th-edition page references for chapters: needs the printed 2005 edition.
-- [ ] Full worked case (observations → calibration → validation → uncertainty → review package): awaiting go-ahead and real or clearly synthetic data choice.
+- [x] Full worked case with clearly made-up data (observations → calibration → validation → uncertainty → review package).
 

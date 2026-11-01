@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, BookOpen, Library, GraduationCap, Menu, Moon, Sun, Keyboard, Quote, Code, FlaskConical, ClipboardCheck, SearchX, ExternalLink, Award, Sparkles, BarChart3, Grid3X3, Zap, Beaker, History, Archive } from "lucide-react";
+import { Home, BookOpen, Library, GraduationCap, Menu, Moon, Sun, Keyboard, Quote, Code, FlaskConical, ClipboardCheck, SearchX, ExternalLink, Award, Sparkles, BarChart3, Grid3X3, Zap, Beaker, History, Archive, Route } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
@@ -36,6 +36,7 @@ export const Navigation = () => {
     { to: "/micro-apps", icon: Zap, label: "Micro-Apps" },
     { to: "/playground", icon: Beaker, label: "Playground" },
     { to: "/model-library", icon: Archive, label: "Model Library" },
+    { to: "/worked-case", icon: Route, label: "Worked Case" },
     { to: "/animations", icon: Sparkles, label: "Animations" },
     { to: "/glossary", icon: Library, label: "Glossary" },
     { to: "/resources", icon: BookOpen, label: "Resources" },

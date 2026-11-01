@@ -18,6 +18,7 @@ export const CHANGELOG: Release[] = [
       { kind: "fix", text: "Ask James keeps working in long conversations." },
       { kind: "fix", text: "Renaming a node in the Model Builder can no longer merge two nodes." },
       { kind: "feature", text: "This What's New page.", link: "/whats-new" },
+      { kind: "content", text: "Worked case (made-up data): audit observations, calibrate, validate on a held-out storm, run an uncertainty ensemble and download a review package.", link: "/worked-case" },
       { kind: "feature", text: "Model Library: upload and keep several .inp files in your browser and run any of them on the real engine.", link: "/model-library" },
     ],
   },
