@@ -65,7 +65,7 @@ const pages = [
 const features = [
   { id: "complexity-simulator", label: "Complexity vs. Reliability Simulator", description: "Interactive chart showing optimal model complexity", path: null },
   { id: "responsibility-quiz", label: "Responsibility Score Quiz", description: "20-question self-assessment for your modeling project", path: "/responsibility-quiz" },
-  { id: "model-comparison", label: "James vs. Your Model Comparison", description: "Compare your model against James's standards", path: null },
+  { id: "model-comparison", label: "Rules of Thumb vs. Your Model", description: "Compare your model against illustrative rules of thumb", path: null },
   { id: "model-autopsies", label: "Model Autopsies", description: "Case studies of modeling failures and lessons learned", path: "/model-autopsies" },
   { id: "software-translation", label: "SWMM5/ICM Translation Panels", description: "Map James's principles to specific software actions", path: null },
   { id: "certification-badge", label: "Responsible Modeler Badge", description: "Earn a lesson completion badge", path: null },

@@ -208,6 +208,7 @@ const AboutAuthor = () => {
                     <p><strong>ISBN:</strong> 0-9683681-5-8</p>
                     <p><strong>Pages:</strong> 303</p>
                     <p><strong>Original Draft:</strong> R177p.wp5 (1993-12-27)</p>
+                    <p className="text-xs text-muted-foreground">The CHI web page is an incomplete version abstracted from this 1993 draft, not the 2005 edition.</p>
                   </div>
                 </Card>
               </div>
@@ -285,7 +286,7 @@ const AboutAuthor = () => {
                 rel="noopener noreferrer"
               >
                 <Button variant="outline" className="gap-2">
-                  Read Original Publication <ExternalLink className="w-4 h-4" />
+                  Read CHI Web Version (incomplete, 1993 draft) <ExternalLink className="w-4 h-4" />
                 </Button>
               </a>
               <a 
