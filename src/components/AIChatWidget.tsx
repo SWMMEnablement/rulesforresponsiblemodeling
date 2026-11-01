@@ -1,12 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send, Bot, User, Loader2, Minimize2 } from "lucide-react";
+import { MessageCircle, X, Send, Bot, User, Loader2, Minimize2, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { ScrollArea } from "./ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { CHAT_LIMITS, trimChatHistory, type ChatTurn } from "@/lib/chatHistory";
+import { citedSources, findSources, ORIGINAL_PUBLICATION_URL, toPayloadSources, type ChatSource } from "@/lib/chatSources";
 
-type Message = ChatTurn;
+type Message = ChatTurn & { sources?: ChatSource[] };
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const CHAT_URL = SUPABASE_URL ? `${SUPABASE_URL}/functions/v1/chat` : null;
@@ -33,7 +35,7 @@ export const AIChatWidget = () => {
     }
   }, [isOpen, isMinimized]);
 
-  const streamChat = async (userMessages: Message[]) => {
+  const streamChat = async (userMessages: Message[], sources: ChatSource[]) => {
     if (!CHAT_URL) throw new Error("The chat backend is not configured for this deployment (VITE_SUPABASE_URL is empty).");
     const resp = await fetch(CHAT_URL, {
       method: "POST",
@@ -41,7 +43,7 @@ export const AIChatWidget = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
       },
-      body: JSON.stringify({ messages: trimChatHistory(userMessages) }),
+      body: JSON.stringify({ messages: trimChatHistory(userMessages), sources: toPayloadSources(sources) }),
     });
 
     if (!resp.ok) {
@@ -86,7 +88,7 @@ export const AIChatWidget = () => {
                   i === prev.length - 1 ? { ...m, content: assistantContent } : m
                 );
               }
-              return [...prev, { role: "assistant", content: assistantContent }];
+              return [...prev, { role: "assistant", content: assistantContent, sources }];
             });
           }
         } catch {
@@ -108,7 +110,7 @@ export const AIChatWidget = () => {
     setIsLoading(true);
 
     try {
-      await streamChat(updatedMessages);
+      await streamChat(updatedMessages, findSources(userMessage.content));
     } catch (error) {
       console.error("Chat error:", error);
       setMessages((prev) => [
@@ -235,6 +237,7 @@ export const AIChatWidget = () => {
                       )}
                     >
                       <p className="whitespace-pre-wrap">{msg.content}</p>
+                      {msg.role === "assistant" && !msg.isError && msg.sources && <SourceList answer={msg.content} sources={msg.sources} />}
                     </div>
                     {msg.role === "user" && (
                       <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
@@ -279,3 +282,31 @@ export const AIChatWidget = () => {
     </div>
   );
 };
+
+function SourceList({ answer, sources }: { answer: string; sources: ChatSource[] }) {
+  const cited = citedSources(answer, sources);
+  return (
+    <div className="mt-2 pt-2 border-t border-border/60 text-xs space-y-1">
+      {cited.length > 0 ? (
+        <>
+          <p className="font-medium text-foreground">Sources</p>
+          <ul className="space-y-0.5">
+            {cited.map((s) => (
+              <li key={s.n}>
+                <Link to={s.url} className="text-primary underline underline-offset-2">[{s.n}] Chapter {s.chapter}: {s.section}</Link>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p className="text-muted-foreground">No chapter summary was cited. Treat this as general guidance.</p>
+      )}
+      <p className="text-muted-foreground">
+        Sources are the app's own summaries, not quotes from William James.{" "}
+        <a href={ORIGINAL_PUBLICATION_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 underline underline-offset-2">
+          Original publication <ExternalLink className="h-3 w-3" />
+        </a>
+      </p>
+    </div>
+  );
+}
