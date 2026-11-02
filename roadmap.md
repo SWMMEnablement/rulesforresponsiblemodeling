@@ -19,3 +19,12 @@
 - [ ] 4th-edition page references for chapters: needs the printed 2005 edition.
 - [x] Full worked case with clearly made-up data (observations → calibration → validation → uncertainty → review package).
 
+
+# Tough-grade review (83/100)
+- [ ] Worked case: autosave, resume, export/import session, start over.
+- [ ] Worked case: per-run pipe capacity, surcharge time, peak water level and flood volume.
+- [ ] Worked case: diagnostic coverage explanation, conditional percentiles, run-count choice and convergence check.
+- [ ] Audit SWMM/ICM advice (reporting step, gauge ratios, terrain resolution, ICM tool names).
+- [ ] Chapters 2 and 4 quotations labelled as paraphrases; replace fixed self-grade with dated review log.
+- [ ] Homepage: "Start the worked case" as main action plus Learn / Experiment / Review my model.
+- [ ] Next feature (not started): worked case on the user's own INP + observed-flow CSV.
