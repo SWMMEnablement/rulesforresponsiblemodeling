@@ -1647,7 +1647,7 @@ const chapterExamples: Record<number, ChapterExamples> = {
     },
     icmSwmm: {
       title: "Uncertainty Analysis in ICM SWMM",
-      description: "Quantify uncertainty in SWMM networks using ICM's sensitivity tools.",
+      description: "Quantify uncertainty in SWMM networks with repeated ICM runs (scripted or built-in, depending on version).",
       steps: [
         "Identify key uncertain parameters in SWMM network",
         "Use ICM's sensitivity analysis to rank parameter importance",
@@ -1658,7 +1658,7 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Present results with confidence intervals"
       ],
       tips: [
-        "ICM's sensitivity tool works with SWMM parameters",
+        "Check whether your ICM version's sensitivity tooling supports SWMM networks",
         "Focus uncertainty effort on dominant parameters",
         "Maintain SWMM export for regulatory documentation"
       ]
@@ -1676,7 +1676,7 @@ const chapterExamples: Record<number, ChapterExamples> = {
         "Document parameter sensitivity rankings"
       ],
       tips: [
-        "ICM's sensitivity tool quickly identifies dominant parameters",
+        "Ranking parameter responses identifies the dominant ones",
         "Focus uncertainty effort on parameters that matter most",
         "Consider both input and structural uncertainty"
       ]

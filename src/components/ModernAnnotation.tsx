@@ -808,7 +808,7 @@ puts "Simulation complete. Check results at key nodes."`
       modernPerspective: "Dr. James's insight remains valid: short, accurate calibration periods suffice. Modern practice adds: calibrate to extremes (low flows and peaks) not just overall fit, and validate across seasons.",
       softwareGuidance: {
         swmm: "Split your calibration period by season. Verify the model performs well for both summer low flows and winter baseflow.",
-        icm: "Use ICM's calibration wizard but manually check low-flow and high-flow performance separately."
+        icm: "If your ICM version has calibration tools, use them but manually check low-flow and high-flow performance separately."
       },
       practicalTip: "A model that fits annual totals but misses seasonal patterns may fail for ecological or water supply applications."
     }
@@ -1238,7 +1238,7 @@ end`
       modernPerspective: "Automatic calibration tools are powerful but dangerous without sensitivity analysis first. Modern practice: sensitivity analysis → select 5-10 key parameters → automatic calibration → manual refinement → validation.",
       softwareGuidance: {
         swmm: "PEST and SWMM-EPANET-Integration support gradient-based and genetic algorithm calibration. Define tight bounds based on physical reasoning.",
-        icm: "ICM's calibration wizard is effective but verify results manually. Watch for equifinality—multiple parameter sets may produce similar fits."
+        icm: "Automated calibration tools (where your ICM version has them) save time, but verify results manually. Watch for equifinality—multiple parameter sets may produce similar fits."
       },
       codeSnippets: [
         {
