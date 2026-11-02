@@ -1165,7 +1165,7 @@ const chapterExamples: Record<number, ChapterExamples> = {
       ],
       tips: [
         "2D adds value for surface flooding, not necessarily pipe hydraulics",
-        "Mesh resolution should match your DEM accuracy",
+        "Choose mesh resolution for the flow paths that matter; it cannot be more accurate than the ground data",
         "The CFL condition controls timestep in 2D—finer mesh = slower runs"
       ]
     },

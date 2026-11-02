@@ -20,43 +20,43 @@ const translations: ChapterTranslation[] = [
   {
     chapter: 2, title: "Discretization & Complexity",
     translations: [
-      { rule: "Match spatial resolution to data and purpose", swmm: "Start with fewer subcatchments; test if adding more changes your design decision", icm: "Don't use 2D surface flooding if your DTM is 10m resolution" },
-      { rule: "Temporal resolution must match rainfall data", swmm: "Use reporting timestep ≤ wet-weather timestep; ensure routing timestep < conduit travel time", icm: "Set timestep multiplier appropriately; use adaptive timestepping for stability" },
+      { rule: "Match spatial resolution to data and purpose", swmm: "Start with fewer subcatchments; test if adding more changes your design decision", icm: "Before trusting 2D flood extents, check that the ground model can represent the flow paths that matter (kerbs, walls, narrow channels). A coarse ground model can still suit broad screening." },
+      { rule: "Time steps must resolve what the decision depends on", swmm: "The reporting step only controls how often results are saved; it is separate from the wet-weather runoff step and the routing step. Choose a reporting step short enough to capture the peaks and durations you will report, a rainfall interval that matches the data, and a routing step short enough for stable results, then check the continuity errors.", icm: "Choose a results timestep that captures the peaks you will report, and check the run's convergence and volume balance rather than relying on a fixed setting." },
     ],
   },
   {
     chapter: 4, title: "Optimal Complexity",
     translations: [
       { rule: "Optimal complexity is not maximum complexity", swmm: "Don't use DYNWAVE if KINWAVE gives acceptable results for your purpose", icm: "Don't enable full 2D unless the decision requires surface flood mapping" },
-      { rule: "Match complexity to data availability", swmm: "A 500-subcatchment model calibrated to 2 rain gages is lying to you", icm: "Don't use 2D surface flooding if your DTM is 10m resolution" },
+      { rule: "Match complexity to data availability", swmm: "A 500-subcatchment model calibrated with 2 rain gauges probably has more spatial detail than the rainfall data can support. Test whether the answer depends on that detail.", icm: "Ask whether the ground model and survey data support the 2D detail you plan to report." },
       { rule: "Simpler models may be more reliable", swmm: "Test: Does adding the 50th subcatchment change your design decision? If not, you don't need it.", icm: "Compare results between simplified and detailed network representations" },
     ],
   },
   {
     chapter: 9, title: "Objective Functions",
     translations: [
-      { rule: "Use multiple objective functions", swmm: "Compare NSE, RMSE, and peak flow error — not just visual fit", icm: "Use ICM's built-in statistics (R², volume error, peak timing) in calibration reports" },
+      { rule: "Use multiple objective functions", swmm: "Compare NSE, RMSE, and peak flow error — not just visual fit", icm: "Report fit statistics such as volume error, peak error and timing, from the software's comparison tools or your own scripts" },
       { rule: "Match the metric to the decision", swmm: "For CSO frequency, track overflow count, not just peak match", icm: "For flood mapping, prioritize depth accuracy over flow accuracy" },
     ],
   },
   {
     chapter: 10, title: "Uncertainty Analysis",
     translations: [
-      { rule: "Uncertainty must be communicated honestly", swmm: "Run Monte Carlo on Manning's n, imperviousness, and depression storage", icm: "Use ICM's Monte Carlo sensitivity tool on your top 5 uncertain parameters" },
+      { rule: "Uncertainty must be communicated honestly", swmm: "Run Monte Carlo on Manning's n, imperviousness, and depression storage", icm: "Run repeated simulations with your most uncertain parameters varied (scripted, or with built-in tools where your version has them)" },
       { rule: "Present confidence intervals, not single values", swmm: "Report peak flow as a range (e.g., 2.5-4.1 m³/s) not a point estimate", icm: "Use ensemble runs to generate confidence bands on flood extents" },
     ],
   },
   {
     chapter: 11, title: "Sensitivity Analysis",
     translations: [
-      { rule: "Rank parameters by influence on output", swmm: "Vary one parameter at a time across ±20% and plot output response", icm: "Use ICM's sensitivity analysis module to auto-rank parameter importance" },
-      { rule: "Fix insensitive parameters to literature values", swmm: "If Dstore-perv doesn't change results, use 5mm and stop calibrating it", icm: "Reduce calibration parameter set to only sensitive parameters" },
+      { rule: "Rank parameters by influence on output", swmm: "Vary one parameter at a time across a plausible range and plot the output response", icm: "Change one parameter at a time and rank the responses; check your version's documentation for any built-in sensitivity tools" },
+      { rule: "Fix insensitive parameters to literature values", swmm: "If Dstore-perv doesn't change results, fix it at a documented literature value and stop calibrating it", icm: "Reduce calibration parameter set to only sensitive parameters" },
     ],
   },
   {
     chapter: 14, title: "Parameter Optimization",
     translations: [
-      { rule: "Split calibration and validation datasets", swmm: "Never validate on the same events you calibrated to — use at least 1 separate event", icm: "Use ICM's auto-calibration with a held-out validation period" },
+      { rule: "Split calibration and validation datasets", swmm: "Never validate on the same events you calibrated to — use at least 1 separate event", icm: "If you use automated calibration (built-in or scripted, depending on version), still keep a held-out validation period" },
       { rule: "Avoid over-parameterization", swmm: "If you have 50 subcatchments but only 1 rain gage and 1 event, you cannot independently constrain all parameters", icm: "Reduce degrees of freedom by grouping similar subcatchments" },
     ],
   },
@@ -70,7 +70,10 @@ export const SoftwareTranslationPanels = () => {
         <h2 className="text-2xl font-bold text-foreground">SWMM5 / ICM Translation Panels</h2>
       </div>
       <p className="text-muted-foreground mb-6 text-sm">
-        James's principles translated into specific software actions. Click a chapter to expand.
+        Principles from the book translated into software actions. Click a chapter to expand.
+      </p>
+      <p className="text-muted-foreground mb-6 text-xs -mt-4">
+        App-written practice guidance, not quotations. Feature names and menus differ between SWMM and InfoWorks ICM versions; check your version's documentation.
       </p>
 
       <div className="space-y-3">

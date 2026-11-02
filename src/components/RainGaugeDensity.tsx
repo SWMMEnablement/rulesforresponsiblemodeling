@@ -53,12 +53,12 @@ export const RainGaugeDensity = () => {
               <HelpCircle className="w-5 h-5 text-muted-foreground cursor-help" />
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
-              <p>How many rain gauges do you need? James says: subcatchments should not exceed 3–5× gauge count. Ch. 6, 7, & 4.</p>
+              <p>How many rain gauges do you need? The 5:1 limit here is an illustrative rule of thumb for this app, not a published standard. The right number depends on storm size, gauge spacing and what the model is for. See Ch. 4, 6 and 7.</p>
             </TooltipContent>
           </Tooltip>
         </div>
         <p className="text-muted-foreground mb-6 text-sm">
-          Adjust gauge count and subcatchments to see spatial coverage and James's recommended ratios.
+          Adjust gauge count and subcatchments to see spatial coverage against an illustrative ratio.
         </p>
 
         {/* Sliders */}
@@ -110,12 +110,12 @@ export const RainGaugeDensity = () => {
             {isOversubscribed && <AlertTriangle className="w-5 h-5 text-destructive mt-0.5 shrink-0" />}
             <div>
               <p className="font-semibold text-sm text-foreground">
-                Ratio: {Math.round(ratio)}:1 (Recommended max: 5:1)
+                Ratio: {Math.round(ratio)}:1 (Illustrative max: 5:1)
               </p>
               <p className="text-xs text-muted-foreground mt-1">
                 {isOversubscribed
-                  ? `You have ${Math.round(ratio)} subcatchments per gauge. Most receive IDENTICAL rainfall. Reduce subcatchments to ≤${maxRecommended} or add more gauges.`
-                  : `Good ratio. Each gauge supports ${Math.round(ratio)} subcatchments — spatial variability is adequately represented.`}
+                  ? `You have ${Math.round(ratio)} subcatchments per gauge. Many receive identical rainfall. Check whether the answer depends on that detail; consider ≤${maxRecommended} subcatchments or more gauges.`
+                  : `Good ratio. Each gauge supports ${Math.round(ratio)} subcatchments — within this illustrative limit. Whether it is enough depends on how much rainfall varies across your catchment.`}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
                 Storm cell captured by {capturedGauges}/{gauges} gauge{capturedGauges !== 1 ? "s" : ""}.

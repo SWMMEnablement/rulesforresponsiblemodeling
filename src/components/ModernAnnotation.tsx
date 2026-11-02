@@ -488,7 +488,7 @@ print(f"  Small (<0.5 ha): {len(small)} ({100*len(small)/len(areas_ha):.1f}%)")`
       originalConcept: "Temporal Discretization",
       modernPerspective: "Modern continuous rainfall data (1-5 minute) enables finer timesteps, but CFL constraints and computational efficiency still matter for long-term simulations. Variable timesteps are now standard practice.",
       softwareGuidance: {
-        swmm: "Use SWMM's variable timestep routing. Set wet-weather steps to 15-30 seconds, dry-weather to 5-15 minutes for efficiency.",
+        swmm: "Use SWMM's variable routing step for dynamic wave, a wet-weather runoff step short enough for your rainfall data, and a longer dry-weather step for efficiency. Confirm the choice with continuity errors and by halving the steps to see whether results change.",
         icm: "ICM handles variable timesteps automatically. Monitor the 'minimum timestep used' in run logs to verify stability."
       },
       practicalTip: "For 30+ year simulations, balance accuracy against run time. A 20% faster model enables more sensitivity runs."
