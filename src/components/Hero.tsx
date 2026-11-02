@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 import { usePathwayProgress } from "@/hooks/usePathwayProgress";
 import { useBookmarks } from "@/hooks/useBookmarks";
-import { hasProgress, loadSession, stepsDone } from "@/lib/workedCaseSession";
+import { hasProgress as caseHasProgress, loadSession, stepsDone } from "@/lib/workedCaseSession";
 
 const routes = [
   { to: "/study-guide", icon: GraduationCap, title: "Learn", desc: "Read the 17 chapters through a Student (8–10 hrs), Practitioner (4–5 hrs) or Ethics (3–4 hrs) path.", cta: "Choose a path" },
@@ -23,7 +23,7 @@ export const Hero = () => {
   const { progress } = usePathwayProgress();
   const { bookmarks } = useBookmarks();
   const [caseSession] = useState(() => loadSession());
-  const caseInProgress = hasProgress(caseSession);
+  const caseInProgress = caseHasProgress(caseSession);
   const caseSteps = stepsDone(caseSession);
 
   // Find most recent pathway / bookmark for "resume"
