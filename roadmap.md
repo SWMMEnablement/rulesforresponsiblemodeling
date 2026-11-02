@@ -21,10 +21,10 @@
 
 
 # Tough-grade review (83/100)
-- [ ] Worked case: autosave, resume, export/import session, start over.
-- [ ] Worked case: per-run pipe capacity, surcharge time, peak water level and flood volume.
-- [ ] Worked case: diagnostic coverage explanation, conditional percentiles, run-count choice and convergence check.
-- [ ] Audit SWMM/ICM advice (reporting step, gauge ratios, terrain resolution, ICM tool names).
-- [ ] Chapters 2 and 4 quotations labelled as paraphrases; replace fixed self-grade with dated review log.
-- [ ] Homepage: "Start the worked case" as main action plus Learn / Experiment / Review my model.
+- [x] Worked case: autosave, resume, export/import session, start over.
+- [x] Worked case: per-run pipe capacity, surcharge time, peak water level and flood volume.
+- [x] Worked case: diagnostic coverage explanation, conditional percentiles, run-count choice and convergence check.
+- [x] Audit SWMM/ICM advice (reporting step, gauge ratios, terrain resolution, ICM tool names).
+- [x] Chapters 2 and 4 quotations labelled as paraphrases; replace fixed self-grade with dated review log.
+- [x] Homepage: "Start the worked case" as main action plus Learn / Experiment / Review my model.
 - [ ] Next feature (not started): worked case on the user's own INP + observed-flow CSV.
