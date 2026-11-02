@@ -28,12 +28,13 @@ const Chapter3 = () => {
           </p>
 
           <Card className="p-6 bg-secondary/5 border-l-4 border-l-secondary mb-6">
-            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Data Reliability</h3>
-            <p className="text-muted-foreground italic mb-3">
-              "Garbage in, garbage out is an oversimplification. The real challenge is that imperfect 
+            <h3 className="text-lg font-bold text-foreground mb-2">James on Data Reliability: a paraphrase</h3>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">App-written paraphrase, not a quotation. Not yet checked against a page of the 2005 edition.</p>
+            <p className="text-foreground/90 border-l-2 border-primary pl-3 mb-3">
+              Garbage in, garbage out is an oversimplification. The real challenge is that imperfect 
               data, when carefully characterized and properly propagated through uncertainty analysis, 
               can still support sound decisions. Unknown data quality is far more dangerous than 
-              known imperfection."
+              known imperfection.
             </p>
             <p className="text-sm text-muted-foreground">
               Dr. James stressed that data quality assessment should be systematic and documented. 

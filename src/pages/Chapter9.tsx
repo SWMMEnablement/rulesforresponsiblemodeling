@@ -28,12 +28,13 @@ const Chapter9 = () => {
           </p>
 
           <Card className="p-6 bg-secondary/5 border-l-4 border-l-secondary mb-6">
-            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Objective Functions</h3>
-            <p className="text-muted-foreground italic mb-3">
-              "The choice of objective function is itself a modeling decision that deserves careful 
+            <h3 className="text-lg font-bold text-foreground mb-2">James on Objective Functions: a paraphrase</h3>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">App-written paraphrase, not a quotation. Not yet checked against a page of the 2005 edition.</p>
+            <p className="text-foreground/90 border-l-2 border-primary pl-3 mb-3">
+              The choice of objective function is itself a modeling decision that deserves careful 
               consideration. Different objectives will lead to different 'optimal' parameter sets, 
               and no single metric captures all aspects of model performance. The objective function 
-              should reflect what matters most for your specific application."
+              should reflect what matters most for your specific application.
             </p>
             <p className="text-sm text-muted-foreground">
               Dr. James cautioned against blindly adopting standard metrics without considering project 

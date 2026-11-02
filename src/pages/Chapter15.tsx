@@ -82,12 +82,13 @@ graph LR
           </ul>
 
           <Card className="p-6 bg-background/50 mt-6">
-            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Fuzzy Approaches</h3>
-            <p className="text-muted-foreground italic mb-3">
-              "Fuzzy logic excels where traditional crisp models struggle—in situations where expert 
+            <h3 className="text-lg font-bold text-foreground mb-2">James on Fuzzy Approaches: a paraphrase</h3>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">App-written paraphrase, not a quotation. Not yet checked against a page of the 2005 edition.</p>
+            <p className="text-foreground/90 border-l-2 border-primary pl-3 mb-3">
+              Fuzzy logic excels where traditional crisp models struggle—in situations where expert 
               knowledge is available but precise mathematical relationships are not. It provides a 
               bridge between human reasoning and computational models, particularly valuable for 
-              real-time decision support where operators must act quickly with imperfect information."
+              real-time decision support where operators must act quickly with imperfect information.
             </p>
             <p className="text-sm text-muted-foreground">
               Dr. James recognized that many water management decisions involve qualitative judgments 
