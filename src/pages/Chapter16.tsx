@@ -92,7 +92,7 @@ graph TD
 
           <Card className="p-6 bg-background/50 mt-6">
             <h3 className="text-lg font-bold text-foreground mb-2">James on Model Certainty: a paraphrase</h3>
-            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">App-written paraphrase, not a quotation. Not yet checked against a page of the 2005 edition.</p>
+            <p className="text-xs text-muted-foreground mb-1">App-written paraphrase, not a quotation. Not yet checked against a page of the 2005 edition.</p>
             <p className="text-foreground/90 border-l-2 border-primary pl-3 mb-3">
               Model error is not a sign of failure—it is an inherent characteristic of all models. 
               The responsible approach is not to minimize error at any cost, but to characterize it 

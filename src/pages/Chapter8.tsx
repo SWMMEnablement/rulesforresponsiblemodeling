@@ -29,7 +29,7 @@ const Chapter8 = () => {
 
           <Card className="p-6 bg-secondary/5 border-l-4 border-l-secondary mb-6">
             <h3 className="text-lg font-bold text-foreground mb-2">James on Decision Support Systems: a paraphrase</h3>
-            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">App-written paraphrase, not a quotation. Not yet checked against a page of the 2005 edition.</p>
+            <p className="text-xs text-muted-foreground mb-1">App-written paraphrase, not a quotation. Not yet checked against a page of the 2005 edition.</p>
             <p className="text-foreground/90 border-l-2 border-primary pl-3 mb-3">
               A decision support system is more than a model with a pretty interface. It is a framework 
               that integrates data management, modeling, analysis, and communication into a coherent 
