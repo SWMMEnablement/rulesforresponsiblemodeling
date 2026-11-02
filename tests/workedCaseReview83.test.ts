@@ -28,7 +28,7 @@ describe("worked case session is kept", () => {
   test("an untouched session is not offered for resume; a confirmed audit is", () => {
     expect(hasProgress({ ...session, auditConfirmed: false, excluded: { A: [], B: [], C: [] } })).toBe(false);
     expect(hasProgress(session)).toBe(true);
-    expect(stepsDone(session)).toBe(1);
+    expect(stepsDone(session)).toBe(2); // audit confirmed + validation run
   });
 });
 
