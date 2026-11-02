@@ -2265,7 +2265,8 @@ export const SoftwareExamples = ({ chapterNumber }: SoftwareExamplesProps) => {
             Chapter {chapterNumber}: Practical Software Examples
           </DialogTitle>
           <DialogDescription>
-            Compare implementation approaches across EPA SWMM5, ICM SWMM Networks, and InfoWorks ICM
+            Compare implementation approaches across EPA SWMM5, ICM SWMM Networks, and InfoWorks ICM.
+            These are app-written examples: tool names and menus change between versions, so check them against your version's documentation.
           </DialogDescription>
         </DialogHeader>
         
