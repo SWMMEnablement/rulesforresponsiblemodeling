@@ -41,7 +41,7 @@ export const Navigation = () => {
     { to: "/glossary", icon: Library, label: "Glossary" },
     { to: "/resources", icon: BookOpen, label: "Resources" },
     { to: "/phd-thesis", icon: FlaskConical, label: "Goyen PhD Thesis" },
-    { to: "/grade-report", icon: Award, label: "Grade Report" },
+    { to: "/grade-report", icon: Award, label: "Review Log" },
     { to: "/cross-reference", icon: Grid3X3, label: "Cross-Ref" },
     { to: "/progress", icon: BarChart3, label: "My Progress" },
     { to: "/whats-new", icon: History, label: "What's New" },
