@@ -1,21 +1,16 @@
-import { BookOpen, Activity, Code2, ExternalLink, Github, GraduationCap, Briefcase, Shield, ArrowRight, Search, Compass, SearchX, Layers, Sparkles, PlayCircle, Route, FlaskConical, Archive } from "lucide-react";
+import { BookOpen, Activity, Code2, ExternalLink, Github, GraduationCap, Shield, ArrowRight, Search, Compass, SearchX, Layers, Sparkles, PlayCircle, Route, FlaskConical, Archive } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 import { usePathwayProgress } from "@/hooks/usePathwayProgress";
 import { useBookmarks } from "@/hooks/useBookmarks";
+import { hasProgress as caseHasProgress, loadSession, stepsDone } from "@/lib/workedCaseSession";
 
-const quickPaths = [
-  { to: "/study-guide", icon: GraduationCap, title: "Student Path", desc: "Foundation-first approach", preview: "Chapters 1–6 + diagnostic", time: "8-10 hrs", color: "from-blue-500 to-cyan-500" },
-  { to: "/study-guide", icon: Briefcase, title: "Practitioner Review", desc: "Quick refresher for pros", preview: "SWMM5/ICM translation panels", time: "4-5 hrs", color: "from-emerald-500 to-teal-500" },
-  { to: "/study-guide", icon: Shield, title: "Ethics Deep Dive", desc: "Philosophy & uncertainty", preview: "Autopsies + responsibility quiz", time: "3-4 hrs", color: "from-purple-500 to-pink-500" },
-];
-
-const engineTools = [
-  { to: "/worked-case", icon: Route, title: "Worked Case", desc: "Audit data, calibrate, validate, add uncertainty and download a review package. A made-up example, start to finish.", cta: "Start the case" },
-  { to: "/playground", icon: FlaskConical, title: "SWMM Playground", desc: "Change roughness, imperviousness and rainfall, run ensembles, or draw your own network.", cta: "Open the Playground" },
-  { to: "/model-library", icon: Archive, title: "Model Library", desc: "Keep your own .inp files in this browser and run any of them with one click.", cta: "Open your library" },
+const routes = [
+  { to: "/study-guide", icon: GraduationCap, title: "Learn", desc: "Read the 17 chapters through a Student (8–10 hrs), Practitioner (4–5 hrs) or Ethics (3–4 hrs) path.", cta: "Choose a path" },
+  { to: "/playground", icon: FlaskConical, title: "Experiment", desc: "Run the real SWMM 5.2 engine: change roughness, imperviousness and rainfall, run ensembles, or draw a network.", cta: "Open the Playground" },
+  { to: "/model-library", icon: Archive, title: "Review my model", desc: "Keep your own .inp files in this browser, run them and check flows and continuity errors.", cta: "Open the Model Library" },
 ];
 
 const scrollTo = (id: string) => {
@@ -27,6 +22,9 @@ export const Hero = () => {
   const [showCodeDialog, setShowCodeDialog] = useState(false);
   const { progress } = usePathwayProgress();
   const { bookmarks } = useBookmarks();
+  const [caseSession] = useState(() => loadSession());
+  const caseInProgress = caseHasProgress(caseSession);
+  const caseSteps = stepsDone(caseSession);
 
   // Find most recent pathway / bookmark for "resume"
   const lastPathway = [...progress].sort((a, b) => b.lastAccessedAt - a.lastAccessedAt)[0];
@@ -75,27 +73,32 @@ export const Hero = () => {
           17 chapters mapped directly to <span className="font-semibold text-white">SWMM5 &amp; InfoWorks ICM</span> — with simulators, illustrative failure autopsies, and a 10-question completion badge.
         </p>
 
-        {/* Primary CTA cluster */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4 animate-slide-up" style={{ animationDelay: "0.28s" }}>
-          {hasProgress && resumeHref ? (
+        {/* One main action, then three routes */}
+        <div className="flex flex-col items-center gap-3 mb-4 animate-slide-up" style={{ animationDelay: "0.28s" }}>
+          <Link to="/worked-case">
+            <Button size="lg" className="h-14 px-8 text-lg bg-white text-primary hover:bg-white/90 font-semibold shadow-lg gap-2">
+              {caseInProgress ? <PlayCircle className="w-6 h-6" /> : <Route className="w-6 h-6" />}
+              {caseInProgress ? `Resume the worked case · ${caseSteps} of 5 steps done` : "Start the worked case"}
+            </Button>
+          </Link>
+          <p className="text-sm text-white/80 max-w-xl">
+            One made-up catchment from observed data through calibration, validation and uncertainty to a review package, on the real SWMM engine.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-8 animate-slide-up" style={{ animationDelay: "0.29s" }}>
+          {hasProgress && resumeHref && (
             <Link to={resumeHref}>
-              <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg gap-2">
-                <PlayCircle className="w-5 h-5" />
-                {resumeLabel}
+              <Button size="sm" variant="outline" className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 gap-2">
+                <BookOpen className="w-4 h-4" /> {resumeLabel}
               </Button>
             </Link>
-          ) : (
-            <Button
-              size="lg"
-              onClick={() => scrollTo("diagnostic-tool")}
-              className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg gap-2"
-            >
-              <Compass className="w-5 h-5" />
-              Take the 3-Question Diagnostic
-            </Button>
           )}
+          <Button size="sm" variant="outline" onClick={() => scrollTo("diagnostic-tool")} className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 gap-2">
+            <Compass className="w-4 h-4" /> 3-question diagnostic
+          </Button>
           <Button
-            size="lg"
+            size="sm"
             variant="outline"
             onClick={() => {
               scrollTo("global-search");
@@ -106,43 +109,18 @@ export const Hero = () => {
             }}
             className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 gap-2"
           >
-            <Search className="w-5 h-5" />
-            Search 17 chapters &amp; tools
+            <Search className="w-4 h-4" /> Search chapters &amp; tools
           </Button>
         </div>
 
-        {/* Pathway Cards */}
-        <div className="grid sm:grid-cols-3 gap-4 mb-10 max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: "0.3s" }}>
-          {quickPaths.map((path) => (
-            <Link key={path.title} to={path.to}>
-              <div className="group h-full p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:border-white/40 hover:-translate-y-0.5 focus-within:bg-white/20 transition-all cursor-pointer text-left">
-                <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${path.color} flex items-center justify-center text-white mb-3`}>
-                  <path.icon className="w-5 h-5" />
-                </div>
-                <h3 className="font-semibold text-white text-sm mb-1">{path.title}</h3>
-                <p className="text-xs text-white/70 mb-2">{path.desc}</p>
-                <p className="text-[11px] text-white/60 mb-3 italic opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
-                  {path.preview}
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-white/50">{path.time}</span>
-                  <ArrowRight className="w-4 h-4 text-white/50 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* Hands-on tools that run the real SWMM engine */}
-        <div className="mb-10 max-w-4xl mx-auto animate-slide-up" style={{ animationDelay: "0.31s" }}>
-          <p className="text-sm font-semibold uppercase tracking-wide text-white/80 mb-3">Hands-on with the real SWMM 5.2 engine</p>
+        <div className="mb-10 max-w-4xl mx-auto animate-slide-up" style={{ animationDelay: "0.3s" }}>
           <div className="grid sm:grid-cols-3 gap-4">
-            {engineTools.map((t) => (
+            {routes.map((t) => (
               <Link key={t.to} to={t.to} className="group block h-full rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
                 <div className="h-full p-5 rounded-xl bg-white/15 backdrop-blur-sm border border-white/30 hover:bg-white/25 hover:border-white/50 hover:-translate-y-0.5 transition-all text-left">
                   <div className="flex items-center gap-2 mb-2">
                     <t.icon className="w-5 h-5 text-white" />
-                    <h3 className="font-semibold text-white">{t.title}</h3>
+                    <h3 className="font-semibold text-white text-lg">{t.title}</h3>
                   </div>
                   <p className="text-sm text-white/85 mb-3">{t.desc}</p>
                   <span className="inline-flex items-center gap-1 text-sm font-medium text-white">

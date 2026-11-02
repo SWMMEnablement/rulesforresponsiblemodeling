@@ -6,6 +6,20 @@ export interface Release { date: string; title: string; summary: string; items: 
 
 export const CHANGELOG: Release[] = [
   {
+    date: "2026-11-02",
+    title: "Worked case you can resume, and clearer hydraulics",
+    summary: "Fixes from an outside review that graded the app 83/100.",
+    items: [
+      { kind: "feature", text: "Worked case saves automatically, resumes where you left off, and can export, import or start over.", link: "/worked-case" },
+      { kind: "accuracy", text: "Worked case checks each run against its own pipe capacity and reports surcharge time, peak water level and flooding.", link: "/worked-case" },
+      { kind: "accuracy", text: "Low uncertainty-band coverage lists possible causes; percentiles are labelled as conditional; choose 20-200 runs with a convergence check.", link: "/worked-case" },
+      { kind: "accuracy", text: "SWMM and ICM advice corrected: the reporting step is separate from the wet-weather step, gauge and terrain rules are qualified, and ICM tool names carry a version caveat." },
+      { kind: "accuracy", text: "Chapter \"James on...\" passages are labelled as app-written paraphrases." },
+      { kind: "accuracy", text: "The fixed self-grade is replaced by a dated Review Log of outside reviews and open findings.", link: "/grade-report" },
+      { kind: "feature", text: "Home page leads with Start the worked case, then Learn, Experiment and Review my model.", link: "/" },
+    ],
+  },
+  {
     date: "2026-11-01",
     title: "Accuracy review and reproducible runs",
     summary: "Fixes from an outside review that graded the app 80/100, plus two monitoring fixes.",

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { addContinuity, EMPTY_CONTINUITY, reviewChecklist, runContinuityErr, sampleCaseEnsemble, START_PARAMS, worstContinuity } from "../src/lib/workedCase";
+import { addContinuity, convergenceCheck, hydraulicSummary, summariseEnsembleHydraulics, EMPTY_CONTINUITY, reviewChecklist, runContinuityErr, sampleCaseEnsemble, START_PARAMS, worstContinuity } from "../src/lib/workedCase";
 import { buildReadme } from "../src/lib/workedCasePackage";
 import { flowStats, summarizeRun } from "../src/lib/swmm/modelLibrary";
 import { citedSources, findSources } from "../src/lib/chatSources";
@@ -32,6 +32,8 @@ describe("review package seed", () => {
       times: [], observed: { A: [], B: [], C: [] }, excluded: { A: [], B: [], C: [] }, trials: [], final: START_PARAMS,
       validation: { nse: 1, peakErrPct: 0, volErrPct: 0, timingMin: 0, n: 1 }, recalibratedAfterValidation: false, seed: 777,
       samples, designPeaks: [1, 2, 3, 4, 5], designDeterministicPeak: 3, p5: 1, p50: 3, p95: 5, exceedProb: 0, coverage: 1, checklist: [], createdAt: "x",
+      hydraulics: [], detHydraulics: hydraulicSummary([3], [2], [[0]], 0.013), hydraulicStats: summariseEnsembleHydraulics([]),
+      convergence: convergenceCheck([1, 2, 3, 4, 5]), coverageCauses: [],
     });
     expect(readme).toContain("master seed **777**");
     expect(sampleCaseEnsemble(START_PARAMS, 777, 5)).toEqual(samples);

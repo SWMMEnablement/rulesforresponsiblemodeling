@@ -94,12 +94,13 @@ graph TD
           </ul>
 
           <Card className="p-6 bg-background/50 mt-6">
-            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Optimal Complexity</h3>
-            <p className="text-muted-foreground italic mb-3">
-              "There exists an optimal order of model complexity for any given application. Below this 
+            <h3 className="text-lg font-bold text-foreground mb-2">James on Optimal Complexity: a paraphrase</h3>
+            <p className="text-xs text-muted-foreground mb-1">App-written paraphrase, not a quotation. Not yet checked against a page of the 2005 edition.</p>
+            <p className="text-foreground/90 border-l-2 border-primary pl-3 mb-3">
+              There exists an optimal order of model complexity for any given application. Below this 
               optimum, the model fails to capture essential physics. Above it, parameter uncertainty 
               overwhelms any gain in structural accuracy. Finding this optimum requires systematic 
-              evaluation, not intuition."
+              evaluation, not intuition.
             </p>
             <p className="text-sm text-muted-foreground">
               Dr. James's concept of "optimal order of complexity" provides a framework for model selection. 

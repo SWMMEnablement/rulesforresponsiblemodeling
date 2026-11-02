@@ -34,11 +34,12 @@ const Chapter2 = () => {
           </p>
 
           <Card className="p-6 bg-secondary/5 border-l-4 border-l-secondary mb-6">
-            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Discretization Error</h3>
-            <p className="text-muted-foreground italic mb-3">
-              "Discretization error is often the largest source of model uncertainty, yet it is frequently 
+            <h3 className="text-lg font-bold text-foreground mb-2">James on Discretization Error: a paraphrase</h3>
+            <p className="text-xs text-muted-foreground mb-1">App-written paraphrase, not a quotation. Not yet checked against a page of the 2005 edition.</p>
+            <p className="text-foreground/90 border-l-2 border-primary pl-3 mb-3">
+              Discretization error is often the largest source of model uncertainty, yet it is frequently 
               overlooked in favor of parameter uncertainty. The choice of spatial and temporal resolution 
-              should be treated with the same rigor as parameter calibration."
+              should be treated with the same rigor as parameter calibration.
             </p>
             <p className="text-sm text-muted-foreground">
               Dr. James emphasized that discretization errors arise from approximating continuous processes 

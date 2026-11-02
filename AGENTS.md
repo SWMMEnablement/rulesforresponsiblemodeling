@@ -10,3 +10,4 @@
 - Store Model Library .inp files in the visitor's browser (IndexedDB) through the modelLibrary helper, because the app has no sign-in and model files can exceed localStorage quotas.
 - Generate worked-case observations from a hidden parameter set plus seeded noise in the workedCase helper, and label the case and its targets as fictional and illustrative, so the example stays reproducible and never passes as real data.
 - Ground Ask James answers in the app's own chapter summaries picked by the chatSources helper and shown as numbered, clickable citations labelled as app summaries, because the app holds no verified text of the 2005 book.
+- Save Worked Case progress through the workedCaseSession helper (browser storage plus JSON export/import), storing decisions and results but regenerating the synthetic observations, so sessions stay small and survive leaving the page.

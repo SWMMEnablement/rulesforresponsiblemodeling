@@ -275,12 +275,13 @@ graph TD
           </ul>
 
           <Card className="p-6 bg-background/50 mt-6">
-            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Parameter Optimization</h3>
-            <p className="text-muted-foreground italic mb-3">
-              "Optimization is a powerful tool, but it is not magic. A well-optimized poor model 
+            <h3 className="text-lg font-bold text-foreground mb-2">James on Parameter Optimization: a paraphrase</h3>
+            <p className="text-xs text-muted-foreground mb-1">App-written paraphrase, not a quotation. Not yet checked against a page of the 2005 edition.</p>
+            <p className="text-foreground/90 border-l-2 border-primary pl-3 mb-3">
+              Optimization is a powerful tool, but it is not magic. A well-optimized poor model 
               will still give poor predictions. Optimization should follow, not replace, careful 
               model construction and should always be accompanied by uncertainty analysis of the 
-              resulting parameter values."
+              resulting parameter values.
             </p>
             <p className="text-sm text-muted-foreground">
               Dr. James emphasized that optimization algorithms find the best parameters for a given 

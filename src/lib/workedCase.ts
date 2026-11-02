@@ -305,6 +305,8 @@ export interface CaseLog {
   continuityUnknownRuns?: number;
   ensembleSize: number;
   coverage: number;
+  /** Result of convergenceCheck on the design peaks; undefined before an ensemble is run. */
+  ensembleStable?: boolean;
 }
 export interface CheckItem { label: string; status: "pass" | "warn" | "fail"; detail: string }
 
@@ -331,6 +333,101 @@ export function reviewChecklist(l: CaseLog): CheckItem[] {
     { label: "Uncertainty quantified with a recorded seed", status: l.ensembleSize >= 20 ? "pass" : "fail",
       detail: l.ensembleSize ? `${l.ensembleSize} runs` : "Ensemble not run" },
     { label: "Uncertainty band checked against held-out data", status: !Number.isFinite(l.coverage) ? "fail" : l.coverage >= 0.8 ? "pass" : "warn",
-      detail: Number.isFinite(l.coverage) ? `${Math.round(l.coverage * 100)}% of Event C observations inside the 5-95% band` : "Not checked" },
+      detail: Number.isFinite(l.coverage) ? `${Math.round(l.coverage * 100)}% of Event C observations inside the 5-95% band` + (l.coverage < 0.8 ? "; possible causes listed in the report" : "") : "Not checked" },
+    { label: "Ensemble percentiles settled", status: l.ensembleStable === undefined ? "fail" : l.ensembleStable ? "pass" : "warn",
+      detail: l.ensembleStable === undefined ? "Ensemble not run" : l.ensembleStable ? "First half and all runs agree within 5%" : "Percentiles still moving; use more runs before relying on them" },
+  ];
+}
+
+// ---------- hydraulic consequences ----------
+/** Upstream node of the gauged pipe C3 (invert elevation, ft, and depth to ground, ft). */
+export const C3_UPSTREAM = { node: "J3", invertFt: 101, maxDepthFt: 8 };
+
+/** Normal-flow (full-pipe Manning) capacity of C3 for a given roughness. A reference value only:
+ * dynamic-wave routing can push more than this through the pipe under pressure. */
+export const c3CapacityFor = (n: number) => fullPipeCapacity(C3.diameterFt, C3.slope, n);
+
+export interface HydraulicSummary {
+  peakFlowCfs: number;
+  capacityCfs: number;
+  /** Minutes the water at J3 stands above the crown of C3 (pipe surcharged). */
+  surchargeMin: number;
+  /** Highest hydraulic grade (water level) at J3, ft. */
+  maxHglFt: number;
+  /** Water lost to flooding at any node, ft3. */
+  floodFt3: number;
+}
+
+export function hydraulicSummary(flow: number[], depthJ3: number[], floodRates: number[][], conduitN: number, dtMin = REPORT_STEP_MIN): HydraulicSummary {
+  const crown = C3.diameterFt;
+  const surcharged = depthJ3.filter((d) => d > crown + 1e-6).length;
+  const flood = floodRates.reduce((s, series) => s + series.reduce((a, q) => a + Math.max(0, q), 0), 0) * dtMin * 60;
+  return {
+    peakFlowCfs: flow.length ? Math.max(...flow) : NaN,
+    capacityCfs: c3CapacityFor(conduitN),
+    surchargeMin: surcharged * dtMin,
+    maxHglFt: depthJ3.length ? C3_UPSTREAM.invertFt + Math.max(...depthJ3) : NaN,
+    floodFt3: flood,
+  };
+}
+
+export interface EnsembleHydraulics {
+  /** Share of runs whose peak exceeds that run's own normal-flow capacity. */
+  aboveOwnCapacity: number;
+  surcharged: number;
+  flooded: number;
+  surchargeMinP50: number; surchargeMinP95: number;
+  maxHglP50: number; maxHglP95: number;
+  floodFt3P50: number; floodFt3P95: number;
+  capacityMin: number; capacityMax: number;
+}
+
+export function summariseEnsembleHydraulics(runs: HydraulicSummary[]): EnsembleHydraulics {
+  const share = (pred: (r: HydraulicSummary) => boolean) => (runs.length ? runs.filter(pred).length / runs.length : NaN);
+  const col = (k: keyof HydraulicSummary) => runs.map((r) => r[k]);
+  const caps = col("capacityCfs");
+  return {
+    aboveOwnCapacity: share((r) => r.peakFlowCfs > r.capacityCfs),
+    surcharged: share((r) => r.surchargeMin > 0),
+    flooded: share((r) => r.floodFt3 > 0.5),
+    surchargeMinP50: quantile(col("surchargeMin"), 0.5), surchargeMinP95: quantile(col("surchargeMin"), 0.95),
+    maxHglP50: quantile(col("maxHglFt"), 0.5), maxHglP95: quantile(col("maxHglFt"), 0.95),
+    floodFt3P50: quantile(col("floodFt3"), 0.5), floodFt3P95: quantile(col("floodFt3"), 0.95),
+    capacityMin: caps.length ? Math.min(...caps) : NaN, capacityMax: caps.length ? Math.max(...caps) : NaN,
+  };
+}
+
+// ---------- ensemble size and convergence ----------
+export const ENSEMBLE_SIZES = [20, 40, 100, 200] as const;
+
+export interface Convergence { halfN: number; p50ChangePct: number; p95ChangePct: number; stable: boolean }
+/** Compares percentiles from the first half of the runs with all runs. Under 5% change in both
+ * the median and the 95th percentile is treated as stable for this teaching example. */
+export function convergenceCheck(values: number[], tolPct = 5): Convergence {
+  const halfN = Math.floor(values.length / 2);
+  if (halfN < 5) return { halfN, p50ChangePct: NaN, p95ChangePct: NaN, stable: false };
+  const half = values.slice(0, halfN);
+  const rel = (a: number, b: number) => (b === 0 ? 0 : (Math.abs(a - b) / Math.abs(b)) * 100);
+  const p50ChangePct = rel(quantile(half, 0.5), quantile(values, 0.5));
+  const p95ChangePct = rel(quantile(half, 0.95), quantile(values, 0.95));
+  return { halfN, p50ChangePct, p95ChangePct, stable: p50ChangePct < tolPct && p95ChangePct < tolPct };
+}
+
+// ---------- coverage diagnosis ----------
+export interface CoverageCause { cause: string; detail: string; likely: boolean }
+/** Possible reasons the band misses held-out observations. Never a single automatic verdict. */
+export function coverageDiagnosis(coverage: number, validation: FitMetrics | null, n: number): CoverageCause[] {
+  if (!Number.isFinite(coverage) || coverage >= 0.8) return [];
+  const failed = validation ? !allPass(validation) : false;
+  const biased = validation ? Math.abs(validation.peakErrPct) > TARGETS.peakErrPct || Math.abs(validation.volErrPct) > TARGETS.volErrPct : false;
+  return [
+    { cause: "Biased calibrated parameters", likely: failed,
+      detail: failed ? "Validation missed at least one target, so the band may be centred in the wrong place." : "Validation met the targets, so bias is less likely but still possible." },
+    { cause: "Model structure", likely: biased,
+      detail: "One pipe roughness, one infiltration method and three subcatchments may not be able to reproduce the observed shape whatever the parameters." },
+    { cause: "Rainfall error larger than assumed", likely: false, detail: "The ensemble only scales rainfall by 0.9-1.1. Real gauge and spatial errors can be larger and change timing." },
+    { cause: "Parameter ranges too narrow", likely: false, detail: "The sampling ranges are judgement calls; wider ranges give wider bands." },
+    { cause: "Measurement noise not in the band", likely: false, detail: "The band shows model output only. Observations include gauge noise on top." },
+    { cause: "Too few runs", likely: n < 40, detail: `${n} runs give rough percentiles; try more runs and check that the results settle.` },
   ];
 }

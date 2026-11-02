@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Navigation } from "@/components/Navigation";
@@ -10,27 +10,34 @@ import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { AlertTriangle, CheckCircle2, Download, Eye, Loader2, Lock, Play, Route, Unlock, XCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Download, Eye, Loader2, Lock, Play, RotateCcw, Route, Save, Unlock, Upload, XCircle } from "lucide-react";
 import { ResponsiveContainer, ComposedChart, Line, Area, XAxis, YAxis, Tooltip, CartesianGrid, Legend, ReferenceLine } from "recharts";
 import { runSwmm } from "@/lib/swmm/runner";
 import { parseSwmmOut } from "@/lib/swmm/outParser";
 import {
   addContinuity, allPass, auditSeries, EMPTY_CONTINUITY, runContinuityErr, worstContinuity, bandCoverage, buildCaseInp, C3_CAPACITY_CFS, EVENTS, fitMetrics, GAUGED_LINK, makeObserved, OBSERVED_EVENTS,
   PARAM_RANGES, passes, quantile, rainDepthIn, reviewChecklist, runoffRatio, sampleCaseEnsemble, START_PARAMS, TARGETS, TRUTH, TRUTH_CONDUIT_N,
-  type CaseParams, type CaseSample, type EventKey, type FitMetrics,
+  C3_UPSTREAM, ENSEMBLE_CONDUIT_N, ENSEMBLE_SIZES, MODEL_CONDUIT_N, convergenceCheck, coverageDiagnosis, hydraulicSummary, summariseEnsembleHydraulics,
+  type CaseParams, type EventKey, type FitMetrics, type HydraulicSummary,
 } from "@/lib/workedCase";
+import {
+  clearSession, hasProgress, loadSession, parseSession, saveSession, serializeSession, stepsDone,
+  type EnsembleResult, type ObsKey, type WorkedCaseSession,
+} from "@/lib/workedCaseSession";
 import { buildReviewZip, type CalTrial } from "@/lib/workedCasePackage";
 
-type ObsKey = "A" | "B" | "C";
-interface FlowRun { flow: number[]; times: number[]; contErr: number }
+interface FlowRun { flow: number[]; times: number[]; contErr: number; depthJ3: number[]; flood: number[][] }
 
 async function runFlow(p: CaseParams, key: EventKey, opts?: { conduitN?: number; rainFactor?: number }): Promise<FlowRun> {
   const r = await runSwmm(buildCaseInp(p, EVENTS[key], opts));
   if (!r.ok || !r.out) throw new Error(r.errMsg || r.error || `SWMM returned code ${r.rc}`);
   const s = parseSwmmOut(r.out);
   const li = s.links.indexOf(GAUGED_LINK);
-  if (!s.ok || li < 0) throw new Error("Could not read SWMM results");
+  const ni = s.nodes.indexOf(C3_UPSTREAM.node);
+  if (!s.ok || li < 0 || ni < 0) throw new Error("Could not read SWMM results");
   return {
+    depthJ3: Array.from(s.nodeDepth[ni]),
+    flood: s.nodeFlooding.map((f) => Array.from(f)),
     flow: Array.from(s.linkFlow[li]),
     times: Array.from(s.times, (t) => t / 3600),
     contErr: runContinuityErr(r.massBal.runoffErr, r.massBal.flowErr),
@@ -38,7 +45,9 @@ async function runFlow(p: CaseParams, key: EventKey, opts?: { conduitN?: number;
 }
 
 const fmt = (v: number, d = 2) => (Number.isFinite(v) ? v.toFixed(d) : "–");
-const ENSEMBLE_SIZE = 40;
+const DEFAULT_ENSEMBLE_SIZE = 40;
+const toSets = (e: Record<ObsKey, number[]>): Record<ObsKey, Set<number>> => ({ A: new Set(e.A), B: new Set(e.B), C: new Set(e.C) });
+const sortedIdx = (x: Set<number>) => [...x].sort((a, b) => a - b);
 
 function StepHeader({ n, title, done, locked, children }: { n: number; title: string; done?: boolean; locked?: string; children?: React.ReactNode }) {
   return (
@@ -104,7 +113,7 @@ function FlowChart({ times, obs, sim, exclude, band, capacity, height = 220 }: {
           {sim && <Line dataKey="sim" name="Model" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} isAnimationActive={false} />}
           {obs && <Line dataKey="obs" name="Observed (made up)" stroke="none" dot={{ r: 2, fill: "hsl(var(--foreground))" }} isAnimationActive={false} />}
           {obs && exclude && exclude.size > 0 && <Line dataKey="flagged" name="Excluded" stroke="none" dot={{ r: 4, fill: "hsl(var(--destructive))" }} isAnimationActive={false} />}
-          {capacity && <ReferenceLine y={C3_CAPACITY_CFS} stroke="hsl(var(--destructive))" strokeDasharray="6 3" label={{ value: "C3 full-flow capacity", fontSize: 11, fill: "hsl(var(--destructive))", position: "insideTopRight" }} />}
+          {capacity && <ReferenceLine y={C3_CAPACITY_CFS} stroke="hsl(var(--destructive))" strokeDasharray="6 3" label={{ value: `Reference: normal-flow capacity at n = ${MODEL_CONDUIT_N}`, fontSize: 11, fill: "hsl(var(--destructive))", position: "insideTopRight" }} />}
         </ComposedChart>
       </ResponsiveContainer>
     </div>
@@ -112,33 +121,78 @@ function FlowChart({ times, obs, sim, exclude, band, capacity, height = 220 }: {
 }
 
 export default function WorkedCase() {
+  // Saved session (read once). Observations are regenerated; decisions and results come from here.
+  const [initial] = useState<WorkedCaseSession | null>(() => loadSession());
+  const resumed = useRef(hasProgress(initial));
+  const [resumeNote, setResumeNote] = useState(resumed.current && initial ? `Resumed your saved session from ${new Date(initial.savedAt).toLocaleString()}.` : "");
+  const fileInput = useRef<HTMLInputElement>(null);
   // Step 1: synthetic observations
   const [times, setTimes] = useState<number[]>([]);
   const [observed, setObserved] = useState<Record<ObsKey, number[]> | null>(null);
   const [truthDesignPeak, setTruthDesignPeak] = useState(NaN);
   const [loadError, setLoadError] = useState("");
-  const [excluded, setExcluded] = useState<Record<ObsKey, Set<number>>>({ A: new Set(), B: new Set(), C: new Set() });
-  const [auditConfirmed, setAuditConfirmed] = useState(false);
+  const [excluded, setExcluded] = useState<Record<ObsKey, Set<number>>>(() => toSets(initial?.excluded ?? { A: [], B: [], C: [] }));
+  const [auditConfirmed, setAuditConfirmed] = useState(initial?.auditConfirmed ?? false);
   // Step 2: calibration
-  const [params, setParams] = useState<CaseParams>(START_PARAMS);
-  const [trials, setTrials] = useState<CalTrial[]>([]);
-  const [calSims, setCalSims] = useState<{ A: number[]; B: number[] } | null>(null);
+  const [params, setParams] = useState<CaseParams>(initial?.params ?? START_PARAMS);
+  const [trials, setTrials] = useState<CalTrial[]>(initial?.trials ?? []);
+  const [calSims, setCalSims] = useState<{ A: number[]; B: number[] } | null>(initial?.calSims ?? null);
   const [busy, setBusy] = useState<string>("");
   // Step 3: validation
-  const [locked, setLocked] = useState<CaseParams | null>(null);
-  const [validation, setValidation] = useState<{ sim: number[]; m: FitMetrics } | null>(null);
-  const [recalibrated, setRecalibrated] = useState(false);
+  const [locked, setLocked] = useState<CaseParams | null>(initial?.locked ?? null);
+  const [validation, setValidation] = useState<{ sim: number[]; m: FitMetrics } | null>(initial?.validation ?? null);
+  const [recalibrated, setRecalibrated] = useState(initial?.recalibrated ?? false);
   // Step 4: uncertainty
-  const [seed, setSeed] = useState(2005);
-  const [ensemble, setEnsemble] = useState<{
-    seed: number; samples: CaseSample[]; designPeaks: number[]; designDet: number; designDetFlow: number[];
-    design: { lo: number[]; mid: number[]; hi: number[] }; val: { lo: number[]; mid: number[]; hi: number[] }; coverage: number; contErr: number; progress: number;
-  } | null>(null);
+  const [seed, setSeed] = useState(initial?.seed ?? 2005);
+  const [ensembleSize, setEnsembleSize] = useState(initial?.ensembleSize ?? DEFAULT_ENSEMBLE_SIZE);
+  const [ensemble, setEnsemble] = useState<EnsembleResult | null>(initial?.ensemble ?? null);
   const [progress, setProgress] = useState(0);
-  const [contLog, setContLog] = useState(EMPTY_CONTINUITY);
+  const [contLog, setContLog] = useState(initial?.contLog ?? EMPTY_CONTINUITY);
   // Step 5
-  const [packaged, setPackaged] = useState(false);
-  const [revealed, setRevealed] = useState(false);
+  const [packaged, setPackaged] = useState(initial?.packaged ?? false);
+  const [revealed, setRevealed] = useState(initial?.revealed ?? false);
+
+  const session: WorkedCaseSession = useMemo(() => ({
+    version: 1, fictional: true, savedAt: new Date().toISOString(),
+    excluded: { A: sortedIdx(excluded.A), B: sortedIdx(excluded.B), C: sortedIdx(excluded.C) },
+    auditConfirmed, params, trials, calSims, locked, validation, recalibrated, seed, ensembleSize, ensemble, contLog, packaged, revealed,
+  }), [excluded, auditConfirmed, params, trials, calSims, locked, validation, recalibrated, seed, ensembleSize, ensemble, contLog, packaged, revealed]);
+
+  // Autosave every change so leaving the page (e.g. to the Playground) loses nothing.
+  useEffect(() => {
+    if (hasProgress(session)) saveSession(session);
+  }, [session]);
+
+  const applySession = (s: WorkedCaseSession) => {
+    setExcluded(toSets(s.excluded)); setAuditConfirmed(s.auditConfirmed); setParams(s.params); setTrials(s.trials);
+    setCalSims(s.calSims); setLocked(s.locked); setValidation(s.validation); setRecalibrated(s.recalibrated);
+    setSeed(s.seed); setEnsembleSize(s.ensembleSize); setEnsemble(s.ensemble); setContLog(s.contLog);
+    setPackaged(s.packaged); setRevealed(s.revealed); setLoadError("");
+  };
+
+  const startOver = () => {
+    if (!window.confirm("Start the worked case again? Your saved decisions, trials and results in this browser will be cleared. Export the session first if you want to keep it.")) return;
+    clearSession();
+    applySession({ ...session, excluded: { A: [], B: [], C: [] }, auditConfirmed: false, params: START_PARAMS, trials: [], calSims: null, locked: null,
+      validation: null, recalibrated: false, seed: 2005, ensembleSize: DEFAULT_ENSEMBLE_SIZE, ensemble: null, contLog: EMPTY_CONTINUITY, packaged: false, revealed: false });
+    setResumeNote("");
+  };
+
+  const exportSession = () => {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([serializeSession(session)], { type: "application/json" }));
+    a.download = `fernhollow-session-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
+  const importSession = async (file: File | undefined) => {
+    if (!file) return;
+    const s = parseSession(await file.text());
+    if (!s) { setResumeNote("That file is not a Worked Case session, so nothing was changed."); return; }
+    applySession(s);
+    setResumeNote(`Loaded the session saved on ${new Date(s.savedAt).toLocaleString()}.`);
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -217,14 +271,16 @@ export default function WorkedCase() {
     if (!locked || !observed) return;
     setBusy("ens"); setProgress(0);
     try {
-      const samples = sampleCaseEnsemble(locked, seed, ENSEMBLE_SIZE);
+      const samples = sampleCaseEnsemble(locked, seed, ensembleSize);
       const det = await runFlow(locked, "D");
       const designRuns: number[][] = [], valRuns: number[][] = [];
+      const hydraulics: HydraulicSummary[] = [];
       const errs = [det.contErr];
       for (const s of samples) {
         const d = await runFlow(s, "D", { rainFactor: s.rainFactor, conduitN: s.conduitN });
         const v = await runFlow(s, "C", { rainFactor: s.rainFactor, conduitN: s.conduitN });
         designRuns.push(d.flow); valRuns.push(v.flow);
+        hydraulics.push(hydraulicSummary(d.flow, d.depthJ3, d.flood, s.conduitN));
         errs.push(d.contErr, v.contErr);
         setProgress(designRuns.length);
       }
@@ -243,6 +299,7 @@ export default function WorkedCase() {
       setEnsemble({
         seed, samples, designPeaks: designRuns.map((r) => Math.max(...r)), designDet: Math.max(...det.flow), designDetFlow: det.flow,
         design: bands(designRuns), val, coverage: bandCoverage(observed.C, val.lo, val.hi, excluded.C), contErr, progress: samples.length,
+        hydraulics, detHydraulics: hydraulicSummary(det.flow, det.depthJ3, det.flood, MODEL_CONDUIT_N),
       });
       setPackaged(false);
     } catch (e) { setLoadError(e instanceof Error ? e.message : String(e)); }
@@ -254,6 +311,9 @@ export default function WorkedCase() {
     const p = ensemble.designPeaks;
     return { p5: quantile(p, 0.05), p50: quantile(p, 0.5), p95: quantile(p, 0.95), exceed: p.filter((v) => v > C3_CAPACITY_CFS).length / p.length };
   }, [ensemble]);
+  const hyd = useMemo(() => (ensemble ? summariseEnsembleHydraulics(ensemble.hydraulics) : null), [ensemble]);
+  const conv = useMemo(() => (ensemble ? convergenceCheck(ensemble.designPeaks) : null), [ensemble]);
+  const causes = useMemo(() => (ensemble ? coverageDiagnosis(ensemble.coverage, validation?.m ?? null, ensemble.samples.length) : []), [ensemble, validation]);
 
   const checklist = reviewChecklist({
     auditReviewed: auditConfirmed, excludedFlags: excludedCount, totalFlags,
@@ -261,18 +321,20 @@ export default function WorkedCase() {
     validationPassed: validation ? allPass(validation.m) : false,
     maxContinuityErrPct: contLog.maxKnown, continuityUnknownRuns: contLog.unknownRuns,
     ensembleSize: ensemble?.samples.length ?? 0, coverage: ensemble?.coverage ?? NaN,
+    ensembleStable: conv ? conv.stable : undefined,
   });
 
   const downloadPackage = () => {
-    if (!observed || !locked || !validation || !ensemble || !peakStats) return;
+    if (!observed || !locked || !validation || !ensemble || !peakStats || !hyd || !conv) return;
     const zip = buildReviewZip({
       times, observed,
-      excluded: { A: [...excluded.A].sort((a, b) => a - b), B: [...excluded.B].sort((a, b) => a - b), C: [...excluded.C].sort((a, b) => a - b) },
+      excluded: { A: sortedIdx(excluded.A), B: sortedIdx(excluded.B), C: sortedIdx(excluded.C) },
       trials, final: locked, validation: validation.m, recalibratedAfterValidation: recalibrated,
       // the seed that actually produced these samples, not whatever is typed in the box now
       seed: ensemble.seed,
       samples: ensemble.samples, designPeaks: ensemble.designPeaks, designDeterministicPeak: ensemble.designDet,
       p5: peakStats.p5, p50: peakStats.p50, p95: peakStats.p95, exceedProb: peakStats.exceed, coverage: ensemble.coverage,
+      hydraulics: ensemble.hydraulics, detHydraulics: ensemble.detHydraulics, hydraulicStats: hyd, convergence: conv, coverageCauses: causes,
       checklist, createdAt: new Date().toISOString(),
     });
     const a = document.createElement("a");
@@ -305,8 +367,8 @@ export default function WorkedCase() {
           </div>
           <p className="text-muted-foreground">
             <strong className="text-foreground">The question:</strong> how big is the peak flow in pipe C3 during the made-up 10-year, 3-hour design storm
-            ({fmt(rainDepthIn(EVENTS.D), 1)} in), and how likely is it to exceed the pipe's full-flow capacity of {fmt(C3_CAPACITY_CFS, 0)} cfs?
-            Work through five steps. Every run uses the real SWMM 5.2 engine, as in the <Link to="/playground" className="text-primary underline">Playground</Link>.
+            ({fmt(rainDepthIn(EVENTS.D), 1)} in), and what happens in the pipe: does it surcharge, how high does the water rise, and does anything flood?
+            Work through five steps. Your work saves automatically in this browser, so you can leave and come back. Every run uses the real SWMM 5.2 engine, as in the <Link to="/playground" className="text-primary underline">Playground</Link>.
           </p>
           <ol className="flex flex-wrap gap-2 text-xs">
             {["Audit data", "Calibrate", "Validate", "Uncertainty", "Review package"].map((s, i) => {
@@ -314,6 +376,15 @@ export default function WorkedCase() {
               return <li key={s}><Badge variant={done ? "default" : "outline"}>{i + 1}. {s}</Badge></li>;
             })}
           </ol>
+          <div className="flex flex-wrap items-center gap-2 rounded-md border bg-muted/40 p-3 text-sm">
+            <Save className="h-4 w-4 text-primary shrink-0" />
+            <span className="text-muted-foreground mr-auto">{resumeNote || "Saved automatically in this browser."}</span>
+            <Button size="sm" variant="outline" onClick={exportSession}><Download className="h-4 w-4 mr-1" /> Export session</Button>
+            <Button size="sm" variant="outline" onClick={() => fileInput.current?.click()}><Upload className="h-4 w-4 mr-1" /> Import session</Button>
+            <Button size="sm" variant="ghost" onClick={startOver}><RotateCcw className="h-4 w-4 mr-1" /> Start over</Button>
+            <input ref={fileInput} type="file" accept="application/json,.json" className="hidden" aria-label="Import a saved session file"
+              onChange={(e) => { importSession(e.target.files?.[0]); e.target.value = ""; }} />
+          </div>
         </header>
 
         {loadError && <div className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm">SWMM error: {loadError}</div>}
@@ -475,16 +546,24 @@ export default function WorkedCase() {
           {validation && locked && observed && (
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                A calibrated model is one plausible answer, not the answer. This step runs {ENSEMBLE_SIZE} versions of the model with imperviousness ±15%, width ×0.7–1.4 and infiltration ±30% around your values, plus ±10% rainfall for gauge error. Pipe roughness (0.011–0.018) is varied too: the observed storms never filled pipe C3, so the data could not pin it down, yet it matters once the design storm surcharges the pipe.
-                The same seed always gives the same runs.
+                A calibrated model is one plausible answer, not the answer. This step runs {ensembleSize} versions of the model with imperviousness ±15%, width ×0.7–1.4 and infiltration ±30% around your values, plus ±10% rainfall for gauge error. Pipe roughness (0.011–0.018) is varied too: the observed storms never filled pipe C3, so the data could not pin it down, yet it matters once the design storm surcharges the pipe.
+                The same seed always gives the same runs. The percentiles describe only these assumptions: change the ranges, the distributions or the model, and they change.
               </p>
               <div className="flex flex-wrap items-end gap-3">
                 <div className="space-y-1">
                   <Label htmlFor="wc-seed" className="text-xs">Master seed</Label>
                   <Input id="wc-seed" type="number" className="h-9 w-32" value={seed} onChange={(e) => setSeed(Math.max(0, Math.floor(+e.target.value || 0)))} />
                 </div>
+                <div className="space-y-1">
+                  <span className="block text-xs font-medium">Number of runs</span>
+                  <div className="flex gap-1" role="group" aria-label="Number of runs">
+                    {ENSEMBLE_SIZES.map((n) => (
+                      <Button key={n} size="sm" variant={ensembleSize === n ? "default" : "outline"} aria-pressed={ensembleSize === n} disabled={!!busy} onClick={() => setEnsembleSize(n)}>{n}</Button>
+                    ))}
+                  </div>
+                </div>
                 <Button onClick={runEnsemble} disabled={!!busy}>
-                  {busy === "ens" ? <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Run {progress} of {ENSEMBLE_SIZE}</> : <><Play className="h-4 w-4 mr-1" /> Run {ENSEMBLE_SIZE} simulations</>}
+                  {busy === "ens" ? <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Run {progress} of {ensembleSize}</> : <><Play className="h-4 w-4 mr-1" /> Run {ensembleSize} simulations</>}
                 </Button>
               </div>
               {ensemble && ensemble.seed !== seed && (
@@ -492,21 +571,55 @@ export default function WorkedCase() {
                   The seed box now says {seed}, but these results came from seed {ensemble.seed}. The review package records {ensemble.seed}. Run again to use the new seed.
                 </p>
               )}
-              {ensemble && peakStats && (
+              {ensemble && ensemble.samples.length !== ensembleSize && (
+                <p className="text-sm text-warning">These results use {ensemble.samples.length} runs. Run again to use {ensembleSize}.</p>
+              )}
+              {ensemble && peakStats && hyd && conv && (
                 <>
                   <div className="grid gap-3 sm:grid-cols-3">
                     <div className="rounded-md border p-3"><p className="text-xs text-muted-foreground">Calibrated design peak</p><p className="text-2xl font-bold">{fmt(ensemble.designDet, 1)} cfs</p></div>
                     <div className="rounded-md border p-3"><p className="text-xs text-muted-foreground">5–95% range</p><p className="text-2xl font-bold">{fmt(peakStats.p5, 0)}–{fmt(peakStats.p95, 0)} cfs</p></div>
-                    <div className="rounded-md border p-3"><p className="text-xs text-muted-foreground">Runs above capacity ({fmt(C3_CAPACITY_CFS, 0)} cfs)</p><p className="text-2xl font-bold">{Math.round(peakStats.exceed * 100)}%</p></div>
+                    <div className="rounded-md border p-3"><p className="text-xs text-muted-foreground">Runs above their own normal-flow capacity</p><p className="text-2xl font-bold">{Math.round(hyd.aboveOwnCapacity * 100)}%</p>
+                      <p className="text-xs text-muted-foreground">Capacity {fmt(hyd.capacityMin, 0)}–{fmt(hyd.capacityMax, 0)} cfs as n varies {ENSEMBLE_CONDUIT_N.min}–{ENSEMBLE_CONDUIT_N.max}. Above the fixed {fmt(C3_CAPACITY_CFS, 0)} cfs reference: {Math.round(peakStats.exceed * 100)}%.</p></div>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-foreground">What it means in the pipe</p>
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      <div className="rounded-md border p-3"><p className="text-xs text-muted-foreground">C3 surcharged (water above the pipe crown at J3)</p><p className="text-xl font-bold">{Math.round(hyd.surcharged * 100)}% of runs</p>
+                        <p className="text-xs text-muted-foreground">Calibrated: {fmt(ensemble.detHydraulics.surchargeMin, 0)} min · 95th pct: {fmt(hyd.surchargeMinP95, 0)} min</p></div>
+                      <div className="rounded-md border p-3"><p className="text-xs text-muted-foreground">Peak water level at J3 (ground {C3_UPSTREAM.invertFt + C3_UPSTREAM.maxDepthFt} ft)</p><p className="text-xl font-bold">{fmt(hyd.maxHglP50, 1)} ft median</p>
+                        <p className="text-xs text-muted-foreground">Calibrated: {fmt(ensemble.detHydraulics.maxHglFt, 1)} ft · 95th pct: {fmt(hyd.maxHglP95, 1)} ft</p></div>
+                      <div className="rounded-md border p-3"><p className="text-xs text-muted-foreground">Flooding at any node</p><p className="text-xl font-bold">{Math.round(hyd.flooded * 100)}% of runs</p>
+                        <p className="text-xs text-muted-foreground">Calibrated: {fmt(ensemble.detHydraulics.floodFt3, 0)} ft³ · 95th pct: {fmt(hyd.floodFt3P95, 0)} ft³</p></div>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      The dashed line is a reference only. SWMM's dynamic-wave routing models pressurised flow, so a peak above normal-flow capacity means the pipe runs full under pressure, not that the street floods. Surcharge time, water level and flood volume show the consequence.
+                    </p>
                   </div>
                   <div className="grid gap-4 md:grid-cols-2">
                     <div><p className="text-sm font-medium mb-1">Design storm, pipe C3</p><FlowChart times={times} sim={ensemble.designDetFlow} band={ensemble.design} capacity /></div>
                     <div><p className="text-sm font-medium mb-1">Check: Event C observations vs band</p><FlowChart times={times} obs={observed.C} exclude={excluded.C} band={ensemble.val} /></div>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {Math.round(ensemble.coverage * 100)}% of Event C observations fall inside the 5–95% band.{" "}
-                    {ensemble.coverage >= 0.8 ? "That is close enough to the 90% you would expect." : "That is well short of the 90% you would expect: the band covers parameter and rainfall uncertainty but not gauge noise, so the true spread is wider. Say so in the report."}
-                  </p>
+                  <div className="space-y-2 text-sm">
+                    <p className="text-muted-foreground">
+                      {Math.round(ensemble.coverage * 100)}% of Event C observations fall inside the 5–95% band.{" "}
+                      {ensemble.coverage >= 0.8 ? "That is close to the 90% you would expect, given these assumptions." : "That is well short of the 90% you would expect. There is no single automatic explanation; check these possibilities:"}
+                    </p>
+                    {causes.length > 0 && (
+                      <ul className="space-y-1">
+                        {causes.map((c) => (
+                          <li key={c.cause} className="flex items-start gap-2">
+                            {c.likely ? <AlertTriangle className="h-4 w-4 mt-0.5 text-warning shrink-0" /> : <span className="mt-2 h-1.5 w-1.5 rounded-full bg-muted-foreground shrink-0" />}
+                            <span><span className="font-medium text-foreground">{c.cause}{c.likely ? " (check first)" : ""}:</span> <span className="text-muted-foreground">{c.detail}</span></span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    <p className={conv.stable ? "text-muted-foreground" : "text-warning"}>
+                      Convergence check: the first {conv.halfN} runs and all {ensemble.samples.length} differ by {fmt(conv.p50ChangePct, 1)}% in the median peak and {fmt(conv.p95ChangePct, 1)}% in the 95th percentile.{" "}
+                      {conv.stable ? "The percentiles have settled for teaching purposes." : "They are still moving: use more runs before relying on them."}
+                    </p>
+                  </div>
                 </>
               )}
             </div>

@@ -91,12 +91,13 @@ graph TD
           </ul>
 
           <Card className="p-6 bg-background/50 mt-6">
-            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Model Certainty</h3>
-            <p className="text-muted-foreground italic mb-3">
-              "Model error is not a sign of failure—it is an inherent characteristic of all models. 
+            <h3 className="text-lg font-bold text-foreground mb-2">James on Model Certainty: a paraphrase</h3>
+            <p className="text-xs text-muted-foreground mb-1">App-written paraphrase, not a quotation. Not yet checked against a page of the 2005 edition.</p>
+            <p className="text-foreground/90 border-l-2 border-primary pl-3 mb-3">
+              Model error is not a sign of failure—it is an inherent characteristic of all models. 
               The responsible approach is not to minimize error at any cost, but to characterize it 
               honestly and communicate it effectively. Decision-makers deserve to know the confidence 
-              they should place in model predictions."
+              they should place in model predictions.
             </p>
             <p className="text-sm text-muted-foreground">
               Dr. James advocated for transparent uncertainty communication, arguing that false precision 

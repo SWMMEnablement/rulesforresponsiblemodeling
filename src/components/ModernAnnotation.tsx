@@ -488,7 +488,7 @@ print(f"  Small (<0.5 ha): {len(small)} ({100*len(small)/len(areas_ha):.1f}%)")`
       originalConcept: "Temporal Discretization",
       modernPerspective: "Modern continuous rainfall data (1-5 minute) enables finer timesteps, but CFL constraints and computational efficiency still matter for long-term simulations. Variable timesteps are now standard practice.",
       softwareGuidance: {
-        swmm: "Use SWMM's variable timestep routing. Set wet-weather steps to 15-30 seconds, dry-weather to 5-15 minutes for efficiency.",
+        swmm: "Use SWMM's variable routing step for dynamic wave, a wet-weather runoff step short enough for your rainfall data, and a longer dry-weather step for efficiency. Confirm the choice with continuity errors and by halving the steps to see whether results change.",
         icm: "ICM handles variable timesteps automatically. Monitor the 'minimum timestep used' in run logs to verify stability."
       },
       practicalTip: "For 30+ year simulations, balance accuracy against run time. A 20% faster model enables more sensitivity runs."
@@ -808,7 +808,7 @@ puts "Simulation complete. Check results at key nodes."`
       modernPerspective: "Dr. James's insight remains valid: short, accurate calibration periods suffice. Modern practice adds: calibrate to extremes (low flows and peaks) not just overall fit, and validate across seasons.",
       softwareGuidance: {
         swmm: "Split your calibration period by season. Verify the model performs well for both summer low flows and winter baseflow.",
-        icm: "Use ICM's calibration wizard but manually check low-flow and high-flow performance separately."
+        icm: "If your ICM version has calibration tools, use them but manually check low-flow and high-flow performance separately."
       },
       practicalTip: "A model that fits annual totals but misses seasonal patterns may fail for ecological or water supply applications."
     }
@@ -1238,7 +1238,7 @@ end`
       modernPerspective: "Automatic calibration tools are powerful but dangerous without sensitivity analysis first. Modern practice: sensitivity analysis → select 5-10 key parameters → automatic calibration → manual refinement → validation.",
       softwareGuidance: {
         swmm: "PEST and SWMM-EPANET-Integration support gradient-based and genetic algorithm calibration. Define tight bounds based on physical reasoning.",
-        icm: "ICM's calibration wizard is effective but verify results manually. Watch for equifinality—multiple parameter sets may produce similar fits."
+        icm: "Automated calibration tools (where your ICM version has them) save time, but verify results manually. Watch for equifinality—multiple parameter sets may produce similar fits."
       },
       codeSnippets: [
         {

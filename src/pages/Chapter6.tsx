@@ -91,11 +91,12 @@ graph TD
           </ul>
 
           <Card className="p-6 bg-background/50 mt-6">
-            <h3 className="text-lg font-bold text-foreground mb-2">Dr. James on Rainfall Input</h3>
-            <p className="text-muted-foreground italic mb-3">
-              "Rainfall is typically the largest source of uncertainty in urban drainage modeling, 
+            <h3 className="text-lg font-bold text-foreground mb-2">James on Rainfall Input: a paraphrase</h3>
+            <p className="text-xs text-muted-foreground mb-1">App-written paraphrase, not a quotation. Not yet checked against a page of the 2005 edition.</p>
+            <p className="text-foreground/90 border-l-2 border-primary pl-3 mb-3">
+              Rainfall is typically the largest source of uncertainty in urban drainage modeling, 
               yet modelers often spend more effort on hydraulic parameters than on rainfall characterization. 
-              A sophisticated routing model fed with poor rainfall input produces poor results elegantly."
+              A sophisticated routing model fed with poor rainfall input produces poor results elegantly.
             </p>
             <p className="text-sm text-muted-foreground">
               Dr. James emphasized that rainfall input deserves at least as much attention as model 

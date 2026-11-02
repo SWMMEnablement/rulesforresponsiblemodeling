@@ -85,7 +85,7 @@ const softwareExamples: ChapterData[] = [
       title: "Grid-Based vs. Subcatchment Discretization",
       description: "Compare polygon-based and grid-based representations.",
       steps: ["Create model with subcatchment polygons", "Convert to 2D mesh representation", "Compare results", "Evaluate computational cost vs accuracy"],
-      tips: ["2D adds value for surface flooding", "Mesh resolution should match DEM accuracy"]
+      tips: ["2D adds value for surface flooding", "Choose mesh resolution for the flow paths that matter; it cannot be more accurate than the ground data"]
     }
   },
   {

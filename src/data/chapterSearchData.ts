@@ -23,7 +23,7 @@ export const chapterSearchData: ChapterSearchEntry[] = [
 
   // Chapter 3 - Data Quality and Sources
   { id: "c3-data-quality", chapter: 3, title: "Data Quality and Sources", section: "Data Quality", content: "Data quality determines model reliability. Garbage in, gospel out — poor data produces unreliable results that are often presented with unwarranted confidence.", type: "principle" },
-  { id: "c3-rain-gauge", chapter: 3, title: "Data Quality and Sources", section: "Rain Gauge Density", content: "Rain gauge density directly affects model accuracy. Sparse gauge networks miss spatial variability in rainfall. One gauge per subcatchment is ideal but rarely achieved.", type: "concept" },
+  { id: "c3-rain-gauge", chapter: 3, title: "Data Quality and Sources", section: "Rain Gauge Density", content: "Rain gauge density directly affects model accuracy. Sparse gauge networks miss spatial variability in rainfall. How many gauges are needed depends on storm scale, gauge spacing and the model's purpose.", type: "concept" },
   { id: "c3-data-vintage", chapter: 3, title: "Data Quality and Sources", section: "Data Vintage", content: "Data ages and loses relevance. Land use changes, climate shifts, and infrastructure modifications can make historical data less applicable to current conditions.", type: "concept" },
   { id: "c3-gis", chapter: 3, title: "Data Quality and Sources", section: "GIS Integration", content: "Geographic Information Systems provide spatial data for model construction including elevation, land use, soil types, and drainage infrastructure.", type: "definition" },
 
