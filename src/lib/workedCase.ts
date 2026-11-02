@@ -305,6 +305,8 @@ export interface CaseLog {
   continuityUnknownRuns?: number;
   ensembleSize: number;
   coverage: number;
+  /** Result of convergenceCheck on the design peaks; undefined before an ensemble is run. */
+  ensembleStable?: boolean;
 }
 export interface CheckItem { label: string; status: "pass" | "warn" | "fail"; detail: string }
 
@@ -331,7 +333,9 @@ export function reviewChecklist(l: CaseLog): CheckItem[] {
     { label: "Uncertainty quantified with a recorded seed", status: l.ensembleSize >= 20 ? "pass" : "fail",
       detail: l.ensembleSize ? `${l.ensembleSize} runs` : "Ensemble not run" },
     { label: "Uncertainty band checked against held-out data", status: !Number.isFinite(l.coverage) ? "fail" : l.coverage >= 0.8 ? "pass" : "warn",
-      detail: Number.isFinite(l.coverage) ? `${Math.round(l.coverage * 100)}% of Event C observations inside the 5-95% band` : "Not checked" },
+      detail: Number.isFinite(l.coverage) ? `${Math.round(l.coverage * 100)}% of Event C observations inside the 5-95% band` + (l.coverage < 0.8 ? "; possible causes listed in the report" : "") : "Not checked" },
+    { label: "Ensemble percentiles settled", status: l.ensembleStable === undefined ? "fail" : l.ensembleStable ? "pass" : "warn",
+      detail: l.ensembleStable === undefined ? "Ensemble not run" : l.ensembleStable ? "First half and all runs agree within 5%" : "Percentiles still moving; use more runs before relying on them" },
   ];
 }
 
