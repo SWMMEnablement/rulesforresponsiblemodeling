@@ -30,8 +30,8 @@
 - [ ] Next feature (not started): worked case on the user's own INP + observed-flow CSV.
 
 # Technical summary
-- [ ] Rewrite the summary with current source citations, fresh per-file test counts, measured checks, and explicit unchecked provenance.
-- [ ] Synchronize the embedded summary, About disclosure and version; verify download and deliver a new versioned copy.
+- [x] Rewrite the summary with current source citations, fresh per-file test counts, measured checks, and explicit unchecked provenance.
+- [x] Synchronize the embedded summary, About disclosure and version; verify download and deliver a new versioned copy.
 - [x] Add source-traced Markdown, matching embedded copy, head and About links, and AI disclosure.
 - [x] Add public AI index and verify links, embedded fallback and downloads.
 - [x] Deliver a uniquely versioned summary for the second brain.
