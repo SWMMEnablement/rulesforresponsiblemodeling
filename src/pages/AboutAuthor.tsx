@@ -286,7 +286,7 @@ const AboutAuthor = () => {
                 target="_blank" 
                 rel="noopener noreferrer"
               >
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2 whitespace-normal h-auto min-h-10 max-w-full">
                   Read CHI Web Version (incomplete, 1993 draft) <ExternalLink className="w-4 h-4" />
                 </Button>
               </a>

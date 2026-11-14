@@ -58,7 +58,15 @@ export function TechnicalSummary() {
       {error && <p role="alert" className="mt-3 text-destructive">{error}</p>}
       {open && markdown && (
         <div className="prose dark:prose-invert max-w-none mt-6 break-words prose-pre:overflow-x-auto">
-          <ReactMarkdown components={{ a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer">{children}</a> }}>{markdown.replace(/^---\n[\s\S]*?\n---\n/, "")}</ReactMarkdown>
+          <ReactMarkdown components={{
+            h1: ({ children }) => <h4 className="text-2xl font-bold mt-6 mb-4">{children}</h4>,
+            h2: ({ children }) => <h4 className="text-xl font-bold mt-8 mb-3 border-b border-border pb-2">{children}</h4>,
+            h3: ({ children }) => <h5 className="text-lg font-semibold mt-5 mb-2">{children}</h5>,
+            p: ({ children }) => <p className="leading-relaxed mb-4">{children}</p>,
+            ul: ({ children }) => <ul className="list-disc pl-6 space-y-2 mb-4">{children}</ul>,
+            ol: ({ children }) => <ol className="list-decimal pl-6 space-y-2 mb-4">{children}</ol>,
+            a: ({ href, children }) => <a className="text-primary underline" href={href} target="_blank" rel="noopener noreferrer">{children}</a>,
+          }}>{markdown.replace(/^---\n[\s\S]*?\n---\n/, "")}</ReactMarkdown>
         </div>
       )}
       <h3 className="text-xl font-bold text-foreground mt-6">AI use</h3>
