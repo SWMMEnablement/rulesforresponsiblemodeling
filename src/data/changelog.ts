@@ -7,6 +7,14 @@ export interface Release { date: string; title: string; summary: string; items: 
 export const CHANGELOG: Release[] = [
   {
     date: "2026-11-14",
+    title: "Measured technical summary",
+    summary: "Version 2026.1.2 records fresh tests, source citations and explicitly unchecked evidence.",
+    items: [
+      { kind: "accuracy", text: "Technical summary separates automated checks, AI reviews and human reviews, and documents exact climate factors and reproduction requests.", link: "/about-author" },
+    ],
+  },
+  {
+    date: "2026-11-14",
     title: "Technical summary and AI disclosure",
     summary: "Version 2026.1.1 documents computation, inputs, verified checks, credits and known limits.",
     items: [

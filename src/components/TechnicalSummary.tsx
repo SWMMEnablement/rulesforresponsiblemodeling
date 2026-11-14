@@ -33,7 +33,7 @@ export function TechnicalSummary() {
         const url = URL.createObjectURL(new Blob([text], { type: "text/markdown;charset=utf-8" }));
         const link = document.createElement("a");
         link.href = url;
-        link.download = "index.md";
+        link.download = "rain-canvas-studio.md";
         link.click();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
       } else setOpen(true);
@@ -47,7 +47,7 @@ export function TechnicalSummary() {
       <h3 id="technical-summary-heading" className="text-xl font-bold text-foreground">Technical summary</h3>
       <div className="flex flex-wrap gap-3 mt-3">
         <Button variant="outline" disabled={busy} asChild>
-          <a href={SUMMARY_PATH} download="index.md" onClick={(event) => { event.preventDefault(); if (!busy) void load(true); }}>
+          <a href={SUMMARY_PATH} download="rain-canvas-studio.md" onClick={(event) => { event.preventDefault(); if (!busy) void load(true); }}>
             <Download className="w-4 h-4 mr-2" />Technical summary (.md)
           </a>
         </Button>
