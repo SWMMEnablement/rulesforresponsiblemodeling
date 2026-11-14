@@ -30,6 +30,7 @@
 - [ ] Next feature (not started): worked case on the user's own INP + observed-flow CSV.
 
 # Technical summary
-- [ ] Add source-traced Markdown, matching embedded copy, head and About links, and AI disclosure.
-- [ ] Add public AI index and verify links, embedded fallback and downloads.
-- [ ] Deliver a uniquely versioned summary for the second brain; repository upload remains an owner action.
+- [x] Add source-traced Markdown, matching embedded copy, head and About links, and AI disclosure.
+- [x] Add public AI index and verify links, embedded fallback and downloads.
+- [x] Deliver a uniquely versioned summary for the second brain.
+- [ ] Upload the versioned summary to the second-brain repository: no repository write connection is available in this session; owner upload link supplied.
