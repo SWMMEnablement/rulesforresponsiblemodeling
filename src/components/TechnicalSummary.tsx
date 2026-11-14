@@ -58,7 +58,7 @@ export function TechnicalSummary() {
       {error && <p role="alert" className="mt-3 text-destructive">{error}</p>}
       {open && markdown && (
         <div className="prose dark:prose-invert max-w-none mt-6 break-words prose-pre:overflow-x-auto">
-          <ReactMarkdown>{markdown.replace(/^---\n[\s\S]*?\n---\n/, "")}</ReactMarkdown>
+          <ReactMarkdown components={{ a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer">{children}</a> }}>{markdown.replace(/^---\n[\s\S]*?\n---\n/, "")}</ReactMarkdown>
         </div>
       )}
       <h3 className="text-xl font-bold text-foreground mt-6">AI use</h3>
