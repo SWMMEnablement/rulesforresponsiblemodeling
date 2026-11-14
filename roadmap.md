@@ -6,7 +6,7 @@
 - [x] Harden chat input validation; deployed function rejects system overrides and streams valid answers.
 - [x] Verify baseline, ensemble, CSV export, notes, flashcards, and mobile layout.
 - [ ] Source-verification follow-up: chapter/topic reassignment and replacement article URLs need verified source material, not guessed mappings.
-- [ ] Unit standardization: awaiting the owner's preferred system (SI, US customary, or a selector); current explicit units are preserved.
+- [ ] Unit standardization: US customary default is now specified; cross-app conversions are a separate follow-up, with explicit model units preserved.
 - [ ] External Mapbox token rotation: requires the token owner's Mapbox account; downloadable copies were redacted here.
 
 # Tough-grade review (80/100)
@@ -28,3 +28,8 @@
 - [x] Chapters 2 and 4 quotations labelled as paraphrases; replace fixed self-grade with dated review log.
 - [x] Homepage: "Start the worked case" as main action plus Learn / Experiment / Review my model.
 - [ ] Next feature (not started): worked case on the user's own INP + observed-flow CSV.
+
+# Technical summary
+- [ ] Add source-traced Markdown, matching embedded copy, head and About links, and AI disclosure.
+- [ ] Add public AI index and verify links, embedded fallback and downloads.
+- [ ] Deliver a uniquely versioned summary for the second brain; repository upload remains an owner action.
