@@ -3,9 +3,9 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { CHANGELOG } from "@/data/changelog";
+import { APP_VERSION } from "@/data/appDocumentation";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 
-const APP_VERSION = "2026.1";
 const LAST_UPDATED = new Date(`${CHANGELOG[0].date}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 const ISSUES_EMAIL = "robert.dickinson@gmail.com";
 const ISSUES_URL = `mailto:${ISSUES_EMAIL}?subject=${encodeURIComponent("Rules for Responsible Modeling — Issue Report")}`;

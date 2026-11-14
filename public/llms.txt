@@ -1,0 +1,14 @@
+# Rules for Responsible Modeling
+
+> Interactive urban drainage modeling lessons, a real browser SWMM engine and a fictional worked case by Robert Dickinson.
+
+## Documentation
+- [Technical summary](/index.md): Computation, engine provenance, inputs, checks, limitations, reproduction, credits and AI use for the whole application, including its micro-apps.
+
+## Pages
+- [About the author and app](/about-author): Book background, app credits, technical summary and AI disclosure.
+- [What's New](/whats-new): Dated development history.
+- [Review Log](/grade-report): Outside reviewer findings and unresolved limitations.
+- [Micro-Apps](/micro-apps): Public index of chapter-related educational tools covered by the application summary.
+- [SWMM Playground](/playground): Local simulation, model builder and uncertainty charts.
+- [Worked case](/worked-case): Fictional calibration, validation and uncertainty exercise.

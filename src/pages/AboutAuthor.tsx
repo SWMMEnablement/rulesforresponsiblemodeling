@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { TechnicalSummary } from "@/components/TechnicalSummary";
 import { ArrowLeft, BookOpen, Award, GraduationCap, FileText, ExternalLink, Calendar, Building2, User } from "lucide-react";
 
 const AboutAuthor = () => {
@@ -285,7 +286,7 @@ const AboutAuthor = () => {
                 target="_blank" 
                 rel="noopener noreferrer"
               >
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2 whitespace-normal h-auto min-h-10 max-w-full">
                   Read CHI Web Version (incomplete, 1993 draft) <ExternalLink className="w-4 h-4" />
                 </Button>
               </a>
@@ -339,6 +340,7 @@ const AboutAuthor = () => {
               Note: The chapter content in this app is original educational material inspired by Dr. James's 
               work, designed to respect copyright while making the core concepts accessible to modern learners.
             </p>
+            <TechnicalSummary />
           </Card>
 
         </div>
