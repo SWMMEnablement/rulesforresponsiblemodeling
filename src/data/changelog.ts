@@ -6,6 +6,15 @@ export interface Release { date: string; title: string; summary: string; items: 
 
 export const CHANGELOG: Release[] = [
   {
+    date: "2026-11-14",
+    title: "Technical summary and AI disclosure",
+    summary: "Version 2026.1.1 documents computation, inputs, verified checks, credits and known limits.",
+    items: [
+      { kind: "content", text: "Read or download the technical Markdown summary from About, with an embedded fallback and matching AI-use disclosure.", link: "/about-author" },
+      { kind: "content", text: "Public AI index links to the technical summary and relevant public pages." },
+    ],
+  },
+  {
     date: "2026-11-02",
     title: "Worked case you can resume, and clearer hydraulics",
     summary: "Fixes from an outside review that graded the app 83/100.",

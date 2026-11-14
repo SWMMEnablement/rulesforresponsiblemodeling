@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { TechnicalSummary } from "@/components/TechnicalSummary";
 import { ArrowLeft, BookOpen, Award, GraduationCap, FileText, ExternalLink, Calendar, Building2, User } from "lucide-react";
 
 const AboutAuthor = () => {
@@ -339,6 +340,7 @@ const AboutAuthor = () => {
               Note: The chapter content in this app is original educational material inspired by Dr. James's 
               work, designed to respect copyright while making the core concepts accessible to modern learners.
             </p>
+            <TechnicalSummary />
           </Card>
 
         </div>
